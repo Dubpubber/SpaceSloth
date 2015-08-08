@@ -67,7 +67,7 @@ public abstract class GameScreen implements Screen {
         this.chandle = chandle;
 
         // Create the world
-        world = new World(new Vector2(0, 0), true);
+        world = new World(new Vector2(0, 0f), true);
 
         // Create the stage objects.
         MainStage = new Stage();
@@ -129,7 +129,7 @@ public abstract class GameScreen implements Screen {
         batch.setProjectionMatrix(main_cam.combined);
         if(static_background != null) {
             batch.begin();
-            //batch.draw(static_background, 0, 0);
+            batch.draw(static_background, 0, 0);
             batch.end();
         }
 
