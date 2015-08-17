@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.loneboat.spacesloth.main.SpaceSloth;
 import com.loneboat.spacesloth.main.content.ContentHandler;
+import com.loneboat.spacesloth.main.screens.GameScreen;
 import com.loneboat.spacesloth.main.util.GameObjectTracker;
 import net.dermetfan.gdx.graphics.g2d.AnimatedBox2DSprite;
 import net.dermetfan.gdx.graphics.g2d.AnimatedSprite;
@@ -35,6 +36,9 @@ public abstract class GameObject extends Actor implements GameObjectTracker {
 
     // Get our Box2D world
     public World world;
+
+    // Get the screen for GameScreen related methods.
+    public GameScreen currentScreen;
 
     // Box2D objects
     public Body body;
@@ -123,6 +127,10 @@ public abstract class GameObject extends Actor implements GameObjectTracker {
 
     public float getBodyY() {
         return getBody().getPosition().y;
+    }
+
+    public void setCurrentScreen(GameScreen screen) {
+        this.currentScreen = screen;
     }
 
     /**

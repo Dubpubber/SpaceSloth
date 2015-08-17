@@ -24,13 +24,13 @@ public class AsteroidsLevel extends GameScreen {
         this.difficulty = difficulty;
         game.getLogger().info("Switched to an AsteroidsLevel");
 
-        Gdx.input.setInputProcessor(MainStage);
-
         player = new SlothShip(game, handler, MainStage, world);
+        player.setCurrentScreen(this);
         MainStage.addActor(player);
         MainStage.setKeyboardFocus(player);
         setStaticBackground(chandle.getManager().get("Backgrounds/spacebackground_1.jpg", Texture.class));
         setLeadActor(player, true);
+        Gdx.input.setInputProcessor(player.getPlayerInputListener());
     }
 
     @Override

@@ -156,10 +156,20 @@ public abstract class GameScreen implements Screen {
             box2DCam.update();
             debugRenderer.render(world, box2DCam.combined);
 
+            float angle = (float) Math.atan2(
+                    (Gdx.input.getY() - 270),
+                    -(Gdx.input.getX() - 270)
+            );
+
+            angle = (float) -Math.toDegrees(angle);
+
             // Notice how we're still projecting to the hud cam!
             batch.setProjectionMatrix(hud_cam.combined);
             batch.begin();
             font.draw(batch, "Debug Mode", 3, 475);
+            font.draw(batch, "X: " + Math.round(mouseLoc.x), 3, 450);
+            font.draw(batch, "Y: " + Math.round(mouseLoc.y), 3, 425);
+            font.draw(batch, "Angle: " + angle, 3, 400);
             batch.end();
         }
 

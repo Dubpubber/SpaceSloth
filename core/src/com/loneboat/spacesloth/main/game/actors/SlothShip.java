@@ -1,18 +1,15 @@
 package com.loneboat.spacesloth.main.game.actors;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.loneboat.spacesloth.main.Globals;
 import com.loneboat.spacesloth.main.SpaceSloth;
 import com.loneboat.spacesloth.main.content.ContentHandler;
 import com.loneboat.spacesloth.main.game.GameObject;
+import com.loneboat.spacesloth.main.util.PlayerInputListener;
 import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
 
 /**
@@ -21,9 +18,10 @@ import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
  */
 public class SlothShip extends GameObject {
 
+    private PlayerInputListener playerInputListener;
     private Profile profile;
 
-    private class Profile {
+    public class Profile {
         private SlothShip sloth;
         private Vector2 currentSpeed;
 
@@ -75,40 +73,7 @@ public class SlothShip extends GameObject {
 
         getBody().setLinearDamping(0.1f);
 
-        addListener(new InputListener() {
-            @Override
-            public boolean mouseMoved(InputEvent event, float x, float y) {
-                System.out.println("Loc: " + x + " " + y);
-                float angle = (float) Math.atan2(562 - Gdx.input.getY() - box2DSprite.getX(), Gdx.input.getX() - box2DSprite.getY());
-
-                angle = (float) Math.toDegrees(angle);
-
-                box2DSprite.setRotation(angle);
-
-                return false;
-            }
-
-            @Override
-            public boolean keyDown(InputEvent event, int keycode) {
-                switch (keycode) {
-                    case Input.Keys.W:
-                        getBody().setLinearVelocity(new Vector2(0, profile.getCurrentSpeed().y));
-                        break;
-                    case Input.Keys.S:
-                        getBody().setLinearVelocity(new Vector2(0, -profile.getCurrentSpeed().y));
-                        break;
-                    case Input.Keys.A:
-                        getBody().applyForceToCenter(new Vector2(-profile.getCurrentSpeed().x, 0), true);
-                        break;
-                    case Input.Keys.D:
-                        getBody().applyForceToCenter(new Vector2(profile.getCurrentSpeed().x, 0), true);
-                        break;
-                }
-                return false;
-            }
-
-
-        });
+        playerInputListener = new PlayerInputListener(this, game, chandle);
     }
 
     /**
@@ -118,5 +83,22 @@ public class SlothShip extends GameObject {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
+
+        // Rotate the body and sprite around the mouse's location.
+        /*        float angle = (float) Math.atan2(
+                (Gdx.input.getY() - 180),
+                -(Gdx.input.getX() - 180)
+        );
+
+        angle = (float) -Math.toDegrees(angle);*/
     }
+
+    public Profile getProfile() {
+        return profile;
+    }
+
+    public PlayerInputListener getPlayerInputListener() {
+        return playerInputListener;
+    }
+
 }
