@@ -9,6 +9,7 @@ import com.loneboat.spacesloth.main.Globals;
 import com.loneboat.spacesloth.main.SpaceSloth;
 import com.loneboat.spacesloth.main.content.ContentHandler;
 import com.loneboat.spacesloth.main.game.GameObject;
+import com.loneboat.spacesloth.main.util.MouseUtil;
 import com.loneboat.spacesloth.main.util.PlayerInputListener;
 import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
 
@@ -74,6 +75,7 @@ public class SlothShip extends GameObject {
         getBody().setLinearDamping(0.1f);
 
         playerInputListener = new PlayerInputListener(this, game, chandle);
+        setOrigin(getBodyX() / 2, getBodyY() / 2);
     }
 
     /**
@@ -83,14 +85,8 @@ public class SlothShip extends GameObject {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
-
-        // Rotate the body and sprite around the mouse's location.
-        /*        float angle = (float) Math.atan2(
-                (Gdx.input.getY() - 180),
-                -(Gdx.input.getX() - 180)
-        );
-
-        angle = (float) -Math.toDegrees(angle);*/
+        getBody().setTransform(body.getPosition().x, body.getPosition().y, MouseUtil.getMouseAngleRelativeToScreen() / 180);
+        //box2DSprite.setRotation(MouseUtil.getMouseAngleRelativeToScreen());
     }
 
     public Profile getProfile() {
