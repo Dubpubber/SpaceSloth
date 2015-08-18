@@ -2,14 +2,13 @@ package com.loneboat.spacesloth.main.game.actors;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.loneboat.spacesloth.main.Globals;
 import com.loneboat.spacesloth.main.SpaceSloth;
 import com.loneboat.spacesloth.main.content.ContentHandler;
 import com.loneboat.spacesloth.main.game.GameObject;
-import com.loneboat.spacesloth.main.util.MouseUtil;
 import com.loneboat.spacesloth.main.util.PlayerInputListener;
 import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
 
@@ -19,25 +18,16 @@ import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
  */
 public class SlothShip extends GameObject {
 
-    private PlayerInputListener playerInputListener;
+    private PlayerInputListener ip;
     private Profile profile;
 
     public class Profile {
         private SlothShip sloth;
-        private Vector2 currentSpeed;
+        private float velocity = 2.5f;
 
         public Profile(SlothShip sloth) {
             this.sloth = sloth;
         }
-
-        public Vector2 getCurrentSpeed() {
-            return currentSpeed;
-        }
-
-        public void setCurrentSpeed(Vector2 newSpeed) {
-            this.currentSpeed = newSpeed;
-        }
-
     }
 
     /**
@@ -51,7 +41,6 @@ public class SlothShip extends GameObject {
         super(game, chandle, active_stage, world, "Mr. Slothers");
 
         profile = new Profile(this);
-        profile.setCurrentSpeed(new Vector2(10, 10));
 
         BodyDef bdef = new BodyDef();
         FixtureDef fdef = new FixtureDef();
@@ -61,6 +50,7 @@ public class SlothShip extends GameObject {
 
         bdef.position.set(350 / Globals.PixelsPerMetre, 350 / Globals.PixelsPerMetre);
         bdef.type = BodyDef.BodyType.DynamicBody;
+
 
         shape.setAsBox(48 / Globals.PixelsPerMetre, 42 / Globals.PixelsPerMetre);
         fdef.shape = shape;
@@ -72,10 +62,10 @@ public class SlothShip extends GameObject {
         setBody(body);
         setBox2DSprite(sprite);
 
-        getBody().setLinearDamping(0.1f);
-
-        playerInputListener = new PlayerInputListener(this, game, chandle);
+        ip = new PlayerInputListener(game, chandle);
         setOrigin(getBodyX() / 2, getBodyY() / 2);
+
+        setMaxVelocity(10.0f);
     }
 
     /**
@@ -85,8 +75,29 @@ public class SlothShip extends GameObject {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
-        getBody().setTransform(body.getPosition().x, body.getPosition().y, MouseUtil.getMouseAngleRelativeToScreen() / 180);
-        //box2DSprite.setRotation(MouseUtil.getMouseAngleRelativeToScreen());
+
+        if(ip.w) {
+            incCurVelocity(1.0f);
+            getBody().setLinearDamping(0.0f);
+            getBody().applyForceToCenter(
+                    MathUtils.cos(getBody().getAngle()) * getCurVelocity(),
+                    MathUtils.sin(getBody().getAngle()) * getCurVelocity(),
+                    true
+            );
+        } else {
+            setCurVelocity(0.0f);
+            getBody().setLinearDamping(1.0f);
+        }
+
+        if(ip.left) {
+            getBody().setTransform(getBody().getPosition(), getBody().getAngle() + 0.1f);
+        }
+
+        if(ip.right) {
+            getBody().setTransform(getBody().getPosition(), getBody().getAngle() - 0.1f);
+        }
+
+        game.getLogger().info("Speed: " + getCurVelocity());
     }
 
     public Profile getProfile() {
@@ -94,7 +105,7 @@ public class SlothShip extends GameObject {
     }
 
     public PlayerInputListener getPlayerInputListener() {
-        return playerInputListener;
+        return ip;
     }
 
 }
