@@ -1,9 +1,8 @@
 package com.loneboat.spacesloth.main.game;
 
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Fixture;
@@ -47,7 +46,8 @@ public abstract class GameObject extends Actor implements GameObjectTracker {
     public Fixture[] fixes;
 
     // Utility objects.
-    public AnimatedSprite sprite;
+    public Sprite sprite;
+    public AnimatedSprite asprite;
     public AnimatedBox2DSprite animatedBox2DSprite;
     public Box2DSprite box2DSprite;
 
@@ -57,7 +57,8 @@ public abstract class GameObject extends Actor implements GameObjectTracker {
     // Tracker variables
     private float lives;
     private float health;
-    private float velocity;
+    private Vector2 MaxVelocity;
+    private Vector2 CurVelocity;
 
     /**
      * Creates a new game object that is animated but not a box2d object.
@@ -104,7 +105,7 @@ public abstract class GameObject extends Actor implements GameObjectTracker {
             sprite = new AnimatedSprite(animations.get(key));
             if (world != null) {
                 // It's a box2d object!
-                animatedBox2DSprite = new AnimatedBox2DSprite(sprite);
+                animatedBox2DSprite = new AnimatedBox2DSprite(asprite);
             }
         }
     }
@@ -131,6 +132,11 @@ public abstract class GameObject extends Actor implements GameObjectTracker {
 
     public void setCurrentScreen(GameScreen screen) {
         this.currentScreen = screen;
+    }
+
+    public void createBasicSprite(String filename) {
+        Texture bsprite = chandle.getManager().get(filename, Texture.class);
+        sprite = new Sprite(bsprite, bsprite.getWidth(), bsprite.getHeight());
     }
 
     /**
@@ -162,14 +168,46 @@ public abstract class GameObject extends Actor implements GameObjectTracker {
         this.health = health;
     }
 
+
     @Override
-    public float getMaxVelocity() {
-        return velocity;
+    public Vector2 getCurVelocity() {
+        return CurVelocity;
     }
 
     @Override
-    public void setMaxVeolicity(float velocity) {
-        this.velocity = velocity;
+    public void setCurVelocity(Vector2 CurVelocity) {
+        this.CurVelocity = CurVelocity;
+    }
+
+    @Override
+    public void incCurVelocity(Vector2 incVel) {
+        if(compareVelocity()) {
+            CurVelocity.x += incVel.x;
+            CurVelocity.y += incVel.y;
+        }
+    }
+
+    @Override
+    public void decCurVelocity(Vector2 decVel) {
+        if(CurVelocity.isZero()) {
+            CurVelocity.x -= decVel.x;
+            CurVelocity.y -= decVel.y;
+        }
+    }
+
+    @Override
+    public boolean compareVelocity() {
+        return (CurVelocity.x < MaxVelocity.x && CurVelocity.y < MaxVelocity.y);
+    }
+
+    @Override
+    public Vector2 getMaxVelocity() {
+        return MaxVelocity;
+    }
+
+    @Override
+    public void setMaxVelocity(Vector2 MaxVelocity) {
+        this.MaxVelocity = MaxVelocity;
     }
 
     @Override
@@ -191,4 +229,5 @@ public abstract class GameObject extends Actor implements GameObjectTracker {
     public void addLives(float lives) {
         this.lives += lives;
     }
+
 }

@@ -3,6 +3,7 @@ package com.loneboat.spacesloth.main.game.actors;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.loneboat.spacesloth.main.Globals;
@@ -47,10 +48,8 @@ public class SlothShip extends GameObject {
         PolygonShape shape = new PolygonShape();
 
         // create player
-
-        bdef.position.set(350 / Globals.PixelsPerMetre, 350 / Globals.PixelsPerMetre);
+        bdef.position.set(35000 / Globals.PixelsPerMetre, 35000 / Globals.PixelsPerMetre);
         bdef.type = BodyDef.BodyType.DynamicBody;
-
 
         shape.setAsBox(48 / Globals.PixelsPerMetre, 42 / Globals.PixelsPerMetre);
         fdef.shape = shape;
@@ -63,9 +62,11 @@ public class SlothShip extends GameObject {
         setBox2DSprite(sprite);
 
         ip = new PlayerInputListener(game, chandle);
-        setOrigin(getBodyX() / 2, getBodyY() / 2);
+        setOrigin(getWidth() / 2, getHeight() / 2);
+        game.getLogger().info("Current Rotation: " + body.getAngle());
 
-        setMaxVelocity(10.0f);
+        setCurVelocity(new Vector2(0.0f, 0.0f));
+        setMaxVelocity(new Vector2(0.5f, 0.5f));
     }
 
     /**
@@ -76,28 +77,27 @@ public class SlothShip extends GameObject {
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
 
+        Vector2 force = new Vector2(
+                -(MathUtils.sin(getBody().getAngle()) * getCurVelocity().x),
+                (MathUtils.cos(getBody().getAngle()) * getCurVelocity().y)
+        );
+
         if(ip.w) {
-            incCurVelocity(1.0f);
+            incCurVelocity(new Vector2(0.1f, 0.1f));
             getBody().setLinearDamping(0.0f);
-            getBody().applyForceToCenter(
-                    MathUtils.cos(getBody().getAngle()) * getCurVelocity(),
-                    MathUtils.sin(getBody().getAngle()) * getCurVelocity(),
-                    true
-            );
+            getBody().applyLinearImpulse(force.x, force.y, getBodyX(), getBodyY(), true);
         } else {
-            setCurVelocity(0.0f);
+            setCurVelocity(new Vector2(0.0f, 0.0f));
             getBody().setLinearDamping(1.0f);
         }
 
-        if(ip.left) {
+        if(ip.a) {
             getBody().setTransform(getBody().getPosition(), getBody().getAngle() + 0.1f);
         }
 
-        if(ip.right) {
+        if(ip.d) {
             getBody().setTransform(getBody().getPosition(), getBody().getAngle() - 0.1f);
         }
-
-        game.getLogger().info("Speed: " + getCurVelocity());
     }
 
     public Profile getProfile() {

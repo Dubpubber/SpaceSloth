@@ -31,6 +31,10 @@ public class AsteroidsLevel extends GameScreen {
         setStaticBackground(chandle.getManager().get("Backgrounds/spacebackground_1.jpg", Texture.class));
         setLeadActor(player, true);
         Gdx.input.setInputProcessor(player.getPlayerInputListener());
+
+        /*MouseActor mouseActor = new MouseActor(game, handler, MainStage);
+        mouseActor.setCurrentScreen(this);
+        MainStage.addActor(mouseActor);*/
     }
 
     @Override

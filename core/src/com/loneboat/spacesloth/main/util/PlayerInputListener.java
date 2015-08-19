@@ -2,23 +2,20 @@ package com.loneboat.spacesloth.main.util;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.math.Vector2;
 import com.loneboat.spacesloth.main.SpaceSloth;
 import com.loneboat.spacesloth.main.content.ContentHandler;
-import com.loneboat.spacesloth.main.game.actors.SlothShip;
 
 /**
  * com.loneboat.spacesloth.main.util
  * Created by Dubpub on 8/16/2015.
  */
 public class PlayerInputListener implements InputProcessor {
-
-    private SlothShip player;
     private SpaceSloth game;
     private ContentHandler chandle;
 
-    public PlayerInputListener(SlothShip player, SpaceSloth game, ContentHandler chandle) {
-        this.player = player;
+    public boolean w, s, a, d, left, right, pageup;
+
+    public PlayerInputListener(SpaceSloth game, ContentHandler chandle) {
         this.game = game;
         this.chandle = chandle;
     }
@@ -27,16 +24,25 @@ public class PlayerInputListener implements InputProcessor {
     public boolean keyDown(int keycode) {
         switch (keycode) {
             case Input.Keys.W:
-                player.getBody().setLinearVelocity(new Vector2(0, player.getProfile().getCurrentSpeed().y));
+                w = true;
                 break;
             case Input.Keys.S:
-                player.getBody().setLinearVelocity(new Vector2(0, -player.getProfile().getCurrentSpeed().y));
+                s = true;
                 break;
             case Input.Keys.A:
-                player.getBody().applyForceToCenter(new Vector2(-player.getProfile().getCurrentSpeed().x, 0), true);
+                a = true;
                 break;
             case Input.Keys.D:
-                player.getBody().applyForceToCenter(new Vector2(player.getProfile().getCurrentSpeed().x, 0), true);
+                d = true;
+                break;
+            case Input.Keys.LEFT:
+                left = true;
+                break;
+            case Input.Keys.RIGHT:
+                right = true;
+                break;
+            case Input.Keys.PAGE_UP:
+                pageup = true;
                 break;
         }
         return false;
@@ -44,6 +50,29 @@ public class PlayerInputListener implements InputProcessor {
 
     @Override
     public boolean keyUp(int keycode) {
+        switch (keycode) {
+            case Input.Keys.W:
+                w = false;
+                break;
+            case Input.Keys.S:
+                s = false;
+                break;
+            case Input.Keys.A:
+                a = false;
+                break;
+            case Input.Keys.D:
+                d = false;
+                break;
+            case Input.Keys.LEFT:
+                left = false;
+                break;
+            case Input.Keys.RIGHT:
+                right = false;
+                break;
+            case Input.Keys.PAGE_UP:
+                pageup = false;
+                break;
+        }
         return false;
     }
 

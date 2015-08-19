@@ -1,5 +1,7 @@
 package com.loneboat.spacesloth.main.util;
 
+import com.badlogic.gdx.math.Vector2;
+
 /**
  * com.loneboat.spacesloth.main.util
  * Created by Dubpub on 8/7/2015.
@@ -14,8 +16,16 @@ public interface GameObjectTracker {
     float getHealth();
     void setHealth(float health);
 
-    float getMaxVelocity();
-    void setMaxVeolicity(float velocity);
+    Vector2 getCurVelocity();
+    void setCurVelocity(Vector2 CurVelocity);
+
+    void incCurVelocity(Vector2 incVel);
+    void decCurVelocity(Vector2 decVel);
+
+    boolean compareVelocity();
+
+    Vector2 getMaxVelocity();
+    void setMaxVelocity(Vector2 MaxVelocity);
 
     // Adjusters
     void subtrackHealth(float health);

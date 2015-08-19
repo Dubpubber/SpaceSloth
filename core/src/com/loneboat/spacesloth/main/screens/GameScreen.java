@@ -17,6 +17,7 @@ import com.loneboat.spacesloth.main.Globals;
 import com.loneboat.spacesloth.main.SpaceSloth;
 import com.loneboat.spacesloth.main.content.ContentHandler;
 import com.loneboat.spacesloth.main.game.GameObject;
+import com.loneboat.spacesloth.main.util.MouseUtil;
 import net.dermetfan.gdx.graphics.g2d.AnimatedBox2DSprite;
 import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
 
@@ -119,9 +120,8 @@ public abstract class GameScreen implements Screen {
             // Update that camera
             main_cam.update();
         }
-
         // Now we're going to update the mouse relative to the screen.
-        Vector3 worldcoords = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+        Vector3 worldcoords = new Vector3(Gdx.input.getX(), (Gdx.graphics.getHeight() - Gdx.input.getY()), 0);
         hud_cam.unproject(worldcoords);
         mouseLoc = new Vector2(worldcoords.x, worldcoords.y);
 
@@ -156,20 +156,13 @@ public abstract class GameScreen implements Screen {
             box2DCam.update();
             debugRenderer.render(world, box2DCam.combined);
 
-            float angle = (float) Math.atan2(
-                    (Gdx.input.getY() - 270),
-                    -(Gdx.input.getX() - 270)
-            );
-
-            angle = (float) -Math.toDegrees(angle);
-
             // Notice how we're still projecting to the hud cam!
             batch.setProjectionMatrix(hud_cam.combined);
             batch.begin();
             font.draw(batch, "Debug Mode", 3, 475);
             font.draw(batch, "X: " + Math.round(mouseLoc.x), 3, 450);
             font.draw(batch, "Y: " + Math.round(mouseLoc.y), 3, 425);
-            font.draw(batch, "Angle: " + angle, 3, 400);
+            font.draw(batch, "Angle: " + MouseUtil.getMouseAngleRelativeToScreen(), 3, 400);
             batch.end();
         }
 

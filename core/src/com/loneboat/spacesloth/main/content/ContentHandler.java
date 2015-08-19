@@ -43,7 +43,7 @@ public class ContentHandler {
 
         batch = new SpriteBatch();
         debugfont = new BitmapFont();
-        main_cam = new OrthographicCamera();
+        main_cam = new OrthographicCamera(1, GAMEWIDTH / GAMEHEIGHT);
         main_cam.setToOrtho(false, GAMEWIDTH, GAMEHEIGHT);
         hud_cam = new OrthographicCamera();
         hud_cam.setToOrtho(false, GAMEWIDTH, GAMEHEIGHT);
@@ -54,6 +54,7 @@ public class ContentHandler {
     private void queueAssets() {
         manager.load("Backgrounds/spacebackground_1.jpg", Texture.class);
         manager.load("Sprites/Ship_A1.png", Texture.class);
+        manager.load("Sprites/mouseSprite.png", Texture.class);
     }
 
     /**
