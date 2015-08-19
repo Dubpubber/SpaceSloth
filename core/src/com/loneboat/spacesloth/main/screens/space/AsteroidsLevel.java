@@ -1,6 +1,7 @@
 package com.loneboat.spacesloth.main.screens.space;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.loneboat.spacesloth.main.SpaceSloth;
 import com.loneboat.spacesloth.main.content.ContentHandler;
@@ -29,12 +30,15 @@ public class AsteroidsLevel extends GameScreen {
         MainStage.addActor(player);
         MainStage.setKeyboardFocus(player);
         setStaticBackground(chandle.getManager().get("Backgrounds/spacebackground_1.jpg", Texture.class));
+        setClampBackground(true);
         setLeadActor(player, true);
         Gdx.input.setInputProcessor(player.getPlayerInputListener());
 
-        /*MouseActor mouseActor = new MouseActor(game, handler, MainStage);
-        mouseActor.setCurrentScreen(this);
-        MainStage.addActor(mouseActor);*/
+        Pixmap pm = new Pixmap(Gdx.files.internal("Sprites/mouseSprite.png"));
+        Gdx.input.setCursorImage(pm, 0, 0);
+        pm.dispose();
+
+        setIsDebugView(false);
     }
 
     @Override
