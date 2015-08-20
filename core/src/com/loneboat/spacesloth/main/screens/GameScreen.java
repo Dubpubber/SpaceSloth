@@ -12,12 +12,10 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.Logger;
 import com.loneboat.spacesloth.main.Globals;
 import com.loneboat.spacesloth.main.SpaceSloth;
 import com.loneboat.spacesloth.main.content.ContentHandler;
 import com.loneboat.spacesloth.main.game.GameObject;
-import com.loneboat.spacesloth.main.util.MouseUtil;
 import net.dermetfan.gdx.graphics.g2d.AnimatedBox2DSprite;
 import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
 
@@ -33,6 +31,7 @@ public abstract class GameScreen implements Screen {
 
     // Box2d Objects
     public World world;
+    private boolean isDebugView = false;
 
     // Setup the stages
     public Stage MainStage;
@@ -53,6 +52,7 @@ public abstract class GameScreen implements Screen {
 
     // Background texture.
     private Texture static_background;
+    private boolean clampBackground = false;
 
     // Main Actor
     private GameObject LeadActor;
@@ -129,7 +129,10 @@ public abstract class GameScreen implements Screen {
         batch.setProjectionMatrix(main_cam.combined);
         if(static_background != null) {
             batch.begin();
-            batch.draw(static_background, 0, 0);
+            if(clampBackground)
+                batch.draw(static_background, 0, 0, static_background.getWidth() / Globals.PixelsPerMetre, static_background.getHeight() / Globals.PixelsPerMetre);
+            else
+                batch.draw(static_background, 0, 0, static_background.getWidth() / Globals.PixelsPerMetre, static_background.getHeight() / Globals.PixelsPerMetre);
             batch.end();
         }
 
@@ -147,7 +150,7 @@ public abstract class GameScreen implements Screen {
         //
 
         // Finally, we're going to draw the debugs
-        if(game.getLogger().getLevel() == Logger.DEBUG && LeadActor != null) {
+        if(isDebugView && LeadActor != null) {
             box2DCam.position.set(
                     LeadActor.getBodyX(),
                     LeadActor.getBodyY(),
@@ -160,9 +163,6 @@ public abstract class GameScreen implements Screen {
             batch.setProjectionMatrix(hud_cam.combined);
             batch.begin();
             font.draw(batch, "Debug Mode", 3, 475);
-            font.draw(batch, "X: " + Math.round(mouseLoc.x), 3, 450);
-            font.draw(batch, "Y: " + Math.round(mouseLoc.y), 3, 425);
-            font.draw(batch, "Angle: " + MouseUtil.getMouseAngleRelativeToScreen(), 3, 400);
             batch.end();
         }
 
@@ -218,6 +218,19 @@ public abstract class GameScreen implements Screen {
 
     public void addLeadActor() {
 
+    }
+
+    public void setClampBackground(boolean clampBackground) {
+        this.clampBackground = clampBackground;
+    }
+
+
+    public boolean isDebugView() {
+        return isDebugView;
+    }
+
+    public void setIsDebugView(boolean isDebugView) {
+        this.isDebugView = isDebugView;
     }
 
 }

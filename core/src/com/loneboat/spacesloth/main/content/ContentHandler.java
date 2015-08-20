@@ -55,6 +55,9 @@ public class ContentHandler {
         manager.load("Backgrounds/spacebackground_1.jpg", Texture.class);
         manager.load("Sprites/Ship_A1.png", Texture.class);
         manager.load("Sprites/mouseSprite.png", Texture.class);
+        manager.load("Sprites/Thruster_A1.png", Texture.class);
+        manager.load("Sprites/GunMount_A1.png", Texture.class);
+        manager.load("Sprites/Asteroid_2_smallball.png", Texture.class);
     }
 
     /**

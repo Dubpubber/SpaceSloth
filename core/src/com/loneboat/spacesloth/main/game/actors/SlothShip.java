@@ -31,6 +31,8 @@ public class SlothShip extends GameObject {
         }
     }
 
+    private Box2DSprite gunMount_sprite;
+
     /**
      * Creates a new game object that is animated but not a box2d object.
      *
@@ -44,20 +46,70 @@ public class SlothShip extends GameObject {
         profile = new Profile(this);
 
         BodyDef bdef = new BodyDef();
-        FixtureDef fdef = new FixtureDef();
+        FixtureDef shipBody = new FixtureDef();
         PolygonShape shape = new PolygonShape();
 
         // create player
-        bdef.position.set(35000 / Globals.PixelsPerMetre, 35000 / Globals.PixelsPerMetre);
+        bdef.position.set(35 / Globals.PixelsPerMetre, 35 / Globals.PixelsPerMetre);
         bdef.type = BodyDef.BodyType.DynamicBody;
 
-        shape.setAsBox(48 / Globals.PixelsPerMetre, 42 / Globals.PixelsPerMetre);
-        fdef.shape = shape;
+        Body body = world.createBody(bdef);
 
+        shape.setAsBox(48 / Globals.PixelsPerMetre, 42 / Globals.PixelsPerMetre);
+        shipBody.shape = shape;
+
+        Fixture shipFixture = body.createFixture(shipBody);
+
+        // Create the base ship model from the body def so far.
         Texture texture = chandle.getManager().get("Sprites/Ship_A1.png", Texture.class);
         Box2DSprite sprite = new Box2DSprite(texture);
-        Body body = world.createBody(bdef).createFixture(fdef).getBody();
-        body.setUserData(sprite);
+        shipFixture.setUserData(sprite);
+
+        // Dispose of the shape used for the sloth ship, then create a new one for the thrusters.
+        // - Create the first thruster.
+        shape = new PolygonShape();
+        shape.setAsBox(10 / Globals.PixelsPerMetre, 42 / Globals.PixelsPerMetre, new Vector2(-60 / Globals.PixelsPerMetre, -25 / Globals.PixelsPerMetre), 0);
+
+        FixtureDef thruster1 = new FixtureDef();
+        thruster1.shape = shape;
+
+        Fixture thrusterFixture = body.createFixture(thruster1);
+
+        // Assign a new box2d sprite to the thruster polygon.
+        Texture thruster_texture = chandle.getManager().get("Sprites/Thruster_A1.png", Texture.class);
+        Box2DSprite thruster_sprite = new Box2DSprite(thruster_texture);
+        thrusterFixture.setUserData(thruster_sprite);
+
+        // - Create the second thruster.
+        shape.setAsBox(10 / Globals.PixelsPerMetre, 42 / Globals.PixelsPerMetre, new Vector2(60 / Globals.PixelsPerMetre, -25 / Globals.PixelsPerMetre), 0);
+
+        FixtureDef thruster2 = new FixtureDef();
+        thruster2.shape = shape;
+
+        Fixture thruster2Fixture = body.createFixture(thruster2);
+
+        // Assign a new box2d sprite to the thruster polygon.
+        Box2DSprite thruster2_sprite = new Box2DSprite(thruster_texture);
+        thruster2Fixture.setUserData(thruster2_sprite);
+
+        // Finally, create the gun mount for the sloth ship. This piece will rotate with the mouse.
+        shape = new PolygonShape();
+        shape.setAsBox(10 / Globals.PixelsPerMetre, 35 / Globals.PixelsPerMetre, new Vector2(0, 60 / Globals.PixelsPerMetre), 0);
+
+        FixtureDef gunMount_fdef = new FixtureDef();
+        gunMount_fdef.shape = shape;
+
+        Fixture gunMount_Fixture = body.createFixture(gunMount_fdef);
+
+        // Assign the gun mount
+        Texture gunMount_texture = chandle.getManager().get("Sprites/GunMount_A1.png", Texture.class);
+        gunMount_sprite = new Box2DSprite(gunMount_texture);
+        gunMount_Fixture.setUserData(gunMount_sprite);
+
+        // Last, dispose the shape.
+        //shape.dispose();
+
+        // Set the objects data.
         setBody(body);
         setBox2DSprite(sprite);
 
@@ -66,7 +118,9 @@ public class SlothShip extends GameObject {
         game.getLogger().info("Current Rotation: " + body.getAngle());
 
         setCurVelocity(new Vector2(0.0f, 0.0f));
-        setMaxVelocity(new Vector2(0.5f, 0.5f));
+        setMaxVelocity(new Vector2(0.075f, 0.075f));
+
+        shape.dispose();
     }
 
     /**
@@ -88,7 +142,7 @@ public class SlothShip extends GameObject {
             getBody().applyLinearImpulse(force.x, force.y, getBodyX(), getBodyY(), true);
         } else {
             setCurVelocity(new Vector2(0.0f, 0.0f));
-            getBody().setLinearDamping(1.0f);
+            getBody().setLinearDamping(0.75f);
         }
 
         if(ip.a) {
@@ -97,6 +151,10 @@ public class SlothShip extends GameObject {
 
         if(ip.d) {
             getBody().setTransform(getBody().getPosition(), getBody().getAngle() - 0.1f);
+        }
+
+        if(ip.s) {
+            getBody().setLinearDamping(2.5f);
         }
     }
 

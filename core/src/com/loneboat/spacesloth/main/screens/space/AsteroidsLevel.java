@@ -2,10 +2,10 @@ package com.loneboat.spacesloth.main.screens.space;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
 import com.loneboat.spacesloth.main.SpaceSloth;
 import com.loneboat.spacesloth.main.content.ContentHandler;
 import com.loneboat.spacesloth.main.game.actors.SlothShip;
+import com.loneboat.spacesloth.main.game.worldobjects.Asteroid;
 import com.loneboat.spacesloth.main.screens.GameScreen;
 
 /**
@@ -25,20 +25,25 @@ public class AsteroidsLevel extends GameScreen {
         this.difficulty = difficulty;
         game.getLogger().info("Switched to an AsteroidsLevel");
 
+        // Create Player
         player = new SlothShip(game, handler, MainStage, world);
         player.setCurrentScreen(this);
         MainStage.addActor(player);
         MainStage.setKeyboardFocus(player);
-        setStaticBackground(chandle.getManager().get("Backgrounds/spacebackground_1.jpg", Texture.class));
-        setClampBackground(true);
         setLeadActor(player, true);
         Gdx.input.setInputProcessor(player.getPlayerInputListener());
+
+        // Create debug asteroids
+        for(int asses = 0; asses < 25; asses++) {
+            Asteroid a1 = new Asteroid(game, chandle, MainStage, world);
+            MainStage.addActor(a1);
+        }
 
         Pixmap pm = new Pixmap(Gdx.files.internal("Sprites/mouseSprite.png"));
         Gdx.input.setCursorImage(pm, 0, 0);
         pm.dispose();
 
-        setIsDebugView(false);
+        setIsDebugView(true);
     }
 
     @Override
