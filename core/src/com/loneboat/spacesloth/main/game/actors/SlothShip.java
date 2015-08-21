@@ -9,7 +9,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.loneboat.spacesloth.main.Globals;
 import com.loneboat.spacesloth.main.SpaceSloth;
 import com.loneboat.spacesloth.main.content.ContentHandler;
+import com.loneboat.spacesloth.main.game.Box2DSpriteObject;
 import com.loneboat.spacesloth.main.game.GameObject;
+import com.loneboat.spacesloth.main.game.worldobjects.AsteroidBomb;
 import com.loneboat.spacesloth.main.util.PlayerInputListener;
 import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
 
@@ -22,12 +24,27 @@ public class SlothShip extends GameObject {
     private PlayerInputListener ip;
     private Profile profile;
 
+    /**
+     * Holds the player's individual profile.
+     *  (for easy saving and loading.)
+     */
     public class Profile {
         private SlothShip sloth;
-        private float velocity = 2.5f;
 
         public Profile(SlothShip sloth) {
             this.sloth = sloth;
+        }
+
+        public SlothShip getPlayer() {
+            return sloth;
+        }
+
+        public boolean load() {
+            return false;
+        }
+
+        public boolean save() {
+            return false;
         }
     }
 
@@ -41,7 +58,7 @@ public class SlothShip extends GameObject {
      * @param active_stage - Stage on which the this game object will be acting on.
      */
     public SlothShip(SpaceSloth game, final ContentHandler chandle, Stage active_stage, World world) {
-        super(game, chandle, active_stage, world, "Mr. Slothers");
+        super(game, chandle, active_stage, world, "SlothShip");
 
         profile = new Profile(this);
 
@@ -57,12 +74,13 @@ public class SlothShip extends GameObject {
 
         shape.setAsBox(48 / Globals.PixelsPerMetre, 42 / Globals.PixelsPerMetre);
         shipBody.shape = shape;
+        shipBody.density = 0.1f;
 
         Fixture shipFixture = body.createFixture(shipBody);
 
         // Create the base ship model from the body def so far.
         Texture texture = chandle.getManager().get("Sprites/Ship_A1.png", Texture.class);
-        Box2DSprite sprite = new Box2DSprite(texture);
+        Box2DSpriteObject sprite = new Box2DSpriteObject(texture, this);
         shipFixture.setUserData(sprite);
 
         // Dispose of the shape used for the sloth ship, then create a new one for the thrusters.
@@ -77,7 +95,7 @@ public class SlothShip extends GameObject {
 
         // Assign a new box2d sprite to the thruster polygon.
         Texture thruster_texture = chandle.getManager().get("Sprites/Thruster_A1.png", Texture.class);
-        Box2DSprite thruster_sprite = new Box2DSprite(thruster_texture);
+        Box2DSprite thruster_sprite = new Box2DSpriteObject(thruster_texture, this);
         thrusterFixture.setUserData(thruster_sprite);
 
         // - Create the second thruster.
@@ -89,7 +107,7 @@ public class SlothShip extends GameObject {
         Fixture thruster2Fixture = body.createFixture(thruster2);
 
         // Assign a new box2d sprite to the thruster polygon.
-        Box2DSprite thruster2_sprite = new Box2DSprite(thruster_texture);
+        Box2DSprite thruster2_sprite = new Box2DSpriteObject(thruster_texture, this);
         thruster2Fixture.setUserData(thruster2_sprite);
 
         // Finally, create the gun mount for the sloth ship. This piece will rotate with the mouse.
@@ -103,7 +121,7 @@ public class SlothShip extends GameObject {
 
         // Assign the gun mount
         Texture gunMount_texture = chandle.getManager().get("Sprites/GunMount_A1.png", Texture.class);
-        gunMount_sprite = new Box2DSprite(gunMount_texture);
+        gunMount_sprite = new Box2DSpriteObject(gunMount_texture, this);
         gunMount_Fixture.setUserData(gunMount_sprite);
 
         // Last, dispose the shape.
@@ -115,10 +133,12 @@ public class SlothShip extends GameObject {
 
         ip = new PlayerInputListener(game, chandle);
         setOrigin(getWidth() / 2, getHeight() / 2);
-        game.getLogger().info("Current Rotation: " + body.getAngle());
 
         setCurVelocity(new Vector2(0.0f, 0.0f));
         setMaxVelocity(new Vector2(0.075f, 0.075f));
+        setHealth(100.0f);
+
+        getBody().setAngularDamping(2.5f);
 
         shape.dispose();
     }
@@ -145,7 +165,7 @@ public class SlothShip extends GameObject {
             getBody().setLinearDamping(0.75f);
         }
 
-        if(ip.a) {
+        if (ip.a) {
             getBody().setTransform(getBody().getPosition(), getBody().getAngle() + 0.1f);
         }
 
@@ -153,9 +173,16 @@ public class SlothShip extends GameObject {
             getBody().setTransform(getBody().getPosition(), getBody().getAngle() - 0.1f);
         }
 
-        if(ip.s) {
+        if (ip.s) {
             getBody().setLinearDamping(2.5f);
         }
+
+        if(ip.left) {
+            AsteroidBomb bomb = new AsteroidBomb(game, chandle, active_stage, world, this);
+            active_stage.addActor(bomb);
+            bomb.setCurrentScreen(currentScreen);
+        }
+
     }
 
     public Profile getProfile() {

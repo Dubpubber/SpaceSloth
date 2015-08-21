@@ -43,7 +43,6 @@ public abstract class GameObject extends Actor implements GameObjectTracker {
     public Body body;
     public BodyDef bdef;
     public Fixture fixture;
-    public Fixture[] fixes;
 
     // Utility objects.
     public Sprite sprite;

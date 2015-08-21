@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.loneboat.spacesloth.main.SpaceSloth;
 import com.loneboat.spacesloth.main.content.ContentHandler;
 import com.loneboat.spacesloth.main.game.actors.SlothShip;
+import com.loneboat.spacesloth.main.game.handlers.AsteroidsLevelListener;
 import com.loneboat.spacesloth.main.game.worldobjects.Asteroid;
 import com.loneboat.spacesloth.main.screens.GameScreen;
 
@@ -35,10 +36,14 @@ public class AsteroidsLevel extends GameScreen {
 
         // Create debug asteroids
         for(int asses = 0; asses < 25; asses++) {
-            Asteroid a1 = new Asteroid(game, chandle, MainStage, world);
-            MainStage.addActor(a1);
+            Asteroid tempasteroid = new Asteroid(game, chandle, MainStage, world, 85);
+            MainStage.addActor(tempasteroid);
         }
 
+        // Set Contact Listener.
+        world.setContactListener(new AsteroidsLevelListener(game));
+
+        // Apply the mouse image.
         Pixmap pm = new Pixmap(Gdx.files.internal("Sprites/mouseSprite.png"));
         Gdx.input.setCursorImage(pm, 0, 0);
         pm.dispose();
@@ -49,8 +54,5 @@ public class AsteroidsLevel extends GameScreen {
     @Override
     public void render(float delta) {
         super.render(delta);
-
-        MainStage.act(Gdx.graphics.getDeltaTime());
-        MainStage.draw();
     }
 }

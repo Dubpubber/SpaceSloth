@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.loneboat.spacesloth.main.Globals;
 import com.loneboat.spacesloth.main.SpaceSloth;
 import com.loneboat.spacesloth.main.content.ContentHandler;
@@ -35,6 +36,7 @@ public abstract class GameScreen implements Screen {
 
     // Setup the stages
     public Stage MainStage;
+    public Stage HudStage;
     public SpriteBatch batch;
     public BitmapFont font;
 
@@ -72,6 +74,7 @@ public abstract class GameScreen implements Screen {
 
         // Create the stage objects.
         MainStage = new Stage();
+        HudStage = new Stage();
         batch = ContentHandler.batch;
         font = ContentHandler.debugfont;
     }
@@ -109,6 +112,11 @@ public abstract class GameScreen implements Screen {
         // First, clear the screen.
         Gdx.graphics.getGL20().glClearColor(0.50f, 0.50f, 0.50f, 1);
         Gdx.graphics.getGL20().glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+        timer += delta;
+
+        // Stage Acts
+        MainStage.act(delta);
+        HudStage.act(delta);
 
         // Second; update the main camera's position.
         if(LeadActor != null && CameraFollow) {
@@ -143,13 +151,11 @@ public abstract class GameScreen implements Screen {
         AnimatedBox2DSprite.draw(batch, world);
         batch.end();
 
-        // Fifth, we're going to draw the hud
-        batch.setProjectionMatrix(hud_cam.combined);
-        batch.begin();
-        batch.end();
-        //
+        // Draw the stages...
+        MainStage.draw();
+        HudStage.draw();
 
-        // Finally, we're going to draw the debugs
+        // Then, we're going to draw the debugs
         if(isDebugView && LeadActor != null) {
             box2DCam.position.set(
                     LeadActor.getBodyX(),
@@ -163,6 +169,8 @@ public abstract class GameScreen implements Screen {
             batch.setProjectionMatrix(hud_cam.combined);
             batch.begin();
             font.draw(batch, "Debug Mode", 3, 475);
+            font.draw(batch, "Frames: " + Gdx.graphics.getFramesPerSecond(), 3, 450);
+            font.draw(batch, "Current body count: " + world.getBodyCount(), 3, 425);
             batch.end();
         }
 
@@ -179,19 +187,15 @@ public abstract class GameScreen implements Screen {
 
         MainStage.getBatch().setProjectionMatrix(main_cam.combined);
 
-        // Update the hub camera.
-        hud_cam.viewportWidth = width;
-        hud_cam.viewportHeight = height;
-        hud_cam.update();
-
-        MainStage.getBatch().setProjectionMatrix(hud_cam.combined);
-
         // Update the box2d debug camera.
         box2DCam.viewportWidth = width / 25;
         box2DCam.viewportHeight = height / 25;
         box2DCam.update();
 
         MainStage.getBatch().setProjectionMatrix(box2DCam.combined);
+
+        // Update the HUD!
+        HudStage.setViewport(new StretchViewport(width, height));
     }
 
     @Override
