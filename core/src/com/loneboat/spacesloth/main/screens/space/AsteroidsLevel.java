@@ -36,7 +36,7 @@ public class AsteroidsLevel extends GameScreen {
 
         // Create debug asteroids
         for(int asses = 0; asses < 25; asses++) {
-            Asteroid tempasteroid = new Asteroid(game, chandle, MainStage, world, 85);
+            Asteroid tempasteroid = new Asteroid(game, chandle, MainStage, world, 100);
             MainStage.addActor(tempasteroid);
         }
 

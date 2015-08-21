@@ -177,6 +177,7 @@ public class SlothShip extends GameObject {
 
         if (ip.s) {
             getBody().setLinearDamping(2.5f);
+            getBody().setAngularDamping(2.5f);
         }
 
         if(ip.left) {

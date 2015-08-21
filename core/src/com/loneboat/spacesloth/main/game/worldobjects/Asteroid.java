@@ -2,6 +2,7 @@ package com.loneboat.spacesloth.main.game.worldobjects;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -11,8 +12,6 @@ import com.loneboat.spacesloth.main.content.ContentHandler;
 import com.loneboat.spacesloth.main.game.GameObject;
 import com.loneboat.spacesloth.main.util.ScreenUtil;
 import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
-
-import java.util.Random;
 
 /**
  * com.loneboat.spacesloth.main.game.worldobjects
@@ -32,15 +31,12 @@ public class Asteroid extends GameObject {
     public Asteroid(SpaceSloth game, ContentHandler chandle, Stage active_stage, World world, int range) {
         super(game, chandle, active_stage, world, "Asteroid");
 
-        Random asteroidsize = new Random();
-        int size = asteroidsize.nextInt(range);
+        int size = MathUtils.random(range);
 
         BodyDef bdef = new BodyDef();
         FixtureDef asteroidBody = new FixtureDef();
         CircleShape shape = new CircleShape();
-        Vector2 randPos = ScreenUtil.getRandomPositionAroundVector(new Vector2(1,1), 10);
-
-        game.getLogger().info("RandPos: " + randPos.x + " " + randPos.y);
+        Vector2 randPos = ScreenUtil.getRandomPositionAroundVector(new Vector2(1,1), 3);
 
         bdef.position.set(randPos.x, randPos.y);
         bdef.type = BodyDef.BodyType.DynamicBody;
@@ -49,7 +45,7 @@ public class Asteroid extends GameObject {
 
         shape.setRadius(size / Globals.PixelsPerMetre);
         asteroidBody.shape = shape;
-        asteroidBody.density = 2.5f;
+        asteroidBody.density = 0.2f * size;
 
         Fixture shipFixture = body.createFixture(asteroidBody);
 

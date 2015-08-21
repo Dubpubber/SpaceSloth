@@ -14,7 +14,6 @@ public class Box2DSpriteObject extends Box2DSprite {
     public Box2DSpriteObject(Texture texture, GameObject object) {
         super(texture);
         this.object = object;
-        // Lol this is a commit test.
     }
 
     public GameObject getGameObject() {

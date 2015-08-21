@@ -35,6 +35,7 @@ public abstract class GameScreen implements Screen {
 
     // Setup the stages
     public Stage MainStage;
+    public Stage HudStage;
     public SpriteBatch batch;
     public BitmapFont font;
 
@@ -72,6 +73,7 @@ public abstract class GameScreen implements Screen {
 
         // Create the stage objects.
         MainStage = new Stage();
+        HudStage = new Stage();
         batch = ContentHandler.batch;
         font = ContentHandler.debugfont;
     }
@@ -111,6 +113,9 @@ public abstract class GameScreen implements Screen {
         Gdx.graphics.getGL20().glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         timer += delta;
 
+        MainStage.act(delta);
+        HudStage.act(delta);
+
         // Second; update the main camera's position.
         if(LeadActor != null && CameraFollow) {
             main_cam.position.set(
@@ -144,12 +149,6 @@ public abstract class GameScreen implements Screen {
         AnimatedBox2DSprite.draw(batch, world);
         batch.end();
 
-        // Fifth, we're going to draw the hud
-        batch.setProjectionMatrix(hud_cam.combined);
-        batch.begin();
-        batch.end();
-        //
-
         // Finally, we're going to draw the debugs
         if(isDebugView && LeadActor != null) {
             box2DCam.position.set(
@@ -168,6 +167,9 @@ public abstract class GameScreen implements Screen {
             font.draw(batch, "Current body count: " + world.getBodyCount(), 3, 425);
             batch.end();
         }
+
+        MainStage.draw();
+        HudStage.draw();
 
         // Lastly, Step the world's physics then allow the subclass to override!
         world.step(Globals.WorldStep, 8, 3);
