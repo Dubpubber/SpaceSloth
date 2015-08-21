@@ -109,6 +109,7 @@ public abstract class GameScreen implements Screen {
         // First, clear the screen.
         Gdx.graphics.getGL20().glClearColor(0.50f, 0.50f, 0.50f, 1);
         Gdx.graphics.getGL20().glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+        timer += delta;
 
         // Second; update the main camera's position.
         if(LeadActor != null && CameraFollow) {
@@ -163,6 +164,8 @@ public abstract class GameScreen implements Screen {
             batch.setProjectionMatrix(hud_cam.combined);
             batch.begin();
             font.draw(batch, "Debug Mode", 3, 475);
+            font.draw(batch, "Frames: " + Gdx.graphics.getFramesPerSecond(), 3, 450);
+            font.draw(batch, "Current body count: " + world.getBodyCount(), 3, 425);
             batch.end();
         }
 

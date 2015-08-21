@@ -58,6 +58,7 @@ public class ContentHandler {
         manager.load("Sprites/Thruster_A1.png", Texture.class);
         manager.load("Sprites/GunMount_A1.png", Texture.class);
         manager.load("Sprites/Asteroid_2_smallball.png", Texture.class);
+        manager.load("Sprites/Asteroid_2_bomb.png", Texture.class);
     }
 
     /**

@@ -35,8 +35,8 @@ public class AsteroidsLevel extends GameScreen {
 
         // Create debug asteroids
         for(int asses = 0; asses < 25; asses++) {
-            Asteroid a1 = new Asteroid(game, chandle, MainStage, world);
-            MainStage.addActor(a1);
+            Asteroid tempasteroid = new Asteroid(game, chandle, MainStage, world, 85);
+            MainStage.addActor(tempasteroid);
         }
 
         Pixmap pm = new Pixmap(Gdx.files.internal("Sprites/mouseSprite.png"));

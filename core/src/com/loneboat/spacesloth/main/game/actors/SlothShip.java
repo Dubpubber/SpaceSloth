@@ -10,6 +10,7 @@ import com.loneboat.spacesloth.main.Globals;
 import com.loneboat.spacesloth.main.SpaceSloth;
 import com.loneboat.spacesloth.main.content.ContentHandler;
 import com.loneboat.spacesloth.main.game.GameObject;
+import com.loneboat.spacesloth.main.game.worldobjects.AsteroidBomb;
 import com.loneboat.spacesloth.main.util.PlayerInputListener;
 import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
 
@@ -57,6 +58,7 @@ public class SlothShip extends GameObject {
 
         shape.setAsBox(48 / Globals.PixelsPerMetre, 42 / Globals.PixelsPerMetre);
         shipBody.shape = shape;
+        shipBody.density = 0.1f;
 
         Fixture shipFixture = body.createFixture(shipBody);
 
@@ -120,6 +122,8 @@ public class SlothShip extends GameObject {
         setCurVelocity(new Vector2(0.0f, 0.0f));
         setMaxVelocity(new Vector2(0.075f, 0.075f));
 
+        getBody().setAngularDamping(2.5f);
+
         shape.dispose();
     }
 
@@ -145,7 +149,7 @@ public class SlothShip extends GameObject {
             getBody().setLinearDamping(0.75f);
         }
 
-        if(ip.a) {
+        if (ip.a) {
             getBody().setTransform(getBody().getPosition(), getBody().getAngle() + 0.1f);
         }
 
@@ -153,9 +157,16 @@ public class SlothShip extends GameObject {
             getBody().setTransform(getBody().getPosition(), getBody().getAngle() - 0.1f);
         }
 
-        if(ip.s) {
+        if (ip.s) {
             getBody().setLinearDamping(2.5f);
         }
+
+        if(ip.left) {
+            AsteroidBomb bomb = new AsteroidBomb(game, chandle, active_stage, world, this);
+            active_stage.addActor(bomb);
+            bomb.setCurrentScreen(currentScreen);
+        }
+
     }
 
     public Profile getProfile() {
