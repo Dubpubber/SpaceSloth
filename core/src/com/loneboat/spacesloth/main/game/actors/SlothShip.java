@@ -140,6 +140,8 @@ public class SlothShip extends GameObject {
 
         getBody().setAngularDamping(2.5f);
 
+        getBody().setAngularDamping(2.5f);
+
         shape.dispose();
     }
 

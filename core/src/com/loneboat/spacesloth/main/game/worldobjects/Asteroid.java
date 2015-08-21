@@ -8,9 +8,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.loneboat.spacesloth.main.Globals;
 import com.loneboat.spacesloth.main.SpaceSloth;
 import com.loneboat.spacesloth.main.content.ContentHandler;
-import com.loneboat.spacesloth.main.game.Box2DSpriteObject;
 import com.loneboat.spacesloth.main.game.GameObject;
 import com.loneboat.spacesloth.main.util.ScreenUtil;
+import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
 
 import java.util.Random;
 
@@ -38,7 +38,9 @@ public class Asteroid extends GameObject {
         BodyDef bdef = new BodyDef();
         FixtureDef asteroidBody = new FixtureDef();
         CircleShape shape = new CircleShape();
-        Vector2 randPos = ScreenUtil.getRandomPositionAroundVector(new Vector2(1,1), 1);
+        Vector2 randPos = ScreenUtil.getRandomPositionAroundVector(new Vector2(1,1), 10);
+
+        game.getLogger().info("RandPos: " + randPos.x + " " + randPos.y);
 
         bdef.position.set(randPos.x, randPos.y);
         bdef.type = BodyDef.BodyType.DynamicBody;
@@ -47,13 +49,13 @@ public class Asteroid extends GameObject {
 
         shape.setRadius(size / Globals.PixelsPerMetre);
         asteroidBody.shape = shape;
-        asteroidBody.density = 0.1f * size;
+        asteroidBody.density = 2.5f;
 
         Fixture shipFixture = body.createFixture(asteroidBody);
 
         // Create the base ship model from the body def so far.
         Texture texture = chandle.getManager().get("Sprites/Asteroid_2_smallball.png", Texture.class);
-        Box2DSpriteObject sprite = new Box2DSpriteObject(texture, this);
+        Box2DSprite sprite = new Box2DSprite(texture);
         shipFixture.setUserData(sprite);
 
     }
