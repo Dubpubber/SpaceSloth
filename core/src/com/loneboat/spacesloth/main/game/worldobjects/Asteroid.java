@@ -18,8 +18,7 @@ import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
  * Created by Dubpub on 8/20/2015.
  */
 public class Asteroid extends GameObject {
-
-
+    private int ID;
     /**
      * Creates a new game object that is part of box2d.
      *
@@ -54,14 +53,22 @@ public class Asteroid extends GameObject {
         Box2DSprite sprite = new Box2DSprite(texture);
         shipFixture.setUserData(sprite);
 
+        setBody(body);
+        setBox2DSprite(sprite);
+        ID = MathUtils.random(1000);
     }
 
-    /**
-     * @param batch       - the sprite batch.
-     * @param parentAlpha Should be multiplied with the actor's alpha, allowing a parent's alpha to affect all children.
-     */
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
+    }
+
+    @Override
+    public void act(float delta) {
+        super.act(delta);
+        if(!body.isAwake()) {
+            Vector2 v = ScreenUtil.getRandomPositionAroundVector(body.getPosition(), 10);
+            body.applyForceToCenter(v, true);
+        }
     }
 }

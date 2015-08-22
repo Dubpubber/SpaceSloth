@@ -67,7 +67,12 @@ public class AsteroidBomb extends GameObject {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
-        game.getLogger().info(currentScreen.timer + "");
+
+        if(ScreenUtil.isWithinDistance(body.getPosition(), player.getBody().getPosition(), 2)) {
+            world.destroyBody(body);
+            remove();
+        }
+
         if(Math.round(currentScreen.timer) % 3 == 0) {
             body.setLinearVelocity((player.getBodyX() - getBodyX()) * 0.75f, (player.getBodyY() - getBodyY()) * 0.75f);
         }

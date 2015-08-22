@@ -20,7 +20,7 @@ public class ScreenUtil {
 
         switch(quadrant) {
             case 0:
-                // Quadrant 1, (-, +)
+                // Quadrant 1, (+, -)
                 ix += minDistance;
                 iy = -iy - minDistance;
                 break;
@@ -44,6 +44,27 @@ public class ScreenUtil {
         temp.set(ix, iy);
 
         return temp;
+    }
+
+    public static boolean isWithinDistance(Vector2 p1, Vector2 p2, float distance) {
+        return p1.dst(p2) <= distance;
+    }
+
+    public static int calculateQuadrant(Vector2 position) {
+        // Check quadrant 1, (+, -)
+        if(position.x > 0 && position.y < 0) {
+            // Quadrant 1, return 0.
+            return 0;
+        } else if(position.x > 0 && position.y > 0) { // Check quadrant 2, (+, +)
+            // Quadrant 2, return 1.
+            return 1;
+        } else if(position.x < 0 && position.y > 0) { // Check quadrant 3, (-, +)
+            // Quadrant 3, return 2.
+            return 2;
+        } else {
+            // Quadrant 4, return 3.
+            return 3;
+        }
     }
 
 }
