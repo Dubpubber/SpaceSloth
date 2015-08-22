@@ -12,6 +12,7 @@ import com.loneboat.spacesloth.main.content.ContentHandler;
 import com.loneboat.spacesloth.main.game.Box2DSpriteObject;
 import com.loneboat.spacesloth.main.game.GameObject;
 import com.loneboat.spacesloth.main.game.worldobjects.AsteroidBomb;
+import com.loneboat.spacesloth.main.game.worldobjects.weapons.BlueBlast;
 import com.loneboat.spacesloth.main.util.PlayerInputListener;
 import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
 
@@ -48,7 +49,7 @@ public class SlothShip extends GameObject {
         }
     }
 
-    private Box2DSprite gunMount_sprite;
+    private Box2DSpriteObject gunMount_sprite;
 
     /**
      * Creates a new game object that is animated but not a box2d object.
@@ -186,6 +187,11 @@ public class SlothShip extends GameObject {
             bomb.setCurrentScreen(currentScreen);
         }
 
+        if(ip.space) {
+            BlueBlast bb = new BlueBlast(game, chandle, active_stage, world, this);
+            game.getLogger().info("FIRE!");
+        }
+
     }
 
     public Profile getProfile() {
@@ -194,6 +200,10 @@ public class SlothShip extends GameObject {
 
     public PlayerInputListener getPlayerInputListener() {
         return ip;
+    }
+
+    public Box2DSpriteObject getGunMountSprite() {
+        return gunMount_sprite;
     }
 
 }
