@@ -1,9 +1,6 @@
 package com.loneboat.spacesloth.main.game.worldobjects.weapons;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.loneboat.spacesloth.main.Globals;
@@ -37,17 +34,14 @@ public class BlueBlast extends GameObject {
 
         // Get the gun mount fixture from the player.
         GameObject playerGunMount = player.getGunMountSprite().getGameObject();
-        Vector2 playerAngle = new Vector2(-(MathUtils.sin(player.getBody().getAngle()) * 1f), (MathUtils.cos(player.getBody().getAngle()) * 1f));
 
         // Set the blast to the tip of the gunmount sprite.
-        bdef.position.set(
-                player.getBodyX(),
-                player.getBodyY() * playerAngle.y
-        );
-
+        //velocity.set(targetX - position.x, targetY - position.y).nor().scl(Math.min(position.dst(targetX, targetY), speedMax));
+        bdef.position.set(player.getBody().getPosition());
         bdef.type = BodyDef.BodyType.KinematicBody;
 
         Body body = world.createBody(bdef);
+        //getCurVelocity().set(player.getBodyX() - getBodyX(), player.getBodyY() - getBodyY()).nor().scl(Math.min(body.getPosition().dst(getBodyX(), getBodyY()), 10.0f));
 
         shape.setRadius(15 / Globals.PixelsPerMetre);
         bulletbody.shape = shape;
@@ -62,8 +56,6 @@ public class BlueBlast extends GameObject {
         setBody(body);
         setBox2DSprite(sprite);
 
-        body.setLinearVelocity(playerAngle.x * 10, playerAngle.y * 10);
-
     }
 
     public void fire() {
@@ -75,13 +67,8 @@ public class BlueBlast extends GameObject {
         remove();
     }
 
-
-    /**
-     * @param batch       - the sprite batch.
-     * @param parentAlpha Should be multiplied with the actor's alpha, allowing a parent's alpha to affect all children.
-     */
     @Override
-    public void draw(Batch batch, float parentAlpha) {
-        super.draw(batch, parentAlpha);
+    public void act(float delta) {
+        super.act(delta);
     }
 }
