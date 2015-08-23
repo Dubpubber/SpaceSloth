@@ -1,6 +1,8 @@
 package com.loneboat.spacesloth.main.game.worldobjects.weapons;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.loneboat.spacesloth.main.Globals;
@@ -9,6 +11,7 @@ import com.loneboat.spacesloth.main.content.ContentHandler;
 import com.loneboat.spacesloth.main.game.Box2DSpriteObject;
 import com.loneboat.spacesloth.main.game.GameObject;
 import com.loneboat.spacesloth.main.game.actors.SlothShip;
+import com.loneboat.spacesloth.main.util.ScreenUtil;
 
 /**
  * com.loneboat.spacesloth.main.game.worldobjects.weapons
@@ -37,7 +40,7 @@ public class BlueBlast extends GameObject {
 
         // Set the blast to the tip of the gunmount sprite.
         //velocity.set(targetX - position.x, targetY - position.y).nor().scl(Math.min(position.dst(targetX, targetY), speedMax));
-        bdef.position.set(player.getBody().getPosition());
+        bdef.position.set(ScreenUtil.calculateFrontOfGameObject(player, player.getBodyX() + 3.0f, player.getBodyY() + 3.0f));
         bdef.type = BodyDef.BodyType.KinematicBody;
 
         Body body = world.createBody(bdef);
@@ -55,6 +58,9 @@ public class BlueBlast extends GameObject {
 
         setBody(body);
         setBox2DSprite(sprite);
+
+        Vector2 force = new Vector2(-MathUtils.sin(player.getBody().getAngle()) * 2.5f, MathUtils.cos(player.getBody().getAngle()) * 2.5f);
+        body.setLinearVelocity(force);
 
     }
 

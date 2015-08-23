@@ -1,6 +1,8 @@
 package com.loneboat.spacesloth.main.util;
 
 import com.badlogic.gdx.math.Vector2;
+import com.loneboat.spacesloth.main.Globals;
+import com.loneboat.spacesloth.main.game.GameObject;
 
 import java.util.Random;
 
@@ -65,6 +67,38 @@ public class ScreenUtil {
             // Quadrant 4, return 3.
             return 3;
         }
+    }
+
+    /**
+     * Calculates the very most front of any game object based on it's angle.
+     * @param object - The game object in which the calculate will be performed.
+     * @return - The position of the very most front of the object.
+     */
+    public static Vector2 calculateFrontOfGameObject(GameObject object, float frontx, float fronty) {
+        if(object.getBody() == null) return new Vector2(0,0);
+        frontx = frontx / Globals.PixelsPerMetre;
+        fronty = fronty / Globals.PixelsPerMetre;
+        Vector2 front = object.getBody().getPosition();
+        switch(calculateQuadrant(object.getBody().getPosition())) {
+            case 0:
+                // Quadrant 1, (+, -)
+                front.set(front.x + frontx, front.y - fronty);
+                break;
+            case 1:
+                // Quadrant 2, (+, +)
+                front.set(front.x + frontx, front.y + fronty);
+                break;
+            case 2:
+                // Quadrant 3, (-, +)
+                front.set(front.x - frontx, front.y + fronty);
+                break;
+            case 3:
+                // Quadrant 4, (-, -)
+                front.set(front.x - frontx, front.y - fronty);
+                break;
+        }
+        System.out.println("Front Vector: " + front.x + " " + front.y);
+        return front;
     }
 
 }
