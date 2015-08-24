@@ -40,7 +40,7 @@ public class ProjectileObject extends GameObject {
                 setIsActive(false);
             }
         };
-        new Timer().schedule(lifetime, 5000);
+        new Timer().schedule(lifetime, 2500);
         this.shooter = shooter;
         this.lifespan = lifespan;
         this.setZIndex(1);

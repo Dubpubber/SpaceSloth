@@ -25,6 +25,8 @@ public class SlothShip extends GameObject {
     private PlayerInputListener ip;
     private Profile profile;
 
+    private float steeringTorque = 0;
+
     /**
      * Holds the player's individual profile.
      *  (for easy saving and loading.)
@@ -170,11 +172,15 @@ public class SlothShip extends GameObject {
         }
 
         if (ip.a) {
-            getBody().setTransform(getBody().getPosition(), getBody().getAngle() + 0.1f);
+            steeringTorque = 0.25f;
         }
 
         if(ip.d) {
-            getBody().setTransform(getBody().getPosition(), getBody().getAngle() - 0.1f);
+            steeringTorque = -0.25f;
+        }
+
+        if(!ip.a && !ip.d) {
+            steeringTorque = 0;
         }
 
         if (ip.s) {
@@ -193,6 +199,8 @@ public class SlothShip extends GameObject {
             bb.setCurrentScreen(currentScreen);
             currentScreen.addProjectile(bb);
         }
+
+        getBody().applyTorque(steeringTorque, true);
 
     }
 

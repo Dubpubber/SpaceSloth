@@ -83,13 +83,24 @@ public class ScreenUtil {
      * @return - The position of the very most front of the object.
      */
     public static Vector2 calculateAngleOfObject(GameObject object) {
-        float angleA = MathUtils.cos(object.getBody().getAngle());
-        float angleB = MathUtils.sin(object.getBody().getAngle()) / 180);
-        System.out.println("Out " + angleA + " " + angleB);
-        float x1 = object.getBodyX() + (1.25f * angleA);
-        float y1 = object.getBodyY() + (1.25f * angleB);
-        System.out.println("Out " + angleA + " " + angleB + " <>");
-        return new Vector2(x1, y1);
+        System.out.println("--- BEGIN ---");
+        System.out.println("Obj Pos - X: " + object.getBodyX() + " Y: " + object.getBodyY());
+        System.out.println("Obj Pos - Angle: " + object.getBody().getAngle());
+        float radius = 2.5f;
+        float angleCos = MathUtils.cos(object.getBody().getAngle());
+        float angleSin = MathUtils.sin(object.getBody().getAngle());
+        if(angleCos < 0) {
+            angleCos = 1.0f - angleCos;
+        }
+        if(angleSin < 0) {
+            angleSin = 1.0f - angleSin;
+        }
+        System.out.println("AngleCos: " + angleCos + " AngleSin: " + angleSin);
+        float x = object.getBodyX() + (radius * angleCos);
+        float y = object.getBodyY() + (radius * angleSin);
+        System.out.println("Radius: " + radius + " Final X: " + x + " Final Y: " + y);
+        System.out.println("--- END ---");
+        return new Vector2(x, y);
 
         /*if(object.getBody() == null) return new Vector2(0,0);
         float x2 = offsetX * MathUtils.cos(object.getBody().getAngle()) - offsetY * MathUtils.sin(object.getBody().getAngle());
