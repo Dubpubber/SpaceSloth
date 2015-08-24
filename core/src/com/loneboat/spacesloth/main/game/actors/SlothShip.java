@@ -144,6 +144,7 @@ public class SlothShip extends GameObject {
         getBody().setAngularDamping(2.5f);
 
         shape.dispose();
+        this.setZIndex(1000);
     }
 
     /**
@@ -189,7 +190,8 @@ public class SlothShip extends GameObject {
 
         if(ip.space) {
             BlueBlast bb = new BlueBlast(game, chandle, active_stage, world, this);
-            game.getLogger().info("FIRE!");
+            bb.setCurrentScreen(currentScreen);
+            currentScreen.addProjectile(bb);
         }
 
     }

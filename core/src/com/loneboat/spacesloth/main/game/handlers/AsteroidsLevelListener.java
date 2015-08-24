@@ -3,6 +3,7 @@ package com.loneboat.spacesloth.main.game.handlers;
 import com.badlogic.gdx.physics.box2d.*;
 import com.loneboat.spacesloth.main.SpaceSloth;
 import com.loneboat.spacesloth.main.game.Box2DSpriteObject;
+import com.loneboat.spacesloth.main.game.worldobjects.weapons.BlueBlast;
 
 /**
  * com.loneboat.spacesloth.main.game.handlers
@@ -25,7 +26,9 @@ public class AsteroidsLevelListener implements ContactListener {
         if(A.getUserData() instanceof Box2DSpriteObject && B.getUserData() instanceof  Box2DSpriteObject) {
             Box2DSpriteObject sA = (Box2DSpriteObject) A.getUserData();
             Box2DSpriteObject sB = (Box2DSpriteObject) B.getUserData();
-            game.getLogger().info(sA.getGameObject().ObjLabel + " collided with " + sB.getGameObject().ObjLabel);
+            if(sA.getGameObject() instanceof BlueBlast || sB.getGameObject() instanceof BlueBlast) {
+                contact.setEnabled(false);
+            }
         }
     }
 

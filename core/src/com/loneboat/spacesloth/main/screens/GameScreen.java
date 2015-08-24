@@ -16,8 +16,12 @@ import com.loneboat.spacesloth.main.Globals;
 import com.loneboat.spacesloth.main.SpaceSloth;
 import com.loneboat.spacesloth.main.content.ContentHandler;
 import com.loneboat.spacesloth.main.game.GameObject;
+import com.loneboat.spacesloth.main.game.ProjectileObject;
 import net.dermetfan.gdx.graphics.g2d.AnimatedBox2DSprite;
 import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
+
+import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * com.loneboat.spacesloth.main.screens
@@ -59,6 +63,9 @@ public abstract class GameScreen implements Screen {
     private GameObject LeadActor;
     private boolean CameraFollow;
 
+    // Projectiles
+    public ArrayList<ProjectileObject> projectiles;
+
     /**
      * Constructor.
      * @param game - SpaceSloth class
@@ -76,6 +83,8 @@ public abstract class GameScreen implements Screen {
         HudStage = new Stage();
         batch = ContentHandler.batch;
         font = ContentHandler.debugfont;
+
+        projectiles = new ArrayList<ProjectileObject>();
     }
 
     public void setStaticBackground(Texture texture) {
@@ -148,6 +157,17 @@ public abstract class GameScreen implements Screen {
         Box2DSprite.draw(batch, world);
         AnimatedBox2DSprite.draw(batch, world);
         batch.end();
+
+        for(Iterator<ProjectileObject> itr = projectiles.iterator(); itr.hasNext(); ) {
+            ProjectileObject projectileObject = itr.next();
+
+            projectileObject.update(delta);
+
+            if(!projectileObject.isActive()) {
+                projectileObject.dispose();
+                itr.remove();
+            }
+        }
 
         // Finally, we're going to draw the debugs
         if(isDebugView && LeadActor != null) {
@@ -238,4 +258,17 @@ public abstract class GameScreen implements Screen {
         this.isDebugView = isDebugView;
     }
 
+    public void addProjectile(ProjectileObject object) {
+        if(!projectiles.contains(object))
+            projectiles.add(object);
+    }
+
+    public void removeProjectile(ProjectileObject object) {
+        if(projectiles.contains(object))
+            projectiles.remove(object);
+    }
+
+    public int getProjectileCount(GameObject object) {
+        return projectiles.size();
+    }
 }

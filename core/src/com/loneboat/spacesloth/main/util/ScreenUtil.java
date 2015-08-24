@@ -1,7 +1,7 @@
 package com.loneboat.spacesloth.main.util;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.loneboat.spacesloth.main.Globals;
 import com.loneboat.spacesloth.main.game.GameObject;
 
 import java.util.Random;
@@ -11,6 +11,14 @@ import java.util.Random;
  * Created by Dubpub on 8/20/2015.
  */
 public class ScreenUtil {
+
+    /* Grimace's pool status:
+    *  1. Sucks
+    *  2. Alright
+    *  3. Sucks
+    *
+    *  Grimace sucks by majority.
+    */
 
     private static Random rand = new Random();
 
@@ -74,9 +82,22 @@ public class ScreenUtil {
      * @param object - The game object in which the calculate will be performed.
      * @return - The position of the very most front of the object.
      */
-    public static Vector2 calculateFrontOfGameObject(GameObject object, float frontx, float fronty) {
-        if(object.getBody() == null) return new Vector2(0,0);
-        frontx = frontx / Globals.PixelsPerMetre;
+    public static Vector2 calculateAngleOfObject(GameObject object) {
+        float angleA = MathUtils.cos(object.getBody().getAngle());
+        float angleB = MathUtils.sin(object.getBody().getAngle()) / 180);
+        System.out.println("Out " + angleA + " " + angleB);
+        float x1 = object.getBodyX() + (1.25f * angleA);
+        float y1 = object.getBodyY() + (1.25f * angleB);
+        System.out.println("Out " + angleA + " " + angleB + " <>");
+        return new Vector2(x1, y1);
+
+        /*if(object.getBody() == null) return new Vector2(0,0);
+        float x2 = offsetX * MathUtils.cos(object.getBody().getAngle()) - offsetY * MathUtils.sin(object.getBody().getAngle());
+        float y2 = offsetX * MathUtils.sin(object.getBody().getAngle()) + offsetY * MathUtils.cos(object.getBody().getAngle());
+        System.out.println("Coordinates: " + x2 + " " + y2);
+        return new Vector2(x2 / Globals.PixelsPerMetre, y2 / Globals.PixelsPerMetre);*/
+
+        /*frontx = frontx / Globals.PixelsPerMetre;
         fronty = fronty / Globals.PixelsPerMetre;
         Vector2 front = object.getBody().getPosition();
         switch(calculateQuadrant(object.getBody().getPosition())) {
@@ -98,7 +119,7 @@ public class ScreenUtil {
                 break;
         }
         System.out.println("Front Vector: " + front.x + " " + front.y);
-        return front;
+        return front;*/
     }
 
 }
