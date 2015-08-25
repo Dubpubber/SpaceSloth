@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.loneboat.spacesloth.main.SpaceSloth;
 import com.loneboat.spacesloth.main.content.ContentHandler;
 
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -23,6 +24,9 @@ public class ProjectileObject extends GameObject {
 
     // Is active boolean
     private boolean isActive = true;
+
+    // Active list
+    private ArrayList<String> affectedObjects;
 
     /**
      * Creates a standalone projectile GameObject.
@@ -43,7 +47,8 @@ public class ProjectileObject extends GameObject {
         new Timer().schedule(lifetime, 2500);
         this.shooter = shooter;
         this.lifespan = lifespan;
-        this.setZIndex(1);
+        affectedObjects = new ArrayList<String>();
+
     }
 
     public void setDamage(float damage) {
@@ -64,6 +69,24 @@ public class ProjectileObject extends GameObject {
 
     public GameObject getShooter() {
         return shooter;
+    }
+
+    public void addCollisionApplicableObject(GameObject gameObject) {
+        if(!affectedObjects.contains(gameObject.ObjLabel))
+            affectedObjects.add(gameObject.ObjLabel);
+    }
+
+    public void addCollisionApplicableObject(String label) {
+        if(!affectedObjects.contains(label))
+            affectedObjects.add(label);
+    }
+
+    public boolean hasCollisionApplicableObject(GameObject gameObject) {
+        return affectedObjects.contains(gameObject.ObjLabel);
+    }
+
+    public boolean hasCollisionApplicableObject(String label) {
+        return affectedObjects.contains(label);
     }
 
     public void update(float delta) {

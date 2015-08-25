@@ -229,4 +229,10 @@ public abstract class GameObject extends Actor implements GameObjectTracker {
         this.lives += lives;
     }
 
+    public void destroy() {
+        if(world != null && body != null)
+            world.destroyBody(body);
+        remove();
+    }
+
 }

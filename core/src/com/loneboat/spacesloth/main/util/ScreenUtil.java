@@ -83,54 +83,12 @@ public class ScreenUtil {
      * @return - The position of the very most front of the object.
      */
     public static Vector2 calculateAngleOfObject(GameObject object) {
-        System.out.println("--- BEGIN ---");
-        System.out.println("Obj Pos - X: " + object.getBodyX() + " Y: " + object.getBodyY());
-        System.out.println("Obj Pos - Angle: " + object.getBody().getAngle());
-        float radius = 2.5f;
+        float radius = 1.2f;
         float angleCos = MathUtils.cos(object.getBody().getAngle());
         float angleSin = MathUtils.sin(object.getBody().getAngle());
-        if(angleCos < 0) {
-            angleCos = 1.0f - angleCos;
-        }
-        if(angleSin < 0) {
-            angleSin = 1.0f - angleSin;
-        }
-        System.out.println("AngleCos: " + angleCos + " AngleSin: " + angleSin);
         float x = object.getBodyX() + (radius * angleCos);
         float y = object.getBodyY() + (radius * angleSin);
-        System.out.println("Radius: " + radius + " Final X: " + x + " Final Y: " + y);
-        System.out.println("--- END ---");
         return new Vector2(x, y);
-
-        /*if(object.getBody() == null) return new Vector2(0,0);
-        float x2 = offsetX * MathUtils.cos(object.getBody().getAngle()) - offsetY * MathUtils.sin(object.getBody().getAngle());
-        float y2 = offsetX * MathUtils.sin(object.getBody().getAngle()) + offsetY * MathUtils.cos(object.getBody().getAngle());
-        System.out.println("Coordinates: " + x2 + " " + y2);
-        return new Vector2(x2 / Globals.PixelsPerMetre, y2 / Globals.PixelsPerMetre);*/
-
-        /*frontx = frontx / Globals.PixelsPerMetre;
-        fronty = fronty / Globals.PixelsPerMetre;
-        Vector2 front = object.getBody().getPosition();
-        switch(calculateQuadrant(object.getBody().getPosition())) {
-            case 0:
-                // Quadrant 1, (+, -)
-                front.set(front.x + frontx, front.y - fronty);
-                break;
-            case 1:
-                // Quadrant 2, (+, +)
-                front.set(front.x + frontx, front.y + fronty);
-                break;
-            case 2:
-                // Quadrant 3, (-, +)
-                front.set(front.x - frontx, front.y + fronty);
-                break;
-            case 3:
-                // Quadrant 4, (-, -)
-                front.set(front.x - frontx, front.y - fronty);
-                break;
-        }
-        System.out.println("Front Vector: " + front.x + " " + front.y);
-        return front;*/
     }
 
 }
