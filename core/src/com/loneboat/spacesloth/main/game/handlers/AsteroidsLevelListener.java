@@ -23,8 +23,6 @@ public class AsteroidsLevelListener implements ContactListener {
         Fixture A = contact.getFixtureA();
         Fixture B = contact.getFixtureB();
 
-        game.getLogger().info("CONTACT!");
-
         // World object collision.
         if(A.getUserData() instanceof Box2DSpriteObject && B.getUserData() instanceof  Box2DSpriteObject) {
             Box2DSpriteObject sA = (Box2DSpriteObject) A.getUserData();

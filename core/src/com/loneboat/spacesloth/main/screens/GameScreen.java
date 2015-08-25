@@ -164,7 +164,7 @@ public abstract class GameScreen implements Screen {
             projectileObject.update(delta);
 
             if(!projectileObject.isActive()) {
-                projectileObject.dispose();
+                projectileObject.destroy();
                 itr.remove();
             }
         }
@@ -193,6 +193,8 @@ public abstract class GameScreen implements Screen {
 
         // Lastly, Step the world's physics then allow the subclass to override!
         world.step(Globals.WorldStep, 8, 3);
+
+        game.getLogger().info("Timer: " + Math.round(timer));
     }
 
     @Override
@@ -258,14 +260,11 @@ public abstract class GameScreen implements Screen {
         this.isDebugView = isDebugView;
     }
 
-    public void addProjectile(ProjectileObject object) {
-        if(!projectiles.contains(object))
+    public void addProjectile(ProjectileObject object, int seconds) {
+        if(!projectiles.contains(object)) {
             projectiles.add(object);
-    }
-
-    public void removeProjectile(ProjectileObject object) {
-        if(projectiles.contains(object))
-            projectiles.remove(object);
+            object.setDestroyTime(seconds);
+        }
     }
 
     public int getProjectileCount(GameObject object) {

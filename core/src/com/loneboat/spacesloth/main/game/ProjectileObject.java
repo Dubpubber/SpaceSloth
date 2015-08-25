@@ -6,8 +6,6 @@ import com.loneboat.spacesloth.main.SpaceSloth;
 import com.loneboat.spacesloth.main.content.ContentHandler;
 
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * com.loneboat.spacesloth.main.game.worldobjects
@@ -16,8 +14,6 @@ import java.util.TimerTask;
 public class ProjectileObject extends GameObject {
     // Shooter of projectile
     private GameObject shooter;
-
-    private float lifespan = 10;
 
     // Damage of bullet on impact.
     private float damage = 0;
@@ -28,6 +24,12 @@ public class ProjectileObject extends GameObject {
     // Active list
     private ArrayList<String> affectedObjects;
 
+    // Active speed
+    private float speed;
+
+    // Destroy time
+    private float destroyTime;
+
     /**
      * Creates a standalone projectile GameObject.
      *  Awesome for creating projectiles on the fly. GET IT?
@@ -36,19 +38,10 @@ public class ProjectileObject extends GameObject {
      * @param chandle      - Content Handler.
      * @param active_stage - Stage on which the this game object will be acting on.
      */
-    public ProjectileObject(SpaceSloth game, ContentHandler chandle, Stage active_stage, World world, String ObjLabel, float lifespan, GameObject shooter) {
+    public ProjectileObject(SpaceSloth game, ContentHandler chandle, Stage active_stage, World world, String ObjLabel, GameObject shooter) {
         super(game, chandle, active_stage, world, "proj_" + ObjLabel);
-        TimerTask lifetime = new TimerTask() {
-            @Override
-            public void run() {
-                setIsActive(false);
-            }
-        };
-        new Timer().schedule(lifetime, 2500);
         this.shooter = shooter;
-        this.lifespan = lifespan;
         affectedObjects = new ArrayList<String>();
-
     }
 
     public void setDamage(float damage) {
@@ -90,12 +83,24 @@ public class ProjectileObject extends GameObject {
     }
 
     public void update(float delta) {
-        //body.getPosition().set(shooter.getBodyX() + 1, shooter.getBodyY() + 1);
+        if(Math.round(currentScreen.timer) == destroyTime)
+            setIsActive(false);
     }
 
-    public void dispose() {
-        world.destroyBody(body);
-        remove();
+    public void setSpeed(float speed) {
+        this.speed = speed;
+    }
+
+    public float getSpeed() {
+        return speed;
+    }
+
+    public float getDestroyTime() {
+        return destroyTime;
+    }
+
+    public void setDestroyTime(int seconds) {
+        destroyTime = Math.round(currentScreen.timer) + seconds;
     }
 
 }

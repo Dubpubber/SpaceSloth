@@ -26,23 +26,22 @@ public class BlueBlast extends ProjectileObject {
      * @param active_stage - Stage on which the this game object will be acting on.
      */
     public BlueBlast(SpaceSloth game, ContentHandler chandle, Stage active_stage, World world, SlothShip player) {
-        super(game, chandle, active_stage, world, "BlueBlast", 10, player);
+        super(game, chandle, active_stage, world, "BlueBlast", player);
         this.player = player;
 
         BodyDef bdef = new BodyDef();
         FixtureDef bulletbody = new FixtureDef();
         CircleShape shape = new CircleShape();
 
-        Vector2 pos = ScreenUtil.calculateAngleOfObject(player);
+        Vector2 impulse = ScreenUtil.getAngleOffset(player, 1.2f);
 
         // Set the blast to the tip of the gunmount sprite.
-        bdef.position.set(pos);
-        bdef.type = BodyDef.BodyType.KinematicBody;
+        bdef.type = BodyDef.BodyType.DynamicBody;
+        bdef.position.set(impulse);
 
         Body body = world.createBody(bdef);
-        //getCurVelocity().set(player.getBodyX() - getBodyX(), player.getBodyY() - getBodyY()).nor().scl(Math.min(body.getPosition().dst(getBodyX(), getBodyY()), 10.0f));
 
-        shape.setRadius(15 / Globals.PixelsPerMetre);
+        shape.setRadius(12 / Globals.PixelsPerMetre);
         bulletbody.shape = shape;
         bulletbody.density = 1.0f;
 
@@ -52,15 +51,18 @@ public class BlueBlast extends ProjectileObject {
         Box2DSpriteObject sprite = new Box2DSpriteObject(bulletTexture, this);
         bulletFixture.setUserData(sprite);
 
-        body.setLinearVelocity((pos.x - player.getBodyX()) * 10.0f, (pos.y - player.getBodyY()) * 10.0f);
         body.setBullet(true);
 
         setBody(body);
         setBox2DSprite(sprite);
+        setSpeed(10.0f);
+
+        Vector2 forceOffset = ScreenUtil.getPositionOffset(body.getPosition(), player.getBody().getPosition(), getSpeed());
 
         // Define what can collide with this projectile.
         addCollisionApplicableObject(player);
         addCollisionApplicableObject("Asteroid");
 
+        body.setLinearVelocity(forceOffset);
     }
 }

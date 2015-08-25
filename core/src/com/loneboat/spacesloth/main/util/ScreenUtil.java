@@ -77,18 +77,30 @@ public class ScreenUtil {
         }
     }
 
-    /**
-     * Calculates the very most front of any game object based on it's angle.
-     * @param object - The game object in which the calculate will be performed.
-     * @return - The position of the very most front of the object.
-     */
-    public static Vector2 calculateAngleOfObject(GameObject object) {
-        float radius = 1.2f;
-        float angleCos = MathUtils.cos(object.getBody().getAngle());
-        float angleSin = MathUtils.sin(object.getBody().getAngle());
+    public static float calculateNormalAngleOfObject(GameObject object) {
+        float angle = MathUtils.radiansToDegrees * object.getBody().getAngle();
+        while (angle <= 0){
+            angle += 360;
+        }
+        while (angle > 360){
+            angle -= 360;
+        }
+        return angle;
+    }
+
+    public static Vector2 getAngleOffset(GameObject object, float radius) {
+        float angleCos = -MathUtils.cos(object.getBody().getAngle() - (MathUtils.PI / 2));
+        float angleSin = MathUtils.sin(object.getBody().getAngle() + (MathUtils.PI / 2));
         float x = object.getBodyX() + (radius * angleCos);
         float y = object.getBodyY() + (radius * angleSin);
         return new Vector2(x, y);
+    }
+
+    public static Vector2 getPositionOffset(Vector2 v1, Vector2 v2, float scale) {
+        return new Vector2(
+                v1.x - v2.x,
+                v1.y - v2.y
+        ).scl(scale);
     }
 
 }

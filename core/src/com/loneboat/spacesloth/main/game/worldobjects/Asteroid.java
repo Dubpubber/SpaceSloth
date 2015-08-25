@@ -68,7 +68,7 @@ public class Asteroid extends GameObject {
         super.act(delta);
         if(!body.isAwake()) {
             Vector2 v = ScreenUtil.getRandomPositionAroundVector(body.getPosition(), 10);
-            body.applyForceToCenter(v, true);
+            //body.applyForceToCenter(v, true);
         }
     }
 }

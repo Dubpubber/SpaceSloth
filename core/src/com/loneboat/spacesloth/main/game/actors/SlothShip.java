@@ -197,7 +197,8 @@ public class SlothShip extends GameObject {
         if(ip.space) {
             BlueBlast bb = new BlueBlast(game, chandle, active_stage, world, this);
             bb.setCurrentScreen(currentScreen);
-            currentScreen.addProjectile(bb);
+            currentScreen.addProjectile(bb, 5);
+            game.getLogger().info("Projectile created with destroy time of " + bb.getDestroyTime());
         }
 
         getBody().applyTorque(steeringTorque, true);
