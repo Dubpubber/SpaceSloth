@@ -21,11 +21,17 @@ public class ProjectileObject extends GameObject {
     // Is active boolean
     private boolean isActive = true;
 
+    // Splits through objects.
+    private boolean splitter = false;
+
     // Active list
     private ArrayList<String> affectedObjects;
 
     // Active speed
     private float speed;
+
+    // Will be passed down.
+    private float time;
 
     // Destroy time
     private float destroyTime;
@@ -38,9 +44,10 @@ public class ProjectileObject extends GameObject {
      * @param chandle      - Content Handler.
      * @param active_stage - Stage on which the this game object will be acting on.
      */
-    public ProjectileObject(SpaceSloth game, ContentHandler chandle, Stage active_stage, World world, String ObjLabel, GameObject shooter) {
+    public ProjectileObject(SpaceSloth game, ContentHandler chandle, Stage active_stage, World world, String ObjLabel, GameObject shooter, int time) {
         super(game, chandle, active_stage, world, "proj_" + ObjLabel);
         this.shooter = shooter;
+        this.time = time;
         affectedObjects = new ArrayList<String>();
     }
 
@@ -99,8 +106,17 @@ public class ProjectileObject extends GameObject {
         return destroyTime;
     }
 
-    public void setDestroyTime(int seconds) {
-        destroyTime = Math.round(currentScreen.timer) + seconds;
+    public void setDestroyTime() {
+        game.getLogger().info("Destroy time set to " + (Math.round(currentScreen.timer) + time));
+        destroyTime = Math.round(currentScreen.timer) + time;
+    }
+
+    public boolean isSplitter() {
+        return splitter;
+    }
+
+    public void setSplitter(boolean splitter) {
+        this.splitter = splitter;
     }
 
 }

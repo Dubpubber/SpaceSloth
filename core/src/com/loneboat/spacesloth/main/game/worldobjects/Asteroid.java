@@ -9,9 +9,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.loneboat.spacesloth.main.Globals;
 import com.loneboat.spacesloth.main.SpaceSloth;
 import com.loneboat.spacesloth.main.content.ContentHandler;
+import com.loneboat.spacesloth.main.game.Box2DSpriteObject;
 import com.loneboat.spacesloth.main.game.GameObject;
 import com.loneboat.spacesloth.main.util.ScreenUtil;
-import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
 
 /**
  * com.loneboat.spacesloth.main.game.worldobjects
@@ -30,7 +30,7 @@ public class Asteroid extends GameObject {
     public Asteroid(SpaceSloth game, ContentHandler chandle, Stage active_stage, World world, int range) {
         super(game, chandle, active_stage, world, "Asteroid");
 
-        int size = MathUtils.random(range);
+        int size = MathUtils.random(12, range);
 
         BodyDef bdef = new BodyDef();
         FixtureDef asteroidBody = new FixtureDef();
@@ -50,7 +50,7 @@ public class Asteroid extends GameObject {
 
         // Create the base ship model from the body def so far.
         Texture texture = chandle.getManager().get("Sprites/Asteroid_2_smallball.png", Texture.class);
-        Box2DSprite sprite = new Box2DSprite(texture);
+        Box2DSpriteObject sprite = new Box2DSpriteObject(texture, this);
         shipFixture.setUserData(sprite);
 
         setBody(body);
@@ -66,9 +66,5 @@ public class Asteroid extends GameObject {
     @Override
     public void act(float delta) {
         super.act(delta);
-        if(!body.isAwake()) {
-            Vector2 v = ScreenUtil.getRandomPositionAroundVector(body.getPosition(), 10);
-            //body.applyForceToCenter(v, true);
-        }
     }
 }

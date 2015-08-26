@@ -11,7 +11,6 @@ import com.loneboat.spacesloth.main.SpaceSloth;
 import com.loneboat.spacesloth.main.content.ContentHandler;
 import com.loneboat.spacesloth.main.game.Box2DSpriteObject;
 import com.loneboat.spacesloth.main.game.GameObject;
-import com.loneboat.spacesloth.main.game.worldobjects.AsteroidBomb;
 import com.loneboat.spacesloth.main.game.worldobjects.weapons.BlueBlast;
 import com.loneboat.spacesloth.main.util.PlayerInputListener;
 import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
@@ -146,7 +145,9 @@ public class SlothShip extends GameObject {
         getBody().setAngularDamping(2.5f);
 
         shape.dispose();
-        this.setZIndex(1000);
+
+        setMaxProjectileCount(30);
+
     }
 
     /**
@@ -188,17 +189,11 @@ public class SlothShip extends GameObject {
             getBody().setAngularDamping(2.5f);
         }
 
-        if(ip.left) {
-            AsteroidBomb bomb = new AsteroidBomb(game, chandle, active_stage, world, this);
-            active_stage.addActor(bomb);
-            bomb.setCurrentScreen(currentScreen);
-        }
-
-        if(ip.space) {
+        if(ip.space && canFire()) {
             BlueBlast bb = new BlueBlast(game, chandle, active_stage, world, this);
             bb.setCurrentScreen(currentScreen);
-            currentScreen.addProjectile(bb, 5);
-            game.getLogger().info("Projectile created with destroy time of " + bb.getDestroyTime());
+            setCurrentProjectile(bb);
+            fire();
         }
 
         getBody().applyTorque(steeringTorque, true);

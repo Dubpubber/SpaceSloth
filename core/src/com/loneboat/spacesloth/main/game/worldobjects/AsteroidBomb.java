@@ -8,10 +8,10 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.loneboat.spacesloth.main.Globals;
 import com.loneboat.spacesloth.main.SpaceSloth;
 import com.loneboat.spacesloth.main.content.ContentHandler;
+import com.loneboat.spacesloth.main.game.Box2DSpriteObject;
 import com.loneboat.spacesloth.main.game.GameObject;
 import com.loneboat.spacesloth.main.game.actors.SlothShip;
 import com.loneboat.spacesloth.main.util.ScreenUtil;
-import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
 
 /**
  * com.loneboat.spacesloth.main.game.worldobjects
@@ -36,7 +36,7 @@ public class AsteroidBomb extends GameObject {
         BodyDef bdef = new BodyDef();
         FixtureDef asteroidBody = new FixtureDef();
         CircleShape shape = new CircleShape();
-        Vector2 randPos = ScreenUtil.getRandomPositionAroundVector(player.getBody().getPosition(), 10);
+        Vector2 randPos = ScreenUtil.getRandomPositionAroundVector(player.getBody().getPosition(), 100);
 
         bdef.position.set(randPos.x, randPos.y);
         bdef.type = BodyDef.BodyType.DynamicBody;
@@ -51,7 +51,7 @@ public class AsteroidBomb extends GameObject {
 
         // Create the base ship model from the body def so far.
         Texture texture = chandle.getManager().get("Sprites/Asteroid_2_bomb.png", Texture.class);
-        Box2DSprite sprite = new Box2DSprite(texture);
+        Box2DSpriteObject sprite = new Box2DSpriteObject(texture, this);
         shipFixture.setUserData(sprite);
 
         setBox2DSprite(sprite);
@@ -69,12 +69,11 @@ public class AsteroidBomb extends GameObject {
         super.draw(batch, parentAlpha);
 
         if(ScreenUtil.isWithinDistance(body.getPosition(), player.getBody().getPosition(), 2)) {
-            world.destroyBody(body);
-            remove();
+            queueDestroy();
         }
 
         if(Math.round(currentScreen.timer) % 3 == 0) {
-            body.setLinearVelocity((player.getBodyX() - getBodyX()) * 0.75f, (player.getBodyY() - getBodyY()) * 0.75f);
+            body.setLinearVelocity(new Vector2((player.getBodyX() - getBodyX()), (player.getBodyY() - getBodyY())).scl(1.2f));
         }
     }
 }

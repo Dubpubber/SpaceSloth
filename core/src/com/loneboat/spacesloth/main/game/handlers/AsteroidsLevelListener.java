@@ -27,29 +27,29 @@ public class AsteroidsLevelListener implements ContactListener {
         if(A.getUserData() instanceof Box2DSpriteObject && B.getUserData() instanceof  Box2DSpriteObject) {
             Box2DSpriteObject sA = (Box2DSpriteObject) A.getUserData();
             Box2DSpriteObject sB = (Box2DSpriteObject) B.getUserData();
-        }
+            GameObject oA = sA.getGameObject();
+            GameObject oB = sB.getGameObject();
 
-        // Projectile collision, A is a world object and B is a projectile.
-        // elseif - A is the projectile, B is the world object.
-        if(A.getUserData() instanceof Box2DSpriteObject && B.getUserData() instanceof ProjectileObject) {
-            GameObject oA = ((Box2DSpriteObject) A.getUserData()).getGameObject();
-            ProjectileObject oB = (ProjectileObject) B.getUserData();
-
-            game.getLogger().info(oA.ObjLabel + " collided with " + oB.ObjLabel);
-
-            // First, check for projectiles for Object A.
+            // Projectile check.
             if(oA instanceof ProjectileObject) {
-                // Object A is a projectile, what do you want to do?
-                if(((ProjectileObject) oA).hasCollisionApplicableObject(oB))
-                    oB.destroy();
-            } else if(oB instanceof ProjectileObject) {
-                // Object B is a projectile then!
-                if(((ProjectileObject) oB).hasCollisionApplicableObject(oA))
-                    oA.destroy();
+                ProjectileObject pO1 = (ProjectileObject) oA;
+                // Check if collision is applicable with object.
+                if(pO1.hasCollisionApplicableObject(oB))
+                    oB.queueDestroy();
             }
-        } else if(A.getUserData() instanceof ProjectileObject && B.getUserData() instanceof Box2DSpriteObject) {
+
+            if(oB instanceof ProjectileObject) {
+                ProjectileObject pO1 = (ProjectileObject) oB;
+                // Check if collision is applicable with object.
+                if(pO1.hasCollisionApplicableObject(oA)) {
+                    oA.queueDestroy();
+                    if(!((ProjectileObject) oB).isSplitter())
+                        oB.queueDestroy();
+                }
+            }
 
         }
+
     }
 
     @Override

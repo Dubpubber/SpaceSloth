@@ -28,6 +28,7 @@ import java.util.Iterator;
  * Created by Dubpub on 8/6/2015.
  */
 public abstract class GameScreen implements Screen {
+    int mb = 1024 * 1024;
 
     // Get our basics
     public SpaceSloth game;
@@ -51,8 +52,11 @@ public abstract class GameScreen implements Screen {
     private Box2DDebugRenderer debugRenderer;
     private OrthographicCamera box2DCam;
 
-    // Input trackers
+    // Timers
     public float timer;
+    public float delay;
+
+    // Input trackers
     public Vector2 mouseLoc;
 
     // Background texture.
@@ -65,6 +69,9 @@ public abstract class GameScreen implements Screen {
 
     // Projectiles
     public ArrayList<ProjectileObject> projectiles;
+
+    // To destroy
+    public ArrayList<GameObject> removables;
 
     /**
      * Constructor.
@@ -85,6 +92,7 @@ public abstract class GameScreen implements Screen {
         font = ContentHandler.debugfont;
 
         projectiles = new ArrayList<ProjectileObject>();
+        removables = new ArrayList<GameObject>();
     }
 
     public void setStaticBackground(Texture texture) {
@@ -122,6 +130,9 @@ public abstract class GameScreen implements Screen {
         Gdx.graphics.getGL20().glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         timer += delta;
 
+        if(delay > -0.2)
+            delay -= delta;
+
         MainStage.act(delta);
         HudStage.act(delta);
 
@@ -158,12 +169,29 @@ public abstract class GameScreen implements Screen {
         AnimatedBox2DSprite.draw(batch, world);
         batch.end();
 
+        // Iterate destroy list
+        if(removables.size() > 0) {
+            game.getLogger().info("Destroying " + removables.size() + " objects from the world.");
+            for (Iterator<GameObject> itr = removables.iterator(); itr.hasNext(); ) {
+                GameObject go = itr.next();
+                if(go instanceof ProjectileObject) {
+                    ((ProjectileObject) go).getShooter().decProjectileCount(1);
+                    projectiles.remove(go);
+                }
+                go.destroy();
+                itr.remove();
+            }
+        }
+
+        // Iterate projectiles
         for(Iterator<ProjectileObject> itr = projectiles.iterator(); itr.hasNext(); ) {
             ProjectileObject projectileObject = itr.next();
 
             projectileObject.update(delta);
 
             if(!projectileObject.isActive()) {
+                if(projectileObject.getShooter() != null)
+                    projectileObject.getShooter().decProjectileCount(1);
                 projectileObject.destroy();
                 itr.remove();
             }
@@ -180,11 +208,13 @@ public abstract class GameScreen implements Screen {
             debugRenderer.render(world, box2DCam.combined);
 
             // Notice how we're still projecting to the hud cam!
+            Runtime runtime = Runtime.getRuntime();
             batch.setProjectionMatrix(hud_cam.combined);
             batch.begin();
             font.draw(batch, "Debug Mode", 3, 475);
             font.draw(batch, "Frames: " + Gdx.graphics.getFramesPerSecond(), 3, 450);
             font.draw(batch, "Current body count: " + world.getBodyCount(), 3, 425);
+            font.draw(batch, "Memory Usage: " + ((runtime.totalMemory() - runtime.freeMemory()) / mb) + " mb", 3, 400);
             batch.end();
         }
 
@@ -193,8 +223,6 @@ public abstract class GameScreen implements Screen {
 
         // Lastly, Step the world's physics then allow the subclass to override!
         world.step(Globals.WorldStep, 8, 3);
-
-        game.getLogger().info("Timer: " + Math.round(timer));
     }
 
     @Override
@@ -260,14 +288,19 @@ public abstract class GameScreen implements Screen {
         this.isDebugView = isDebugView;
     }
 
-    public void addProjectile(ProjectileObject object, int seconds) {
+    public void addProjectile(ProjectileObject object) {
         if(!projectiles.contains(object)) {
             projectiles.add(object);
-            object.setDestroyTime(seconds);
         }
     }
 
-    public int getProjectileCount(GameObject object) {
-        return projectiles.size();
+    public void queueDestroyObject(GameObject gameObject) {
+        if(!removables.contains(gameObject))
+            removables.add(gameObject);
     }
+
+    public float getRoundedTimer() {
+        return Math.round(timer);
+    }
+
 }

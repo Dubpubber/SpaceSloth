@@ -35,7 +35,7 @@ public class AsteroidsLevel extends GameScreen {
         Gdx.input.setInputProcessor(player.getPlayerInputListener());
 
         // Create debug asteroids
-        for(int i = 0; i < 50; i++) {
+        for(int i = 0; i < 75; i++) {
             Asteroid tempasteroid = new Asteroid(game, chandle, MainStage, world, 100);
             tempasteroid.setCurrentScreen(this);
             MainStage.addActor(tempasteroid);
@@ -55,5 +55,12 @@ public class AsteroidsLevel extends GameScreen {
     @Override
     public void render(float delta) {
         super.render(delta);
+
+/*        if(getRoundedTimer() % 3 == 0) {
+            // Activate random event.
+            AsteroidBomb bomb = new AsteroidBomb(game, chandle, MainStage, world, player);
+            bomb.setCurrentScreen(this);
+            MainStage.addActor(bomb);
+        }*/
     }
 }

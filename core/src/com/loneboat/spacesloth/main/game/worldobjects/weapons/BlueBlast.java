@@ -26,7 +26,7 @@ public class BlueBlast extends ProjectileObject {
      * @param active_stage - Stage on which the this game object will be acting on.
      */
     public BlueBlast(SpaceSloth game, ContentHandler chandle, Stage active_stage, World world, SlothShip player) {
-        super(game, chandle, active_stage, world, "BlueBlast", player);
+        super(game, chandle, active_stage, world, "BlueBlast", player, 5);
         this.player = player;
 
         BodyDef bdef = new BodyDef();
@@ -55,14 +55,16 @@ public class BlueBlast extends ProjectileObject {
 
         setBody(body);
         setBox2DSprite(sprite);
-        setSpeed(10.0f);
+        setSpeed(50f);
 
         Vector2 forceOffset = ScreenUtil.getPositionOffset(body.getPosition(), player.getBody().getPosition(), getSpeed());
 
         // Define what can collide with this projectile.
-        addCollisionApplicableObject(player);
         addCollisionApplicableObject("Asteroid");
+        addCollisionApplicableObject("AsteroidBomb");
 
         body.setLinearVelocity(forceOffset);
+
+        setSplitter(false);
     }
 }

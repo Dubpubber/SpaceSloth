@@ -53,11 +53,19 @@ public abstract class GameObject extends Actor implements GameObjectTracker {
     // Local Animation storage.
     private TreeMap<String, Animation> animations;
 
+    // Actives
+    private ProjectileObject currentProjectile;
+
     // Tracker variables
     private float lives;
     private float health;
     private Vector2 MaxVelocity;
     private Vector2 CurVelocity;
+    private int projectile_count = 0;
+    private int total_projectile_count = 10;
+
+    // Ignore delay
+    private boolean ignoreDelay = false;
 
     /**
      * Creates a new game object that is animated but not a box2d object.
@@ -233,6 +241,66 @@ public abstract class GameObject extends Actor implements GameObjectTracker {
         if(world != null && body != null)
             world.destroyBody(body);
         remove();
+    }
+
+    public void queueDestroy() {
+        if(currentScreen != null)
+            currentScreen.queueDestroyObject(this);
+        else
+            game.getLogger().info("currentScreen is null, cannot safely destroy " + ObjLabel);
+    }
+
+    public int getProjectileCount() {
+        return projectile_count;
+    }
+
+    public void incProjectileCount(int count) {
+        this.projectile_count += count;
+    }
+
+    public void decProjectileCount(int count) {
+        this.projectile_count -= count;
+    }
+
+    public int getMaxProjectileCount() {
+        return total_projectile_count;
+    }
+
+    public void setMaxProjectileCount(int total_projectile_count) {
+        this.total_projectile_count = total_projectile_count;
+    }
+
+    public boolean canFire() {
+        if(ignoreDelay)
+            return projectile_count < total_projectile_count;
+        else
+            return projectile_count < total_projectile_count && (currentScreen.delay <= 0);
+    }
+
+    public void setCurrentProjectile(ProjectileObject projectile) {
+        this.currentProjectile = projectile;
+    }
+
+    public ProjectileObject getCurrentProjectile() {
+        return currentProjectile;
+    }
+
+    public void fire() {
+        if(currentProjectile != null) {
+            projectile_count++;
+            // Player can fire active projectile.
+            currentProjectile.setDestroyTime();
+            currentScreen.addProjectile(currentProjectile);
+            currentScreen.delay += 0.2;
+        }
+    }
+
+    public boolean isIgnoreDelay() {
+        return ignoreDelay;
+    }
+
+    public void setIgnoreDelay(boolean ignoreDelay) {
+        this.ignoreDelay = ignoreDelay;
     }
 
 }
