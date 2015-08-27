@@ -117,36 +117,65 @@ public abstract class GameObject extends Actor implements GameObjectTracker {
         }
     }
 
+    /**
+     * Sets the box 2d sprite for the game object.
+     * @param sprite - The created sprite in the extended class.
+     */
     public void setBox2DSprite(Box2DSprite sprite) {
         this.box2DSprite = sprite;
     }
 
+    /**
+     * Sets the body for easy box2d handling.
+     * @param body - The created body from the extended Gameobject class.
+     */
     public void setBody(Body body) {
         this.body = body;
     }
 
+    /**
+     * Gets the box2d body.
+     * @return - the body.
+     */
     public Body getBody() {
         return body;
     }
 
+    /**
+     * Gets the relative box2d body, if set, x position.
+     * @return - The position on screen relative to the origin of the world.
+     */
     public float getBodyX() {
         return getBody().getPosition().x;
     }
 
+    /**
+     * Gets the relative box2d body, if set, y position.
+     * @return - The position on the screen relative to the origin of the world.
+     */
     public float getBodyY() {
         return getBody().getPosition().y;
     }
 
+    /**
+     * Sets the screen object, Game Screen object, for this game object.
+     * @param screen - Upon creation, sets from the extended game object.
+     */
     public void setCurrentScreen(GameScreen screen) {
         this.currentScreen = screen;
     }
 
+    /**
+     * Creates a basic sprite, without box2d capabilities.
+     * @param filename - File handle for the texture of the sprite.
+     */
     public void createBasicSprite(String filename) {
         Texture bsprite = chandle.getManager().get(filename, Texture.class);
         sprite = new Sprite(bsprite, bsprite.getWidth(), bsprite.getHeight());
     }
 
     /**
+     * Draws the game object.
      * @param batch - the sprite batch.
      * @param parentAlpha Should be multiplied with the actor's alpha, allowing a parent's alpha to affect all children.
      */
@@ -155,32 +184,55 @@ public abstract class GameObject extends Actor implements GameObjectTracker {
         super.draw(batch, parentAlpha);
     }
 
+    /**
+     * Gets the lives from this objects game tracker.
+     * @return - float of the number of lives left for this object.
+     */
     @Override
     public float getLives() {
         return lives;
     }
 
+    /**
+     * Sets the maximum number of lives for this game object in it's own personal game tracker.
+     * @param lives - float of the new number of lives to be set for this game object.
+     */
     @Override
     public void setLives(float lives) {
         this.lives = lives;
     }
 
+    /**
+     * Gets the health for this game object.
+     * @return - amount of current health for this game object.
+     */
     @Override
     public float getHealth() {
         return health;
     }
 
+    /**
+     * Sets the health for this game object.
+     * @param health - Hard sets the amount of health, as a float, for this game object.
+     */
     @Override
     public void setHealth(float health) {
         this.health = health;
     }
 
-
+    /**
+     * Gets the current velocity of this game object.
+     * @return - The current velocity as a vector2.
+     */
     @Override
     public Vector2 getCurVelocity() {
         return CurVelocity;
     }
 
+    /**
+     * Sets the current velocity of this game object.
+     * @param CurVelocity - a vector2.
+     */
     @Override
     public void setCurVelocity(Vector2 CurVelocity) {
         this.CurVelocity = CurVelocity;
