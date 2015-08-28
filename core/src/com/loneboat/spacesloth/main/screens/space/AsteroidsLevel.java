@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.loneboat.spacesloth.main.SpaceSloth;
 import com.loneboat.spacesloth.main.content.ContentHandler;
 import com.loneboat.spacesloth.main.game.actors.SlothShip;
+import com.loneboat.spacesloth.main.game.actors.UI.PlayerHUD;
 import com.loneboat.spacesloth.main.game.handlers.AsteroidsLevelListener;
 import com.loneboat.spacesloth.main.game.worldobjects.Asteroid;
 import com.loneboat.spacesloth.main.screens.GameScreen;
@@ -50,6 +51,8 @@ public class AsteroidsLevel extends GameScreen {
         pm.dispose();
 
         setIsDebugView(true);
+
+        HudStage.addActor(new PlayerHUD(player, chandle));
     }
 
     @Override

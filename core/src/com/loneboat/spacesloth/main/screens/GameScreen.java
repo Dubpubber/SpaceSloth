@@ -239,7 +239,7 @@ public abstract class GameScreen implements Screen {
         hud_cam.viewportHeight = height;
         hud_cam.update();
 
-        MainStage.getBatch().setProjectionMatrix(hud_cam.combined);
+        HudStage.getBatch().setProjectionMatrix(hud_cam.combined);
 
         // Update the box2d debug camera.
         box2DCam.viewportWidth = width / 25;
