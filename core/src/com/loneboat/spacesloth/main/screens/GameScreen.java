@@ -152,16 +152,17 @@ public abstract class GameScreen implements Screen {
         mouseLoc = new Vector2(worldcoords.x, worldcoords.y);
 
         // Then, draw the background. (So it's always just the background. This must always be rendered first!)
-        batch.setProjectionMatrix(main_cam.combined);
+        batch.setProjectionMatrix(hud_cam.combined);
         if(static_background != null) {
             batch.begin();
             if(clampBackground)
-                batch.draw(static_background, 0, 0, static_background.getWidth() / Globals.PixelsPerMetre, static_background.getHeight() / Globals.PixelsPerMetre);
+                batch.draw(static_background, 0, 0, static_background.getWidth(), static_background.getHeight());
             else
-                batch.draw(static_background, 0, 0, static_background.getWidth() / Globals.PixelsPerMetre, static_background.getHeight() / Globals.PixelsPerMetre);
+                batch.draw(static_background, 0, 0, static_background.getWidth(), static_background.getHeight());
             batch.end();
         }
 
+        batch.setProjectionMatrix(main_cam.combined);
         // Fourth, draw all our game objects using box2d-utils!
         // - Notice how the projection matrix is set to project onto the main camera.
         batch.begin();

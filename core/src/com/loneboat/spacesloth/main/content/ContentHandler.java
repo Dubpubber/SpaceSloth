@@ -61,6 +61,7 @@ public class ContentHandler {
         manager.load("Sprites/Asteroid_2_bomb.png", Texture.class);
         manager.load("Sprites/BlueBlast_A1.png", Texture.class);
         manager.load("Sprites/HUDSprite.png", Texture.class);
+        manager.load("Sprites/SpaceBackground_1.png", Texture.class);
     }
 
     /**

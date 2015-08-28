@@ -56,6 +56,9 @@ public class Asteroid extends GameObject {
         setBody(body);
         setBox2DSprite(sprite);
         ID = MathUtils.random(1000);
+        setMaxHealth(body.getMass());
+        replenishHealth();
+        shape.dispose();
     }
 
     @Override

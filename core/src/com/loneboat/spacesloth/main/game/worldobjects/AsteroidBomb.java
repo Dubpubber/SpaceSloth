@@ -58,6 +58,10 @@ public class AsteroidBomb extends GameObject {
         setBody(body);
 
         body.setLinearVelocity((player.getBodyX() - getBodyX()) * 0.75f, (player.getBodyY() - getBodyY()) * 0.75f);
+
+        setMaxHealth(body.getMass() * shape.getRadius());
+        replenishHealth();
+        shape.dispose();
     }
 
     /**

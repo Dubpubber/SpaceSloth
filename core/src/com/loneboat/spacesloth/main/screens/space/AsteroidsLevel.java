@@ -2,6 +2,7 @@ package com.loneboat.spacesloth.main.screens.space;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 import com.loneboat.spacesloth.main.SpaceSloth;
 import com.loneboat.spacesloth.main.content.ContentHandler;
 import com.loneboat.spacesloth.main.game.actors.SlothShip;
@@ -52,7 +53,8 @@ public class AsteroidsLevel extends GameScreen {
 
         setIsDebugView(true);
 
-        HudStage.addActor(new PlayerHUD(player, chandle));
+        HudStage.addActor(new PlayerHUD(player, chandle, HudStage));
+        setStaticBackground(chandle.getManager().get("Sprites/SpaceBackground_1.png", Texture.class));
     }
 
     @Override

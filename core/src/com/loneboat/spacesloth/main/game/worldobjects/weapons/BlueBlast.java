@@ -66,5 +66,7 @@ public class BlueBlast extends ProjectileObject {
         body.setLinearVelocity(forceOffset);
 
         setSplitter(false);
+        setDamage(10);
+        shape.dispose();
     }
 }

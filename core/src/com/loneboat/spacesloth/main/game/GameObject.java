@@ -59,6 +59,7 @@ public abstract class GameObject extends Actor implements GameObjectTracker {
     // Tracker variables
     private float lives;
     private float health;
+    private float maxHealth;
     private Vector2 MaxVelocity;
     private Vector2 CurVelocity;
     private int projectile_count = 0;
@@ -254,6 +255,18 @@ public abstract class GameObject extends Actor implements GameObjectTracker {
         }
     }
 
+    public float getMaxHealth() {
+        return maxHealth;
+    }
+
+    public void setMaxHealth(float maxHealth) {
+        this.maxHealth = maxHealth;
+    }
+
+    public boolean isDead() {
+        return getHealth() <= 0;
+    }
+
     @Override
     public boolean compareVelocity() {
         return (CurVelocity.x < MaxVelocity.x && CurVelocity.y < MaxVelocity.y);
@@ -353,6 +366,10 @@ public abstract class GameObject extends Actor implements GameObjectTracker {
 
     public void setIgnoreDelay(boolean ignoreDelay) {
         this.ignoreDelay = ignoreDelay;
+    }
+
+    public void replenishHealth() {
+        this.health = this.maxHealth;
     }
 
 }

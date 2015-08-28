@@ -26,6 +26,9 @@ public class SlothShip extends GameObject {
 
     private float steeringTorque = 0;
 
+    private float boostCap;
+    private float curBoost = 0;
+
     /**
      * Holds the player's individual profile.
      *  (for easy saving and loading.)
@@ -147,7 +150,10 @@ public class SlothShip extends GameObject {
         shape.dispose();
 
         setMaxProjectileCount(30);
-
+        setMaxHealth(1000);
+        replenishHealth();
+        setBoostCap(100);
+        replenishBoost();
     }
 
     /**
@@ -159,17 +165,26 @@ public class SlothShip extends GameObject {
         super.draw(batch, parentAlpha);
 
         Vector2 force = new Vector2(
-                -(MathUtils.sin(getBody().getAngle()) * getCurVelocity().x),
-                (MathUtils.cos(getBody().getAngle()) * getCurVelocity().y)
+                -(MathUtils.sin(getBody().getAngle())),
+                (MathUtils.cos(getBody().getAngle()))
         );
+        force.scl(getCurVelocity());
 
         if(ip.w) {
-            incCurVelocity(new Vector2(0.1f, 0.1f));
-            getBody().setLinearDamping(0.0f);
-            getBody().applyLinearImpulse(force.x, force.y, getBodyX(), getBodyY(), true);
+            if(ip.shift && hasBoost()) {
+                incCurVelocity(new Vector2(0.15f, 0.15f));
+                getBody().setLinearDamping(0.0f);
+                getBody().applyLinearImpulse(force.x, force.y, getBodyX(), getBodyY(), true);
+                depleatBoosters();
+            } else {
+                incCurVelocity(new Vector2(0.01f, 0.01f));
+                getBody().setLinearDamping(0.0f);
+                getBody().applyLinearImpulse(force.x, force.y, getBodyX(), getBodyY(), true);
+            }
         } else {
             setCurVelocity(new Vector2(0.0f, 0.0f));
             getBody().setLinearDamping(0.75f);
+            restoreBoosters();
         }
 
         if (ip.a) {
@@ -210,6 +225,41 @@ public class SlothShip extends GameObject {
 
     public Box2DSpriteObject getGunMountSprite() {
         return gunMount_sprite;
+    }
+
+
+    public float getBoostCap() {
+        return boostCap;
+    }
+
+    public void setBoostCap(float boostCap) {
+        this.boostCap = boostCap;
+    }
+
+    public float getCurBoost() {
+        return curBoost;
+    }
+
+    public void setCurBoost(float curBoost) {
+        this.curBoost = curBoost;
+    }
+
+    public void replenishBoost() {
+        this.curBoost = 0;
+    }
+
+    public boolean hasBoost() {
+        return curBoost > 0;
+    }
+
+    public void depleatBoosters() {
+        if(hasBoost())
+            curBoost -= 1.0f;
+    }
+
+    public void restoreBoosters() {
+        if(curBoost < boostCap)
+            curBoost += 1.0f;
     }
 
 }

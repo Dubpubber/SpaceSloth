@@ -34,17 +34,26 @@ public class AsteroidsLevelListener implements ContactListener {
             if(oA instanceof ProjectileObject) {
                 ProjectileObject pO1 = (ProjectileObject) oA;
                 // Check if collision is applicable with object.
-                if(pO1.hasCollisionApplicableObject(oB))
-                    oB.queueDestroy();
+                if(pO1.hasCollisionApplicableObject(oB)) {
+                    oB.subtrackHealth(pO1.getDamage());
+                    if(oB.isDead())
+                        oB.queueDestroy();
+                }
             }
 
             if(oB instanceof ProjectileObject) {
                 ProjectileObject pO1 = (ProjectileObject) oB;
                 // Check if collision is applicable with object.
                 if(pO1.hasCollisionApplicableObject(oA)) {
-                    oA.queueDestroy();
-                    if(!((ProjectileObject) oB).isSplitter())
+                    oA.subtrackHealth(pO1.getDamage());
+                    game.getLogger().info(oA.ObjLabel + " was hit for " + pO1.getDamage() + " current health is " + oA.getHealth());
+                    if(oA.isDead()) {
+                        // Object's health has been depleted.
+                        oA.queueDestroy();
+                    }
+                    if(!((ProjectileObject) oB).isSplitter()) {
                         oB.queueDestroy();
+                    }
                 }
             }
 
