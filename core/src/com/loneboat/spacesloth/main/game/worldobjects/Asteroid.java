@@ -35,7 +35,7 @@ public class Asteroid extends GameObject {
         BodyDef bdef = new BodyDef();
         FixtureDef asteroidBody = new FixtureDef();
         CircleShape shape = new CircleShape();
-        Vector2 randPos = ScreenUtil.getRandomPositionAroundVector(new Vector2(1,1), 3);
+        Vector2 randPos = ScreenUtil.randomVector2(10, 100);
 
         bdef.position.set(randPos.x, randPos.y);
         bdef.type = BodyDef.BodyType.DynamicBody;

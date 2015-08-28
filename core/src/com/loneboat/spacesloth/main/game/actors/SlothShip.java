@@ -165,19 +165,18 @@ public class SlothShip extends GameObject {
         super.draw(batch, parentAlpha);
 
         Vector2 force = new Vector2(
-                -(MathUtils.sin(getBody().getAngle())),
+                -(MathUtils.sin(getBody().getAngle() * getCurVelocity().x)),
                 (MathUtils.cos(getBody().getAngle()))
         );
-        force.scl(getCurVelocity());
 
         if(ip.w) {
             if(ip.shift && hasBoost()) {
-                incCurVelocity(new Vector2(0.15f, 0.15f));
+                incCurVelocity(new Vector2(0.015f, 0.015f));
                 getBody().setLinearDamping(0.0f);
                 getBody().applyLinearImpulse(force.x, force.y, getBodyX(), getBodyY(), true);
                 depleatBoosters();
             } else {
-                incCurVelocity(new Vector2(0.01f, 0.01f));
+                incCurVelocity(new Vector2(0.001f, 0.001f));
                 getBody().setLinearDamping(0.0f);
                 getBody().applyLinearImpulse(force.x, force.y, getBodyX(), getBodyY(), true);
             }
@@ -206,7 +205,7 @@ public class SlothShip extends GameObject {
 
         if(ip.space && canFire()) {
             BlueBlast bb = new BlueBlast(game, chandle, active_stage, world, this);
-            bb.setCurrentScreen(currentScreen);
+            bb.setLevel(level);
             setCurrentProjectile(bb);
             fire();
         }

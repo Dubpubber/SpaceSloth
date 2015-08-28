@@ -48,7 +48,7 @@ public class LoadingScreen extends GameScreen {
                 finished = true;
             }
             if(Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)) {
-                game.setCurrentScreen(new AsteroidsLevel(game, chandle, 0));
+                game.setCurrentScreen(new AsteroidsLevel(game, chandle));
             }
             glyph.setText(font, "Finished loading all game assets! press any button to continue.");
         }

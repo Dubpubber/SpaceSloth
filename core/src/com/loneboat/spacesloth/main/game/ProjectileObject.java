@@ -90,7 +90,7 @@ public class ProjectileObject extends GameObject {
     }
 
     public void update(float delta) {
-        if(Math.round(currentScreen.timer) == destroyTime)
+        if(Math.round(level.timer) == destroyTime)
             setIsActive(false);
     }
 
@@ -107,8 +107,8 @@ public class ProjectileObject extends GameObject {
     }
 
     public void setDestroyTime() {
-        game.getLogger().info("Destroy time set to " + (Math.round(currentScreen.timer) + time));
-        destroyTime = Math.round(currentScreen.timer) + time;
+        game.getLogger().info("Destroy time set to " + (Math.round(level.timer) + time));
+        destroyTime = Math.round(level.timer) + time;
     }
 
     public boolean isSplitter() {

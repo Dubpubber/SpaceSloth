@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.loneboat.spacesloth.main.SpaceSloth;
 import com.loneboat.spacesloth.main.content.ContentHandler;
-import com.loneboat.spacesloth.main.screens.GameScreen;
+import com.loneboat.spacesloth.main.screens.GameLevel;
 import com.loneboat.spacesloth.main.util.GameObjectTracker;
 import net.dermetfan.gdx.graphics.g2d.AnimatedBox2DSprite;
 import net.dermetfan.gdx.graphics.g2d.AnimatedSprite;
@@ -37,7 +37,7 @@ public abstract class GameObject extends Actor implements GameObjectTracker {
     public World world;
 
     // Get the screen for GameScreen related methods.
-    public GameScreen currentScreen;
+    public GameLevel level;
 
     // Box2D objects
     public Body body;
@@ -160,10 +160,10 @@ public abstract class GameObject extends Actor implements GameObjectTracker {
 
     /**
      * Sets the screen object, Game Screen object, for this game object.
-     * @param screen - Upon creation, sets from the extended game object.
+     * @param level - Upon creation, sets from the extended game object.
      */
-    public void setCurrentScreen(GameScreen screen) {
-        this.currentScreen = screen;
+    public void setLevel(GameLevel level) {
+        this.level = level;
     }
 
     /**
@@ -309,8 +309,8 @@ public abstract class GameObject extends Actor implements GameObjectTracker {
     }
 
     public void queueDestroy() {
-        if(currentScreen != null)
-            currentScreen.queueDestroyObject(this);
+        if(level != null)
+            level.queueDestroyObject(this);
         else
             game.getLogger().info("currentScreen is null, cannot safely destroy " + ObjLabel);
     }
@@ -339,7 +339,7 @@ public abstract class GameObject extends Actor implements GameObjectTracker {
         if(ignoreDelay)
             return projectile_count < total_projectile_count;
         else
-            return projectile_count < total_projectile_count && (currentScreen.delay <= 0);
+            return projectile_count < total_projectile_count && (level.delay <= 0);
     }
 
     public void setCurrentProjectile(ProjectileObject projectile) {
@@ -355,8 +355,8 @@ public abstract class GameObject extends Actor implements GameObjectTracker {
             projectile_count++;
             // Player can fire active projectile.
             currentProjectile.setDestroyTime();
-            currentScreen.addProjectile(currentProjectile);
-            currentScreen.delay += 0.2;
+            level.addProjectile(currentProjectile);
+            level.delay += 0.2;
         }
     }
 

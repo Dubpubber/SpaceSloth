@@ -36,7 +36,7 @@ public class AsteroidBomb extends GameObject {
         BodyDef bdef = new BodyDef();
         FixtureDef asteroidBody = new FixtureDef();
         CircleShape shape = new CircleShape();
-        Vector2 randPos = ScreenUtil.getRandomPositionAroundVector(player.getBody().getPosition(), 100);
+        Vector2 randPos = ScreenUtil.randomVector2(100, 1000);
 
         bdef.position.set(randPos.x, randPos.y);
         bdef.type = BodyDef.BodyType.DynamicBody;
@@ -74,10 +74,6 @@ public class AsteroidBomb extends GameObject {
 
         if(ScreenUtil.isWithinDistance(body.getPosition(), player.getBody().getPosition(), 2)) {
             queueDestroy();
-        }
-
-        if(Math.round(currentScreen.timer) % 3 == 0) {
-            body.setLinearVelocity(new Vector2((player.getBodyX() - getBodyX()), (player.getBodyY() - getBodyY())).scl(1.2f));
         }
     }
 }

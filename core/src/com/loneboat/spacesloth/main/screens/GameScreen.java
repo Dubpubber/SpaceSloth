@@ -16,12 +16,8 @@ import com.loneboat.spacesloth.main.Globals;
 import com.loneboat.spacesloth.main.SpaceSloth;
 import com.loneboat.spacesloth.main.content.ContentHandler;
 import com.loneboat.spacesloth.main.game.GameObject;
-import com.loneboat.spacesloth.main.game.ProjectileObject;
 import net.dermetfan.gdx.graphics.g2d.AnimatedBox2DSprite;
 import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
-
-import java.util.ArrayList;
-import java.util.Iterator;
 
 /**
  * com.loneboat.spacesloth.main.screens
@@ -30,13 +26,16 @@ import java.util.Iterator;
 public abstract class GameScreen implements Screen {
     int mb = 1024 * 1024;
 
+    public int WIDTH;
+    public int HEIGHT;
+
     // Get our basics
     public SpaceSloth game;
     public ContentHandler chandle;
 
     // Box2d Objects
     public World world;
-    private boolean isDebugView = false;
+    public boolean isDebugView = false;
 
     // Setup the stages
     public Stage MainStage;
@@ -49,8 +48,8 @@ public abstract class GameScreen implements Screen {
     public OrthographicCamera hud_cam;
 
     // Box2d debug renderer
-    private Box2DDebugRenderer debugRenderer;
-    private OrthographicCamera box2DCam;
+    public Box2DDebugRenderer debugRenderer;
+    public OrthographicCamera box2DCam;
 
     // Timers
     public float timer;
@@ -60,18 +59,11 @@ public abstract class GameScreen implements Screen {
     public Vector2 mouseLoc;
 
     // Background texture.
-    private Texture static_background;
-    private boolean clampBackground = false;
+    public Texture static_background;
 
     // Main Actor
-    private GameObject LeadActor;
-    private boolean CameraFollow;
-
-    // Projectiles
-    public ArrayList<ProjectileObject> projectiles;
-
-    // To destroy
-    public ArrayList<GameObject> removables;
+    public GameObject LeadActor;
+    public boolean CameraFollow;
 
     /**
      * Constructor.
@@ -90,9 +82,6 @@ public abstract class GameScreen implements Screen {
         HudStage = new Stage();
         batch = ContentHandler.batch;
         font = ContentHandler.debugfont;
-
-        projectiles = new ArrayList<ProjectileObject>();
-        removables = new ArrayList<GameObject>();
     }
 
     public void setStaticBackground(Texture texture) {
@@ -155,10 +144,7 @@ public abstract class GameScreen implements Screen {
         batch.setProjectionMatrix(hud_cam.combined);
         if(static_background != null) {
             batch.begin();
-            if(clampBackground)
-                batch.draw(static_background, 0, 0, static_background.getWidth(), static_background.getHeight());
-            else
-                batch.draw(static_background, 0, 0, static_background.getWidth(), static_background.getHeight());
+            batch.draw(static_background, 0, 0, WIDTH, HEIGHT);
             batch.end();
         }
 
@@ -169,34 +155,6 @@ public abstract class GameScreen implements Screen {
         Box2DSprite.draw(batch, world);
         AnimatedBox2DSprite.draw(batch, world);
         batch.end();
-
-        // Iterate destroy list
-        if(removables.size() > 0) {
-            game.getLogger().info("Destroying " + removables.size() + " objects from the world.");
-            for (Iterator<GameObject> itr = removables.iterator(); itr.hasNext(); ) {
-                GameObject go = itr.next();
-                if(go instanceof ProjectileObject) {
-                    ((ProjectileObject) go).getShooter().decProjectileCount(1);
-                    projectiles.remove(go);
-                }
-                go.destroy();
-                itr.remove();
-            }
-        }
-
-        // Iterate projectiles
-        for(Iterator<ProjectileObject> itr = projectiles.iterator(); itr.hasNext(); ) {
-            ProjectileObject projectileObject = itr.next();
-
-            projectileObject.update(delta);
-
-            if(!projectileObject.isActive()) {
-                if(projectileObject.getShooter() != null)
-                    projectileObject.getShooter().decProjectileCount(1);
-                projectileObject.destroy();
-                itr.remove();
-            }
-        }
 
         // Finally, we're going to draw the debugs
         if(isDebugView && LeadActor != null) {
@@ -228,6 +186,8 @@ public abstract class GameScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
+        this.WIDTH = width;
+        this.HEIGHT = height;
         // Update the main camera.
         main_cam.viewportWidth = width / 25;
         main_cam.viewportHeight = height / 25;
@@ -272,32 +232,12 @@ public abstract class GameScreen implements Screen {
         debugRenderer.dispose();
     }
 
-    public void addLeadActor() {
-
-    }
-
-    public void setClampBackground(boolean clampBackground) {
-        this.clampBackground = clampBackground;
-    }
-
-
     public boolean isDebugView() {
         return isDebugView;
     }
 
     public void setIsDebugView(boolean isDebugView) {
         this.isDebugView = isDebugView;
-    }
-
-    public void addProjectile(ProjectileObject object) {
-        if(!projectiles.contains(object)) {
-            projectiles.add(object);
-        }
-    }
-
-    public void queueDestroyObject(GameObject gameObject) {
-        if(!removables.contains(gameObject))
-            removables.add(gameObject);
     }
 
     public float getRoundedTimer() {

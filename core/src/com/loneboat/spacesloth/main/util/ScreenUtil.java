@@ -22,13 +22,13 @@ public class ScreenUtil {
 
     private static Random rand = new Random();
 
+    @Deprecated
     public static Vector2 getRandomPositionAroundVector(Vector2 vector2, int minDistance) {
-        Vector2 temp = new Vector2(0, 0);
-        int quadrant = rand.nextInt(4);
-        float ix = (float) Math.random() * (vector2.x * 10);
-        float iy = (float) Math.random() * (vector2.y * 10);
+        int side = rand.nextInt(7);
+        float ix = (float) Math.random() * (vector2.x * 5);
+        float iy = (float) Math.random() * (vector2.y * 5);
 
-        switch(quadrant) {
+        switch(side) {
             case 0:
                 // Quadrant 1, (+, -)
                 ix += minDistance;
@@ -49,11 +49,31 @@ public class ScreenUtil {
                 ix = -ix - minDistance;
                 iy = -iy - minDistance;
                 break;
+            case 4:
+                // X Axis Positive
+                ix += minDistance;
+                break;
+            case 5:
+                // x Axis Negative
+                ix = -ix - minDistance;
+                break;
+            case 6:
+                // Y Axis Positive
+                iy += minDistance;
+                break;
+            case 7:
+                // Y Axis Negative
+                iy = -iy - minDistance;
+                break;
         }
 
-        temp.set(ix, iy);
+        return new Vector2(ix, iy);
+    }
 
-        return temp;
+    public static Vector2 randomVector2(int min, int max) {
+        float theta = MathUtils.random(0f, MathUtils.PI2);
+        float sqrt = (float) Math.sqrt(MathUtils.random(min, max));
+        return new Vector2(sqrt * MathUtils.cos(theta), sqrt * MathUtils.sin(theta));
     }
 
     public static boolean isWithinDistance(Vector2 p1, Vector2 p2, float distance) {
