@@ -13,7 +13,7 @@ import com.loneboat.spacesloth.main.game.Box2DSpriteObject;
 import com.loneboat.spacesloth.main.game.GameObject;
 import com.loneboat.spacesloth.main.game.worldobjects.weapons.BlueBlast;
 import com.loneboat.spacesloth.main.util.PlayerInputListener;
-import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
+import com.loneboat.spacesloth.main.util.ScreenUtil;
 
 /**
  * com.loneboat.spacesloth.main.game.actors
@@ -28,6 +28,9 @@ public class SlothShip extends GameObject {
 
     private float boostCap;
     private float curBoost = 0;
+    public boolean isBoosting = false;
+
+    private Vector2 MaxBoostVelocity;
 
     /**
      * Holds the player's individual profile.
@@ -67,87 +70,35 @@ public class SlothShip extends GameObject {
 
         profile = new Profile(this);
 
+        // Create the body of the player.
         BodyDef bdef = new BodyDef();
-        FixtureDef shipBody = new FixtureDef();
-        PolygonShape shape = new PolygonShape();
-
-        // create player
         bdef.position.set(35 / Globals.PixelsPerMetre, 35 / Globals.PixelsPerMetre);
         bdef.type = BodyDef.BodyType.DynamicBody;
-
         Body body = world.createBody(bdef);
 
-        shape.setAsBox(48 / Globals.PixelsPerMetre, 42 / Globals.PixelsPerMetre);
-        shipBody.shape = shape;
-        shipBody.density = 0.1f;
+        PolygonShape shape = new PolygonShape();
 
-        Fixture shipFixture = body.createFixture(shipBody);
+        createCockpit(body, shape);
+        createGunMount(body, shape);
+        createHull(body, shape);
+        createThrusters(body, shape);
+        createWings('F', body, shape);
 
-        // Create the base ship model from the body def so far.
-        Texture texture = chandle.getManager().get("Sprites/Ship_A1.png", Texture.class);
-        Box2DSpriteObject sprite = new Box2DSpriteObject(texture, this);
-        shipFixture.setUserData(sprite);
+        shape.dispose();
 
-        // Dispose of the shape used for the sloth ship, then create a new one for the thrusters.
-        // - Create the first thruster.
-        shape = new PolygonShape();
-        shape.setAsBox(10 / Globals.PixelsPerMetre, 42 / Globals.PixelsPerMetre, new Vector2(-60 / Globals.PixelsPerMetre, -25 / Globals.PixelsPerMetre), 0);
-
-        FixtureDef thruster1 = new FixtureDef();
-        thruster1.shape = shape;
-
-        Fixture thrusterFixture = body.createFixture(thruster1);
-
-        // Assign a new box2d sprite to the thruster polygon.
-        Texture thruster_texture = chandle.getManager().get("Sprites/Thruster_A1.png", Texture.class);
-        Box2DSprite thruster_sprite = new Box2DSpriteObject(thruster_texture, this);
-        thrusterFixture.setUserData(thruster_sprite);
-
-        // - Create the second thruster.
-        shape.setAsBox(10 / Globals.PixelsPerMetre, 42 / Globals.PixelsPerMetre, new Vector2(60 / Globals.PixelsPerMetre, -25 / Globals.PixelsPerMetre), 0);
-
-        FixtureDef thruster2 = new FixtureDef();
-        thruster2.shape = shape;
-
-        Fixture thruster2Fixture = body.createFixture(thruster2);
-
-        // Assign a new box2d sprite to the thruster polygon.
-        Box2DSprite thruster2_sprite = new Box2DSpriteObject(thruster_texture, this);
-        thruster2Fixture.setUserData(thruster2_sprite);
-
-        // Finally, create the gun mount for the sloth ship. This piece will rotate with the mouse.
-        shape = new PolygonShape();
-        shape.setAsBox(10 / Globals.PixelsPerMetre, 35 / Globals.PixelsPerMetre, new Vector2(0, 60 / Globals.PixelsPerMetre), 0);
-
-        FixtureDef gunMount_fdef = new FixtureDef();
-        gunMount_fdef.shape = shape;
-
-        Fixture gunMount_Fixture = body.createFixture(gunMount_fdef);
-
-        // Assign the gun mount
-        Texture gunMount_texture = chandle.getManager().get("Sprites/GunMount_A1.png", Texture.class);
-        gunMount_sprite = new Box2DSpriteObject(gunMount_texture, this);
-        gunMount_Fixture.setUserData(gunMount_sprite);
-
-        // Last, dispose the shape.
-        //shape.dispose();
-
-        // Set the objects data.
         setBody(body);
-        setBox2DSprite(sprite);
 
         ip = new PlayerInputListener(game, chandle);
         setOrigin(getWidth() / 2, getHeight() / 2);
 
         setCurVelocity(new Vector2(0.0f, 0.0f));
         setMaxVelocity(new Vector2(0.075f, 0.075f));
+        setMaxBoostVelocity(new Vector2(0.090f, 0.090f));
         setHealth(100.0f);
 
         getBody().setAngularDamping(2.5f);
 
         getBody().setAngularDamping(2.5f);
-
-        shape.dispose();
 
         setMaxProjectileCount(30);
         setMaxHealth(1000);
@@ -165,25 +116,27 @@ public class SlothShip extends GameObject {
         super.draw(batch, parentAlpha);
 
         Vector2 force = new Vector2(
-                -(MathUtils.sin(getBody().getAngle() * getCurVelocity().x)),
+                -(MathUtils.sin(getBody().getAngle())),
                 (MathUtils.cos(getBody().getAngle()))
-        );
+        ).scl(getCurVelocity());
 
         if(ip.w) {
-            if(ip.shift && hasBoost()) {
-                incCurVelocity(new Vector2(0.015f, 0.015f));
-                getBody().setLinearDamping(0.0f);
-                getBody().applyLinearImpulse(force.x, force.y, getBodyX(), getBodyY(), true);
-                depleatBoosters();
+            if(!isBoosting) {
+                incCurVelocity(new Vector2(0.01f, 0.01f));
             } else {
-                incCurVelocity(new Vector2(0.001f, 0.001f));
-                getBody().setLinearDamping(0.0f);
-                getBody().applyLinearImpulse(force.x, force.y, getBodyX(), getBodyY(), true);
+                setCurVelocity(getMaxBoostVelocity());
+                if(!hasBoost())
+                    isBoosting = false;
             }
+            getBody().setLinearDamping(0.0f);
+            getBody().applyLinearImpulse(force.x, force.y, getBodyX(), getBodyY(), true);
         } else {
             setCurVelocity(new Vector2(0.0f, 0.0f));
             getBody().setLinearDamping(0.75f);
-            restoreBoosters();
+        }
+
+        if(ip.shift && useBoost()) {
+            isBoosting = true;
         }
 
         if (ip.a) {
@@ -209,6 +162,11 @@ public class SlothShip extends GameObject {
             setCurrentProjectile(bb);
             fire();
         }
+
+        if(!isBoosting)
+            restoreBoosters();
+        else
+            depleatBoosters();
 
         getBody().applyTorque(steeringTorque, true);
 
@@ -244,11 +202,15 @@ public class SlothShip extends GameObject {
     }
 
     public void replenishBoost() {
-        this.curBoost = 0;
+        this.curBoost = boostCap;
     }
 
     public boolean hasBoost() {
         return curBoost > 0;
+    }
+
+    public boolean useBoost() {
+        return curBoost >= boostCap;
     }
 
     public void depleatBoosters() {
@@ -258,7 +220,104 @@ public class SlothShip extends GameObject {
 
     public void restoreBoosters() {
         if(curBoost < boostCap)
-            curBoost += 1.0f;
+            curBoost += 0.15f;
+    }
+
+    public Vector2 getMaxBoostVelocity() {
+        return MaxBoostVelocity;
+    }
+
+    public void setMaxBoostVelocity(Vector2 maxBoostVelocity) {
+        MaxBoostVelocity = maxBoostVelocity;
+    }
+
+    public void createCockpit(Body body, PolygonShape shape) {
+        shape = new PolygonShape();
+        shape.setAsBox(
+               41 / Globals.PixelsPerMetre, 40 / Globals.PixelsPerMetre, new Vector2(0,0), 0
+        );
+        FixtureDef cockpit = new FixtureDef();
+        cockpit.shape = shape;
+        cockpit.density = 5.0f;
+        Fixture cockpitFixture = body.createFixture(cockpit);
+        Texture texture = chandle.getManager().get("Bodies/Ship_1/Ship_1_Cockpit.png");
+        Box2DSpriteObject spriteObject = new Box2DSpriteObject(texture, this);
+        cockpitFixture.setUserData(spriteObject);
+    }
+
+    public void createGunMount(Body body, PolygonShape shape) {
+        shape = new PolygonShape();
+        shape.setAsBox(
+                12 / Globals.PixelsPerMetre, 20 / Globals.PixelsPerMetre,
+                ScreenUtil.scaleVector(new Vector2(0, 65)), 0
+        );
+        FixtureDef gunMount = new FixtureDef();
+        gunMount.shape = shape;
+        gunMount.density = 1.5f;
+        Fixture gunMountFixture = body.createFixture(gunMount);
+        Texture texture = chandle.getManager().get("Bodies/Ship_1/Ship_1_GunMount.png");
+        Box2DSpriteObject spriteObject = new Box2DSpriteObject(texture, this);
+        gunMountFixture.setUserData(spriteObject);
+    }
+
+    public void createHull(Body body, PolygonShape shape) {
+        shape = new PolygonShape();
+        shape.setAsBox(
+                40 / Globals.PixelsPerMetre, 81 / Globals.PixelsPerMetre,
+                ScreenUtil.scaleVector(new Vector2(0, -127)), 0
+        );
+        FixtureDef hull = new FixtureDef();
+        hull.shape = shape;
+        hull.density = 10.0f;
+        Fixture hullFixture = body.createFixture(hull);
+        Texture texture = chandle.getManager().get("Bodies/Ship_1/Ship_1_Hull.png");
+        Box2DSpriteObject spriteObject = new Box2DSpriteObject(texture, this);
+        hullFixture.setUserData(spriteObject);
+    }
+
+    public void createThrusters(Body body, PolygonShape shape) {
+        shape = new PolygonShape();
+        shape.setAsBox(
+                42 / Globals.PixelsPerMetre, 16 / Globals.PixelsPerMetre,
+                ScreenUtil.scaleVector(new Vector2(0, -225)), 0
+        );
+        FixtureDef thruster = new FixtureDef();
+        thruster.shape = shape;
+        thruster.density = 2.0f;
+        Fixture thrusterFixture = body.createFixture(thruster);
+        Texture texture = chandle.getManager().get("Bodies/Ship_1/Ship_1_Thrusters.png");
+        Box2DSpriteObject spriteObject = new Box2DSpriteObject(texture, this);
+        thrusterFixture.setUserData(spriteObject);
+    }
+
+    public void createWings(char rank, Body body, PolygonShape shape) {
+        // Create the first wing.
+        shape = new PolygonShape();
+        shape.setAsBox(
+                37 / Globals.PixelsPerMetre, 38 / Globals.PixelsPerMetre,
+                ScreenUtil.scaleVector(new Vector2(60, -150)), 0
+        );
+        FixtureDef winga = new FixtureDef();
+        winga.shape = shape;
+        winga.density = 1.5f;
+        Fixture WingAFixture = body.createFixture(winga);
+        Texture texture1 = chandle.getManager().get("Bodies/Ship_1/Ship_1_1" + rank + "_Wing.png");
+        Box2DSpriteObject spriteObject1 = new Box2DSpriteObject(texture1, this);
+        WingAFixture.setUserData(spriteObject1);
+
+        // Create the second wing.
+        shape = new PolygonShape();
+        shape.setAsBox(
+                37 / Globals.PixelsPerMetre, 38 / Globals.PixelsPerMetre,
+                ScreenUtil.scaleVector(new Vector2(-60, -150)), 0
+        );
+        FixtureDef wingb = new FixtureDef();
+        wingb.shape = shape;
+        wingb.density = 1.5f;
+        Fixture WingBFixture = body.createFixture(wingb);
+        Texture texture2 = chandle.getManager().get("Bodies/Ship_1/Ship_1_2" + rank + "_Wing.png");
+        Box2DSpriteObject spriteObject2 = new Box2DSpriteObject(texture2, this);
+        WingBFixture.setUserData(spriteObject2);
     }
 
 }

@@ -244,7 +244,8 @@ public abstract class GameObject extends Actor implements GameObjectTracker {
         if(compareVelocity()) {
             CurVelocity.x += incVel.x;
             CurVelocity.y += incVel.y;
-        }
+        } else
+            setCurVelocity(getMaxVelocity());
     }
 
     @Override

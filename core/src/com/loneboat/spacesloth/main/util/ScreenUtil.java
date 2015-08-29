@@ -2,6 +2,7 @@ package com.loneboat.spacesloth.main.util;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.loneboat.spacesloth.main.Globals;
 import com.loneboat.spacesloth.main.game.GameObject;
 
 import java.util.Random;
@@ -121,6 +122,10 @@ public class ScreenUtil {
                 v1.x - v2.x,
                 v1.y - v2.y
         ).scl(scale);
+    }
+
+    public static Vector2 scaleVector(Vector2 vector2) {
+        return new Vector2(vector2.x / Globals.PixelsPerMetre, vector2.y / Globals.PixelsPerMetre);
     }
 
 }

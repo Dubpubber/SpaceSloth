@@ -20,6 +20,7 @@ import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * com.loneboat.spacesloth.main.util
@@ -41,7 +42,7 @@ public class GameLevel extends GameScreen {
     private ArrayList<GameObject> removables;
 
     // Simple HashMap of Limit Tracking.
-    private HashMap<String, Integer> worldlyObjects;
+    private HashMap<String, AtomicInteger> worldlyObjects;
 
     public GameLevel(SpaceSloth game, ContentHandler chandle, DIFFICULTY levelDifficulty) {
         super(game, chandle);
@@ -49,7 +50,7 @@ public class GameLevel extends GameScreen {
         this.levelDifficulty = levelDifficulty;
         projectiles = new ArrayList<ProjectileObject>();
         removables = new ArrayList<GameObject>();
-        worldlyObjects = new HashMap<String, Integer>();
+        worldlyObjects = new HashMap<String, AtomicInteger>();
         setMousePixmap();
         adjustLimits();
         spawnPlayer();
@@ -122,7 +123,8 @@ public class GameLevel extends GameScreen {
                 if(go instanceof ProjectileObject) {
                     ((ProjectileObject) go).getShooter().decProjectileCount(1);
                     projectiles.remove(go);
-                }
+                } else
+                    removeFromCount(go);
                 go.destroy();
                 itr.remove();
             }
@@ -160,6 +162,8 @@ public class GameLevel extends GameScreen {
             font.draw(batch, "Frames: " + Gdx.graphics.getFramesPerSecond(), 3, 450);
             font.draw(batch, "Current body count: " + world.getBodyCount(), 3, 425);
             font.draw(batch, "Memory Usage: " + ((runtime.totalMemory() - runtime.freeMemory()) / mb) + " mb", 3, 400);
+            font.draw(batch, "Current ship velocity: " + player.getCurVelocity().x + " " + player.getCurVelocity().y + " / " + player.getMaxVelocity().x + " " + player.getMaxVelocity().y, 3, 375);
+            font.draw(batch, "isBoosting: " + player.isBoosting + " cBoost: " + player.getCurBoost(), 3, 350);
             batch.end();
         }
 
@@ -200,19 +204,37 @@ public class GameLevel extends GameScreen {
     }
 
     private void adjustLimits() {
-        worldlyObjects.put("Asteroid", 50);
-        worldlyObjects.put("Asteroid_c", 0);
-        worldlyObjects.put("AsteroidBomb", 10 * levelDifficulty.getLevel());
-        worldlyObjects.put("AsteroidBomb_c", 0);
+        worldlyObjects.put("Asteroid", new AtomicInteger(250));
+        worldlyObjects.put("Asteroid_c", new AtomicInteger(0));
+        worldlyObjects.put("AsteroidBomb", new AtomicInteger(10 * levelDifficulty.getLevel()));
+        worldlyObjects.put("AsteroidBomb_c", new AtomicInteger(0));
     }
 
     public boolean checkPopulationLimit(GameObject obj) {
         String lbl = obj.ObjLabel;
-        return worldlyObjects.containsKey(lbl) && worldlyObjects.get(lbl + "_c") < worldlyObjects.get(obj.ObjLabel);
+        return worldlyObjects.containsKey(lbl) && worldlyObjects.get(lbl).get() < worldlyObjects.get(lbl + "_c").get();
     }
 
     public boolean checkPopulationLimit(String lbl) {
-        return worldlyObjects.containsKey(lbl) && worldlyObjects.get(lbl + "_c") < worldlyObjects.get(lbl);
+        return worldlyObjects.containsKey(lbl) && worldlyObjects.get(lbl).get() < worldlyObjects.get(lbl + "_c").get();
+    }
+
+    public void addToCount(GameObject obj) {
+        String lbl = obj.ObjLabel;
+        worldlyObjects.get(lbl + "_c").incrementAndGet();
+    }
+
+    public void addToCount(String lbl) {
+        worldlyObjects.get(lbl + "_c").incrementAndGet();
+    }
+
+    public void removeFromCount(GameObject obj) {
+        String lbl = obj.ObjLabel;
+        worldlyObjects.get(lbl + "_c").decrementAndGet();
+    }
+
+    public void removeFromCount(String lbl) {
+        worldlyObjects.get(lbl + "_c").decrementAndGet();
     }
 
     public void spawnPlayer() {
@@ -226,18 +248,20 @@ public class GameLevel extends GameScreen {
 
     public void spawnAsteroid() {
         if(checkPopulationLimit("Asteroid")) {
-            Asteroid asteroid = new Asteroid(game, chandle, MainStage, world, 100);
+            Asteroid asteroid = new Asteroid(game, chandle, MainStage, world, 100, 10000);
             asteroid.setLevel(this);
             MainStage.addActor(asteroid);
+            addToCount(asteroid);
         }
     }
 
     public void spawnAsteroids(int amount) {
         for(int i = 0; i < amount; i++) {
             if(checkPopulationLimit("Asteroid")) {
-                Asteroid asteroid = new Asteroid(game, chandle, MainStage, world, 100);
+                Asteroid asteroid = new Asteroid(game, chandle, MainStage, world, 100, 10000);
                 asteroid.setLevel(this);
                 MainStage.addActor(asteroid);
+                addToCount(asteroid);
             }
         }
     }
@@ -247,6 +271,7 @@ public class GameLevel extends GameScreen {
             AsteroidBomb asteroidBomb = new AsteroidBomb(game, chandle, MainStage, world, getPlayer());
             asteroidBomb.setLevel(this);
             MainStage.addActor(asteroidBomb);
+            addToCount(asteroidBomb);
         }
     }
 
@@ -256,6 +281,7 @@ public class GameLevel extends GameScreen {
                 AsteroidBomb asteroidBomb = new AsteroidBomb(game, chandle, MainStage, world, getPlayer());
                 asteroidBomb.setLevel(this);
                 MainStage.addActor(asteroidBomb);
+                addToCount(asteroidBomb);
             }
         }
     }

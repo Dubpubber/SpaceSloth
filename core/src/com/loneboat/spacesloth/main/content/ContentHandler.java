@@ -47,13 +47,11 @@ public class ContentHandler {
         main_cam.setToOrtho(false, GAMEWIDTH, GAMEHEIGHT);
         hud_cam = new OrthographicCamera();
         hud_cam.setToOrtho(false, GAMEWIDTH, GAMEHEIGHT);
-
         queueAssets();
     }
 
     private void queueAssets() {
         manager.load("Backgrounds/spacebackground_1.jpg", Texture.class);
-        manager.load("Sprites/Ship_A1.png", Texture.class);
         manager.load("Sprites/mouseSprite.png", Texture.class);
         manager.load("Sprites/Thruster_A1.png", Texture.class);
         manager.load("Sprites/GunMount_A1.png", Texture.class);
@@ -62,6 +60,14 @@ public class ContentHandler {
         manager.load("Sprites/BlueBlast_A1.png", Texture.class);
         manager.load("Sprites/HUDSprite.png", Texture.class);
         manager.load("Sprites/SpaceBackground_1.png", Texture.class);
+
+        // Load ships
+        manager.load("Bodies/Ship_1/Ship_1_Thrusters.png", Texture.class);
+        manager.load("Bodies/Ship_1/Ship_1_Cockpit.png", Texture.class);
+        manager.load("Bodies/Ship_1/Ship_1_Hull.png", Texture.class);
+        manager.load("Bodies/Ship_1/Ship_1_GunMount.png", Texture.class);
+        manager.load("Bodies/Ship_1/Ship_1_1F_Wing.png", Texture.class);
+        manager.load("Bodies/Ship_1/Ship_1_2F_Wing.png", Texture.class);
     }
 
     /**

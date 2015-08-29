@@ -81,7 +81,7 @@ public class PlayerHUD extends Actor {
         ProgressBar.ProgressBarStyle boostbarstyle = new ProgressBar.ProgressBarStyle(skin.newDrawable("background"), skin.newDrawable("boost"));
         boostbarstyle.knobBefore = boostbarstyle.knob;
         boostbar = new ProgressBar(0, player.getBoostCap(), 1.0f, true, boostbarstyle);
-        boostbar.setAnimateDuration(1.0f);
+        boostbar.setAnimateDuration(0.5f);
         boostbar.setValue(player.getCurBoost());
         boostbar.setSize(57, 56);
         boostbar.setPosition(384, 14);

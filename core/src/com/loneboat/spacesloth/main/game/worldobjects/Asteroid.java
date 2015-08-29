@@ -27,15 +27,15 @@ public class Asteroid extends GameObject {
      * @param active_stage - Stage on which the this game object will be acting on.
      * @param world
      */
-    public Asteroid(SpaceSloth game, ContentHandler chandle, Stage active_stage, World world, int range) {
+    public Asteroid(SpaceSloth game, ContentHandler chandle, Stage active_stage, World world, int diameter, int maxDistance) {
         super(game, chandle, active_stage, world, "Asteroid");
 
-        int size = MathUtils.random(12, range);
+        int size = MathUtils.random(12, diameter);
 
         BodyDef bdef = new BodyDef();
         FixtureDef asteroidBody = new FixtureDef();
         CircleShape shape = new CircleShape();
-        Vector2 randPos = ScreenUtil.randomVector2(10, 100);
+        Vector2 randPos = ScreenUtil.randomVector2(10, maxDistance);
 
         bdef.position.set(randPos.x, randPos.y);
         bdef.type = BodyDef.BodyType.DynamicBody;
