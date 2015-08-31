@@ -193,7 +193,7 @@ public abstract class Part {
         this.MASS = MASS;
     }
 
-    private boolean createFixtureForPart(float x, float y) {
+    public boolean createFixtureForPart(float x, float y) {
         if(gameObject.getBody() == null)
             return false;
         Texture texture = ContentHandler.manager.get(getName(), Texture.class);
@@ -214,6 +214,7 @@ public abstract class Part {
         Fixture fixture = gameObject.getBody().createFixture(fixtureDef);
         setBox2DSpriteObject(new Box2DSpriteObject(texture, gameObject));
         fixture.setUserData(getBox2DSpriteObject());
+        shape.dispose();
         return true;
     }
 

@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.loneboat.spacesloth.main.SpaceSloth;
+import com.loneboat.spacesloth.main.content.systems.PartFactory;
 
 /**
  * com.loneboat.spacesloth.main.content
@@ -30,6 +31,8 @@ public class ContentHandler {
     // The updating progress of the asset manager.
     private float progress;
 
+    public PartFactory partFactory;
+
     /**
      * Constructor for the content handler, this class manages most global objects needed for the game.
      * @param game - can be changed to accommodate any like minded extension.
@@ -47,6 +50,8 @@ public class ContentHandler {
         main_cam.setToOrtho(false, GAMEWIDTH, GAMEHEIGHT);
         hud_cam = new OrthographicCamera();
         hud_cam.setToOrtho(false, GAMEWIDTH, GAMEHEIGHT);
+        partFactory = new PartFactory(game);
+        partFactory.populatePartList();
         queueAssets();
     }
 

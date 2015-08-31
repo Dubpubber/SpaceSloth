@@ -17,12 +17,12 @@ public class SpaceSloth extends Game {
 
 	@Override
 	public void create () {
-		chandle = new ContentHandler(this);
-		manager = chandle.getManager();
-
 		logger = new Logger("SpaceSloth:Terminal");
 		logger.setLevel(Logger.DEBUG);
 		logger.info("System started up successfully.");
+		chandle = new ContentHandler(this);
+		manager = chandle.getManager();
+
 		setCurrentScreen(new LoadingScreen(this, chandle));
 	}
 

@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.loneboat.spacesloth.main.Globals;
 import com.loneboat.spacesloth.main.SpaceSloth;
 import com.loneboat.spacesloth.main.content.ContentHandler;
+import com.loneboat.spacesloth.main.content.systems.PartFactory;
 import com.loneboat.spacesloth.main.game.Box2DSpriteObject;
 import com.loneboat.spacesloth.main.game.GameObject;
 import com.loneboat.spacesloth.main.game.worldobjects.weapons.BlueBlast;
@@ -31,6 +32,8 @@ public class SlothShip extends GameObject {
     public boolean isBoosting = false;
 
     private Vector2 MaxBoostVelocity;
+
+    private PartFactory pf;
 
     /**
      * Holds the player's individual profile.
