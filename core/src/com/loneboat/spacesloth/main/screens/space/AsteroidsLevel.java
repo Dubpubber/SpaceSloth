@@ -20,9 +20,9 @@ public class AsteroidsLevel extends GameLevel {
 
         // Set Contact Listener.
         world.setContactListener(new AsteroidsLevelListener(game));
-        spawnAsteroids(500);
+        spawnAsteroids(100);
 
-        setIsDebugView(false);
+        setIsDebugView(true);
 
         setStaticBackground(chandle.getManager().get("Sprites/SpaceBackground_1.png", Texture.class));
     }

@@ -13,7 +13,7 @@ import com.loneboat.spacesloth.main.game.ProjectileObject;
 import com.loneboat.spacesloth.main.game.actors.SlothShip;
 import com.loneboat.spacesloth.main.game.actors.UI.PlayerHUD;
 import com.loneboat.spacesloth.main.game.worldobjects.Asteroid;
-import com.loneboat.spacesloth.main.game.worldobjects.AsteroidBomb;
+import com.loneboat.spacesloth.main.game.worldobjects.enemies.AsteroidBomb;
 import net.dermetfan.gdx.graphics.g2d.AnimatedBox2DSprite;
 import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
 
@@ -36,6 +36,7 @@ public class GameLevel extends GameScreen {
     private final DIFFICULTY levelDifficulty;
 
     // Projectiles
+    // TODO: MAke into treemap or stack.
     private ArrayList<ProjectileObject> projectiles;
 
     // To destroy
@@ -204,7 +205,7 @@ public class GameLevel extends GameScreen {
     }
 
     private void adjustLimits() {
-        worldlyObjects.put("Asteroid", new AtomicInteger(250));
+        worldlyObjects.put("Asteroid", new AtomicInteger(100));
         worldlyObjects.put("Asteroid_c", new AtomicInteger(0));
         worldlyObjects.put("AsteroidBomb", new AtomicInteger(10 * levelDifficulty.getLevel()));
         worldlyObjects.put("AsteroidBomb_c", new AtomicInteger(0));
@@ -212,11 +213,12 @@ public class GameLevel extends GameScreen {
 
     public boolean checkPopulationLimit(GameObject obj) {
         String lbl = obj.ObjLabel;
-        return worldlyObjects.containsKey(lbl) && worldlyObjects.get(lbl).get() < worldlyObjects.get(lbl + "_c").get();
+        return worldlyObjects.containsKey(lbl) && worldlyObjects.get(lbl + "_c").get() < worldlyObjects.get(lbl).get();
     }
 
     public boolean checkPopulationLimit(String lbl) {
-        return worldlyObjects.containsKey(lbl) && worldlyObjects.get(lbl).get() < worldlyObjects.get(lbl + "_c").get();
+        game.getLogger().info(lbl + " Count: " + worldlyObjects.get(lbl + "_c") + " Limit: " + worldlyObjects.get(lbl));
+        return worldlyObjects.containsKey(lbl) && worldlyObjects.get(lbl + "_c").get() < worldlyObjects.get(lbl).get();
     }
 
     public void addToCount(GameObject obj) {

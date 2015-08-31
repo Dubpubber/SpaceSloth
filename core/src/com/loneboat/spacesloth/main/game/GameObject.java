@@ -373,4 +373,11 @@ public abstract class GameObject extends Actor implements GameObjectTracker {
         this.health = this.maxHealth;
     }
 
+    public float getMass() {
+        if(body != null)
+            return body.getMass();
+        else
+            return 0;
+    }
+
 }

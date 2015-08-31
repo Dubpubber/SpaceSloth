@@ -118,7 +118,7 @@ public class SlothShip extends GameObject {
         Vector2 force = new Vector2(
                 -(MathUtils.sin(getBody().getAngle())),
                 (MathUtils.cos(getBody().getAngle()))
-        ).scl(getCurVelocity());
+        ).scl(new Vector2(getCurVelocity().x * getMass(), getCurVelocity().y * getMass()));
 
         if(ip.w) {
             if(!isBoosting) {
@@ -140,11 +140,11 @@ public class SlothShip extends GameObject {
         }
 
         if (ip.a) {
-            steeringTorque = 0.25f;
+            steeringTorque = 1.75f * getMass();
         }
 
         if(ip.d) {
-            steeringTorque = -0.25f;
+            steeringTorque = -1.75f * getMass();
         }
 
         if(!ip.a && !ip.d) {

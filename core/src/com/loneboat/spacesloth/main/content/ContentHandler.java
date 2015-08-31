@@ -19,7 +19,7 @@ public class ContentHandler {
 
     // Save the game object and the asset manager for later use.
     private SpaceSloth game;
-    private AssetManager manager;
+    public static AssetManager manager;
 
     // Our general camera references will be kept here.
     private OrthographicCamera main_cam;
@@ -36,7 +36,7 @@ public class ContentHandler {
      */
     public ContentHandler(SpaceSloth game) {
         this.game = game;
-        this.manager = new AssetManager();
+        manager = new AssetManager();
 
         GAMEWIDTH = Gdx.graphics.getWidth();
         GAMEHEIGHT = Gdx.graphics.getHeight();

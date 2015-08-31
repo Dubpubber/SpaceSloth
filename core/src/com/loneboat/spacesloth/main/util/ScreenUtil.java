@@ -128,4 +128,8 @@ public class ScreenUtil {
         return new Vector2(vector2.x / Globals.PixelsPerMetre, vector2.y / Globals.PixelsPerMetre);
     }
 
+    public static Vector2 scaleVector(float x, float y) {
+        return new Vector2(x / Globals.PixelsPerMetre, y / Globals.PixelsPerMetre);
+    }
+
 }

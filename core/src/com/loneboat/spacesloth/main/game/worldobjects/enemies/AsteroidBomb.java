@@ -1,4 +1,4 @@
-package com.loneboat.spacesloth.main.game.worldobjects;
+package com.loneboat.spacesloth.main.game.worldobjects.enemies;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
