@@ -1,4 +1,4 @@
-package com.loneboat.spacesloth.main.content.systems.parts.systems;
+package com.loneboat.spacesloth.main.content.partsystem.parts.systems;
 
 /**
  * com.loneboat.spacesloth.main.content.systems.parts.systems

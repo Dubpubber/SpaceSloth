@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.loneboat.spacesloth.main.SpaceSloth;
-import com.loneboat.spacesloth.main.content.systems.PartFactory;
+import com.loneboat.spacesloth.main.content.partsystem.PartFactory;
 
 /**
  * com.loneboat.spacesloth.main.content

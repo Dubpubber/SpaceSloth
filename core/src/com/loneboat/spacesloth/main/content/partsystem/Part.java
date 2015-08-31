@@ -1,4 +1,4 @@
-package com.loneboat.spacesloth.main.content.systems;
+package com.loneboat.spacesloth.main.content.partsystem;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.physics.box2d.Fixture;

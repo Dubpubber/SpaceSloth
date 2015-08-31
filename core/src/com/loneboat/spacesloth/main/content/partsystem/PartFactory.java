@@ -1,4 +1,4 @@
-package com.loneboat.spacesloth.main.content.systems;
+package com.loneboat.spacesloth.main.content.partsystem;
 
 import com.badlogic.gdx.Gdx;
 import com.loneboat.spacesloth.main.SpaceSloth;
@@ -118,7 +118,7 @@ public class PartFactory {
 
                                                     break;
                                                 case COCKPIT:
-                                                    
+
 
                                                     break;
                                                 case HULL:

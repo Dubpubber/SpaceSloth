@@ -1,6 +1,6 @@
-package com.loneboat.spacesloth.main.content.systems.parts;
+package com.loneboat.spacesloth.main.content.partsystem.parts;
 
-import com.loneboat.spacesloth.main.content.systems.Part;
+import com.loneboat.spacesloth.main.content.partsystem.Part;
 import com.loneboat.spacesloth.main.game.GameObject;
 
 /**
