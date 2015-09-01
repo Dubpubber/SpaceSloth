@@ -23,10 +23,15 @@ public class PartFactory {
 
     public static class Property {
         private String key;
-        private Object value;
+        private String value;
 
-        public Property(String key, Object value) {
+        private Property() {}
+
+        public void setKey(String key) {
             this.key = key;
+        }
+
+        public void setValue(String value) {
             this.value = value;
         }
 
@@ -36,6 +41,10 @@ public class PartFactory {
 
         public Object getValue() {
             return value;
+        }
+
+        public float asFloat() {
+            return Float.parseFloat(value);
         }
     }
 
@@ -61,8 +70,15 @@ public class PartFactory {
                 temp.setAlpha(v.getFloat(8));
                 temp.setShortHand(v.getString(9));
                 temp.setPartType(PartType.valueOf(v.getString(10)));
-                if(v.isArray())
-                    game.getLogger().info("It worked.");
+                if(v.get(11) != null && v.get(11).isArray()) {
+                    JsonValue propertyArray = v.get(11);
+                    int size = propertyArray.size;
+                    // This part has an array of properties, iterate it.
+                    for(int i = 0; i < size; i++) {
+                        Property property = SeriesA.fromJson(Property.class, v.get(11).get(i).toString());
+                        temp.addProperty(property);
+                    }
+                }
                 parts.put(temp.getShortHand(), temp);
             }
         }

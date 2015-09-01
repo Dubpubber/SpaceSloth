@@ -1,5 +1,6 @@
 package com.loneboat.spacesloth.main.game.actors;
 
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
@@ -93,6 +94,11 @@ public class SlothShip extends GameObject {
             }
             return currentParts[0];
         }
+
+        public float getTorque() {
+            return currentParts[4].getProperty("Torque").asFloat();
+        }
+
     }
 
     private Box2DSpriteObject gunMount_sprite;
@@ -122,6 +128,9 @@ public class SlothShip extends GameObject {
         createHull(body, shape);
         createThrusters(body, shape);
         createWings(body, shape);
+
+        // Shield!
+        createShield(body);
 
         shape.dispose();
 
@@ -179,11 +188,11 @@ public class SlothShip extends GameObject {
         }
 
         if (ip.a) {
-            steeringTorque = 1.75f * getMass();
+            steeringTorque = profile.getTorque() * getMass();
         }
 
         if(ip.d) {
-            steeringTorque = -1.75f * getMass();
+            steeringTorque = -profile.getTorque() * getMass();
         }
 
         if(!ip.a && !ip.d) {
@@ -381,6 +390,28 @@ public class SlothShip extends GameObject {
         if(!c_part2.getRGB().equalsIgnoreCase("none"))
             spriteObject2.setColor(c_part2.getColor());
         WingBFixture.setUserData(spriteObject2);
+    }
+
+    public void createShield(Body body) {
+        CircleShape shape = new CircleShape();
+        shape.setRadius(2);
+        shape.setPosition(ScreenUtil.scaleVector(0, -100));
+
+        FixtureDef shield_def = new FixtureDef();
+        shield_def.shape = shape;
+        Fixture shieldFixture = body.createFixture(shield_def);
+
+        Pixmap pixmap = new Pixmap(64, 64, Pixmap.Format.RGBA8888);
+        pixmap.setColor(0, 0, 1, 0.38f);
+        pixmap.fillCircle(32, 32, 32);
+        Texture pixmaptex = new Texture(pixmap);
+        pixmap.dispose();
+
+        Box2DSpriteObject spriteObject = new Box2DSpriteObject(pixmaptex, this);
+        spriteObject.setPosition(shape.getPosition().x, shape.getPosition().y);
+        shieldFixture.setUserData(spriteObject);
+
+        shape.dispose();
     }
 
 }

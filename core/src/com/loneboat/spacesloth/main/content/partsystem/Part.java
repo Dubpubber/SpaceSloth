@@ -2,7 +2,7 @@ package com.loneboat.spacesloth.main.content.partsystem;
 
 import com.badlogic.gdx.graphics.Color;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
 /**
  * com.loneboat.spacesloth.main.content.systems
@@ -58,10 +58,10 @@ public class Part {
     private float Alpha;
     private String shortHand;
     private PartType partType;
-    private HashMap<String, Object> customObjects;
+    private ArrayList<PartFactory.Property> properties;
 
     public Part() {
-        customObjects = new HashMap<String, Object>();
+        properties = new ArrayList<PartFactory.Property>();
     }
 
     public boolean isVisible() {
@@ -158,11 +158,15 @@ public class Part {
         this.partType = partType;
     }
 
-    public void addProperty(String property, Object value) {
-        customObjects.put(property, value);
+    public void addProperty(PartFactory.Property property) {
+        properties.add(property);
     }
 
-    public void getProperty(String property, Object value) {
-        customObjects.put(property, value);
+    public PartFactory.Property getProperty(String key) {
+        for(PartFactory.Property property : properties) {
+            if(property.getKey().equalsIgnoreCase(key))
+                return property;
+        }
+        return null;
     }
 }
