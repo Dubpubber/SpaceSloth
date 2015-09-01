@@ -32,6 +32,7 @@ public class LoadingScreen extends GameScreen {
 
         game.getLogger().info("Switched to LoadingScreen.");
         glyph = new GlyphLayout();
+        glyph.setText(font, "Loading parts...");
     }
 
     @Override

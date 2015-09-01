@@ -9,7 +9,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.loneboat.spacesloth.main.Globals;
 import com.loneboat.spacesloth.main.SpaceSloth;
 import com.loneboat.spacesloth.main.content.ContentHandler;
+import com.loneboat.spacesloth.main.content.partsystem.Part;
 import com.loneboat.spacesloth.main.content.partsystem.PartFactory;
+import com.loneboat.spacesloth.main.content.partsystem.PartType;
 import com.loneboat.spacesloth.main.game.Box2DSpriteObject;
 import com.loneboat.spacesloth.main.game.GameObject;
 import com.loneboat.spacesloth.main.game.worldobjects.weapons.BlueBlast;
@@ -41,13 +43,29 @@ public class SlothShip extends GameObject {
      */
     public class Profile {
         private SlothShip sloth;
+        private Part[] currentParts;
 
         public Profile(SlothShip sloth) {
             this.sloth = sloth;
+            this.currentParts = new Part[20];
+            //  TODO: remove when loading and saving is implemented.
+            loadDefaultParts();
         }
 
         public SlothShip getPlayer() {
             return sloth;
+        }
+
+        /**
+         * Called if no previous profile is created.
+         */
+        public void loadDefaultParts() {
+            currentParts[0] = PartFactory.fetchPart("rankecockpit");
+            currentParts[1] = PartFactory.fetchPart("rankfgunmount");
+            currentParts[2] = PartFactory.fetchPart("rankfhull");
+            currentParts[3] = PartFactory.fetchPart("rankfthrusters");
+            currentParts[4] = PartFactory.fetchPart("rankfwinga");
+            currentParts[5] = PartFactory.fetchPart("rankfwingb");
         }
 
         public boolean load() {
@@ -56,6 +74,24 @@ public class SlothShip extends GameObject {
 
         public boolean save() {
             return false;
+        }
+
+        public Part getPart(PartType partType) {
+            switch(partType) {
+                case COCKPIT:
+                    return currentParts[0];
+                case GUNMOUNT:
+                    return currentParts[1];
+                case HULL:
+                    return currentParts[2];
+                case THRUSTER:
+                    return currentParts[3];
+                case WING1:
+                    return currentParts[4];
+                case WING2:
+                    return currentParts[5];
+            }
+            return currentParts[0];
         }
     }
 
@@ -85,7 +121,7 @@ public class SlothShip extends GameObject {
         createGunMount(body, shape);
         createHull(body, shape);
         createThrusters(body, shape);
-        createWings('F', body, shape);
+        createWings(body, shape);
 
         shape.dispose();
 
@@ -243,8 +279,12 @@ public class SlothShip extends GameObject {
         cockpit.shape = shape;
         cockpit.density = 5.0f;
         Fixture cockpitFixture = body.createFixture(cockpit);
-        Texture texture = chandle.getManager().get("Bodies/Ship_1/Ship_1_Cockpit.png");
+
+        Part c_part = profile.getPart(PartType.COCKPIT);
+        Texture texture = chandle.getManager().get(c_part.getFileName());
         Box2DSpriteObject spriteObject = new Box2DSpriteObject(texture, this);
+        if(!c_part.getRGB().equalsIgnoreCase("none"))
+            spriteObject.setColor(c_part.getColor());
         cockpitFixture.setUserData(spriteObject);
     }
 
@@ -258,8 +298,12 @@ public class SlothShip extends GameObject {
         gunMount.shape = shape;
         gunMount.density = 1.5f;
         Fixture gunMountFixture = body.createFixture(gunMount);
-        Texture texture = chandle.getManager().get("Bodies/Ship_1/Ship_1_GunMount.png");
+
+        Part c_part = profile.getPart(PartType.GUNMOUNT);
+        Texture texture = chandle.getManager().get(c_part.getFileName());
         Box2DSpriteObject spriteObject = new Box2DSpriteObject(texture, this);
+        if(!c_part.getRGB().equalsIgnoreCase("none"))
+            spriteObject.setColor(c_part.getColor());
         gunMountFixture.setUserData(spriteObject);
     }
 
@@ -273,8 +317,12 @@ public class SlothShip extends GameObject {
         hull.shape = shape;
         hull.density = 10.0f;
         Fixture hullFixture = body.createFixture(hull);
-        Texture texture = chandle.getManager().get("Bodies/Ship_1/Ship_1_Hull.png");
+
+        Part c_part = profile.getPart(PartType.HULL);
+        Texture texture = chandle.getManager().get(c_part.getFileName());
         Box2DSpriteObject spriteObject = new Box2DSpriteObject(texture, this);
+        if(!c_part.getRGB().equalsIgnoreCase("none"))
+            spriteObject.setColor(c_part.getColor());
         hullFixture.setUserData(spriteObject);
     }
 
@@ -288,12 +336,16 @@ public class SlothShip extends GameObject {
         thruster.shape = shape;
         thruster.density = 2.0f;
         Fixture thrusterFixture = body.createFixture(thruster);
-        Texture texture = chandle.getManager().get("Bodies/Ship_1/Ship_1_Thrusters.png");
+
+        Part c_part = profile.getPart(PartType.THRUSTER);
+        Texture texture = chandle.getManager().get(c_part.getFileName());
         Box2DSpriteObject spriteObject = new Box2DSpriteObject(texture, this);
+        if(!c_part.getRGB().equalsIgnoreCase("none"))
+            spriteObject.setColor(c_part.getColor());
         thrusterFixture.setUserData(spriteObject);
     }
 
-    public void createWings(char rank, Body body, PolygonShape shape) {
+    public void createWings(Body body, PolygonShape shape) {
         // Create the first wing.
         shape = new PolygonShape();
         shape.setAsBox(
@@ -304,8 +356,12 @@ public class SlothShip extends GameObject {
         winga.shape = shape;
         winga.density = 1.5f;
         Fixture WingAFixture = body.createFixture(winga);
-        Texture texture1 = chandle.getManager().get("Bodies/Ship_1/Ship_1_1" + rank + "_Wing.png");
+
+        Part c_part1 = profile.getPart(PartType.WING1);
+        Texture texture1 = chandle.getManager().get(c_part1.getFileName());
         Box2DSpriteObject spriteObject1 = new Box2DSpriteObject(texture1, this);
+        if(!c_part1.getRGB().equalsIgnoreCase("none"))
+            spriteObject1.setColor(c_part1.getColor());
         WingAFixture.setUserData(spriteObject1);
 
         // Create the second wing.
@@ -318,8 +374,12 @@ public class SlothShip extends GameObject {
         wingb.shape = shape;
         wingb.density = 1.5f;
         Fixture WingBFixture = body.createFixture(wingb);
-        Texture texture2 = chandle.getManager().get("Bodies/Ship_1/Ship_1_2" + rank + "_Wing.png");
+
+        Part c_part2 = profile.getPart(PartType.WING2);
+        Texture texture2 = chandle.getManager().get(c_part2.getFileName());
         Box2DSpriteObject spriteObject2 = new Box2DSpriteObject(texture2, this);
+        if(!c_part2.getRGB().equalsIgnoreCase("none"))
+            spriteObject2.setColor(c_part2.getColor());
         WingBFixture.setUserData(spriteObject2);
     }
 

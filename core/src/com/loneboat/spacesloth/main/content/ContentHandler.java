@@ -50,8 +50,9 @@ public class ContentHandler {
         main_cam.setToOrtho(false, GAMEWIDTH, GAMEHEIGHT);
         hud_cam = new OrthographicCamera();
         hud_cam.setToOrtho(false, GAMEWIDTH, GAMEHEIGHT);
-        partFactory = new PartFactory(game);
-        partFactory.populatePartList();
+
+        PartFactory.function(game);
+
         queueAssets();
     }
 
@@ -67,12 +68,12 @@ public class ContentHandler {
         manager.load("Sprites/SpaceBackground_1.png", Texture.class);
 
         // Load ships
-        manager.load("Bodies/Ship_1/Ship_1_Thrusters.png", Texture.class);
-        manager.load("Bodies/Ship_1/Ship_1_Cockpit.png", Texture.class);
-        manager.load("Bodies/Ship_1/Ship_1_Hull.png", Texture.class);
-        manager.load("Bodies/Ship_1/Ship_1_GunMount.png", Texture.class);
-        manager.load("Bodies/Ship_1/Ship_1_1F_Wing.png", Texture.class);
-        manager.load("Bodies/Ship_1/Ship_1_2F_Wing.png", Texture.class);
+        manager.load("Parts/Sprites/SeriesA/RankF_Cockpit.png", Texture.class);
+        manager.load("Parts/Sprites/SeriesA/RankF_GunMount.png", Texture.class);
+        manager.load("Parts/Sprites/SeriesA/RankF_Hull.png", Texture.class);
+        manager.load("Parts/Sprites/SeriesA/RankF_Thrusters.png", Texture.class);
+        manager.load("Parts/Sprites/SeriesA/RankF_Wing1.png", Texture.class);
+        manager.load("Parts/Sprites/SeriesA/RankF_Wing2.png", Texture.class);
     }
 
     /**
