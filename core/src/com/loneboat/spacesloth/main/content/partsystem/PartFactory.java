@@ -21,6 +21,24 @@ public class PartFactory {
     public static Json SeriesA;
     public static HashMap<String, Part> parts;
 
+    public static class Property {
+        private String key;
+        private Object value;
+
+        public Property(String key, Object value) {
+            this.key = key;
+            this.value = value;
+        }
+
+        public String getKey() {
+            return key;
+        }
+
+        public Object getValue() {
+            return value;
+        }
+    }
+
     private PartFactory() {}
 
     public static PartFactory function(SpaceSloth game) {
@@ -42,6 +60,9 @@ public class PartFactory {
                 temp.setRGB(v.getString(7));
                 temp.setAlpha(v.getFloat(8));
                 temp.setShortHand(v.getString(9));
+                temp.setPartType(PartType.valueOf(v.getString(10)));
+                if(v.isArray())
+                    game.getLogger().info("It worked.");
                 parts.put(temp.getShortHand(), temp);
             }
         }

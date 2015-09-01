@@ -5,5 +5,5 @@ package com.loneboat.spacesloth.main.content.partsystem;
  * Created by Dubpub on 8/31/2015.
  */
 public enum PartType {
-    COCKPIT, GUNMOUNT, HULL, THRUSTER, WING1, WING2
+    COCKPIT, GUNMOUNT, HULL, THRUSTERS, WING1, WING2
 }

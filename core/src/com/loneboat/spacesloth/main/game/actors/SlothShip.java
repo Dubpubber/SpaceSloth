@@ -61,8 +61,8 @@ public class SlothShip extends GameObject {
          */
         public void loadDefaultParts() {
             currentParts[0] = PartFactory.fetchPart("rankecockpit");
-            currentParts[1] = PartFactory.fetchPart("rankfgunmount");
-            currentParts[2] = PartFactory.fetchPart("rankfhull");
+            currentParts[1] = PartFactory.fetchPart("rankegunmount");
+            currentParts[2] = PartFactory.fetchPart("rankehull");
             currentParts[3] = PartFactory.fetchPart("rankfthrusters");
             currentParts[4] = PartFactory.fetchPart("rankfwinga");
             currentParts[5] = PartFactory.fetchPart("rankfwingb");
@@ -84,7 +84,7 @@ public class SlothShip extends GameObject {
                     return currentParts[1];
                 case HULL:
                     return currentParts[2];
-                case THRUSTER:
+                case THRUSTERS:
                     return currentParts[3];
                 case WING1:
                     return currentParts[4];
@@ -337,7 +337,7 @@ public class SlothShip extends GameObject {
         thruster.density = 2.0f;
         Fixture thrusterFixture = body.createFixture(thruster);
 
-        Part c_part = profile.getPart(PartType.THRUSTER);
+        Part c_part = profile.getPart(PartType.THRUSTERS);
         Texture texture = chandle.getManager().get(c_part.getFileName());
         Box2DSpriteObject spriteObject = new Box2DSpriteObject(texture, this);
         if(!c_part.getRGB().equalsIgnoreCase("none"))

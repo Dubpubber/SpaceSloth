@@ -2,6 +2,8 @@ package com.loneboat.spacesloth.main.content.partsystem;
 
 import com.badlogic.gdx.graphics.Color;
 
+import java.util.HashMap;
+
 /**
  * com.loneboat.spacesloth.main.content.systems
  * Created by Dubpub on 8/30/2015.
@@ -54,8 +56,13 @@ public class Part {
     private String FileName;
     private String RGB;
     private float Alpha;
-
     private String shortHand;
+    private PartType partType;
+    private HashMap<String, Object> customObjects;
+
+    public Part() {
+        customObjects = new HashMap<String, Object>();
+    }
 
     public boolean isVisible() {
         return Visible;
@@ -141,5 +148,21 @@ public class Part {
 
     public void setShortHand(String shortHand) {
         this.shortHand = shortHand;
+    }
+
+    public PartType getPartType() {
+        return partType;
+    }
+
+    public void setPartType(PartType partType) {
+        this.partType = partType;
+    }
+
+    public void addProperty(String property, Object value) {
+        customObjects.put(property, value);
+    }
+
+    public void getProperty(String property, Object value) {
+        customObjects.put(property, value);
     }
 }
