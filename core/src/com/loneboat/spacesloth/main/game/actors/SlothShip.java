@@ -1,6 +1,5 @@
 package com.loneboat.spacesloth.main.game.actors;
 
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
@@ -67,6 +66,7 @@ public class SlothShip extends GameObject {
             currentParts[3] = PartFactory.fetchPart("rankfthrusters");
             currentParts[4] = PartFactory.fetchPart("rankfwinga");
             currentParts[5] = PartFactory.fetchPart("rankfwingb");
+            currentParts[6] = PartFactory.fetchPart("rankfshield");
         }
 
         public boolean load() {
@@ -91,6 +91,8 @@ public class SlothShip extends GameObject {
                     return currentParts[4];
                 case WING2:
                     return currentParts[5];
+                case SGENERATOR:
+                    return currentParts[6];
             }
             return currentParts[0];
         }
@@ -395,20 +397,17 @@ public class SlothShip extends GameObject {
     public void createShield(Body body) {
         CircleShape shape = new CircleShape();
         shape.setRadius(2);
-        shape.setPosition(ScreenUtil.scaleVector(0, -100));
+        shape.setPosition(ScreenUtil.scaleVector(0, -35));
 
         FixtureDef shield_def = new FixtureDef();
         shield_def.shape = shape;
         Fixture shieldFixture = body.createFixture(shield_def);
 
-        Pixmap pixmap = new Pixmap(64, 64, Pixmap.Format.RGBA8888);
-        pixmap.setColor(0, 0, 1, 0.38f);
-        pixmap.fillCircle(32, 32, 32);
-        Texture pixmaptex = new Texture(pixmap);
-        pixmap.dispose();
-
-        Box2DSpriteObject spriteObject = new Box2DSpriteObject(pixmaptex, this);
-        spriteObject.setPosition(shape.getPosition().x, shape.getPosition().y);
+        Part c_part = profile.getPart(PartType.SGENERATOR);
+        Texture texture = chandle.getManager().get(c_part.getFileName());
+        Box2DSpriteObject spriteObject = new Box2DSpriteObject(texture, this);
+        if(!c_part.getRGB().equalsIgnoreCase("none"))
+            spriteObject.setColor(c_part.getColor());
         shieldFixture.setUserData(spriteObject);
 
         shape.dispose();

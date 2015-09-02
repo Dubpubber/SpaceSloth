@@ -67,13 +67,16 @@ public class ContentHandler {
         manager.load("Sprites/HUDSprite.png", Texture.class);
         manager.load("Sprites/SpaceBackground_1.png", Texture.class);
 
-        // Load ships
+        // Load ship parts
         manager.load("Parts/Sprites/SeriesA/RankF_Cockpit.png", Texture.class);
         manager.load("Parts/Sprites/SeriesA/RankF_GunMount.png", Texture.class);
         manager.load("Parts/Sprites/SeriesA/RankF_Hull.png", Texture.class);
         manager.load("Parts/Sprites/SeriesA/RankF_Thrusters.png", Texture.class);
         manager.load("Parts/Sprites/SeriesA/RankF_Wing1.png", Texture.class);
         manager.load("Parts/Sprites/SeriesA/RankF_Wing2.png", Texture.class);
+
+        // Load ship systems
+        manager.load("Parts/Sprites/ShieldBase.png", Texture.class);
     }
 
     /**

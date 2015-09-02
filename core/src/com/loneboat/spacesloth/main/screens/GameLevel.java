@@ -217,7 +217,6 @@ public class GameLevel extends GameScreen {
     }
 
     public boolean checkPopulationLimit(String lbl) {
-        game.getLogger().info(lbl + " Count: " + worldlyObjects.get(lbl + "_c") + " Limit: " + worldlyObjects.get(lbl));
         return worldlyObjects.containsKey(lbl) && worldlyObjects.get(lbl + "_c").get() < worldlyObjects.get(lbl).get();
     }
 
