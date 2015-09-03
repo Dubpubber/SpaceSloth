@@ -45,6 +45,8 @@ public class SlothShip extends GameObject {
         private SlothShip sloth;
         private Part[] currentParts;
 
+        private Box2DSpriteObject shield;
+
         public Profile(SlothShip sloth) {
             this.sloth = sloth;
             this.currentParts = new Part[20];
@@ -99,6 +101,18 @@ public class SlothShip extends GameObject {
 
         public float getTorque() {
             return currentParts[4].getProperty("Torque").asFloat();
+        }
+
+        public void setShield(Box2DSpriteObject sprite) {
+            this.shield = sprite;
+        }
+
+        public Box2DSpriteObject getShield() {
+            return shield;
+        }
+
+        public Body getShieldBody() {
+            return shield.getGameObject().getBody();
         }
 
     }
@@ -213,7 +227,7 @@ public class SlothShip extends GameObject {
             fire();
         }
 
-        if(!isBoosting)
+        if (!isBoosting)
             restoreBoosters();
         else
             depleatBoosters();
@@ -289,6 +303,7 @@ public class SlothShip extends GameObject {
         FixtureDef cockpit = new FixtureDef();
         cockpit.shape = shape;
         cockpit.density = 5.0f;
+        cockpit.filter.groupIndex = -1;
         Fixture cockpitFixture = body.createFixture(cockpit);
 
         Part c_part = profile.getPart(PartType.COCKPIT);
@@ -308,6 +323,7 @@ public class SlothShip extends GameObject {
         FixtureDef gunMount = new FixtureDef();
         gunMount.shape = shape;
         gunMount.density = 1.5f;
+        gunMount.filter.groupIndex = -1;
         Fixture gunMountFixture = body.createFixture(gunMount);
 
         Part c_part = profile.getPart(PartType.GUNMOUNT);
@@ -327,6 +343,7 @@ public class SlothShip extends GameObject {
         FixtureDef hull = new FixtureDef();
         hull.shape = shape;
         hull.density = 10.0f;
+        hull.filter.groupIndex = -1;
         Fixture hullFixture = body.createFixture(hull);
 
         Part c_part = profile.getPart(PartType.HULL);
@@ -346,6 +363,7 @@ public class SlothShip extends GameObject {
         FixtureDef thruster = new FixtureDef();
         thruster.shape = shape;
         thruster.density = 2.0f;
+        thruster.filter.groupIndex = -1;
         Fixture thrusterFixture = body.createFixture(thruster);
 
         Part c_part = profile.getPart(PartType.THRUSTERS);
@@ -366,6 +384,7 @@ public class SlothShip extends GameObject {
         FixtureDef winga = new FixtureDef();
         winga.shape = shape;
         winga.density = 1.5f;
+        winga.filter.groupIndex = -1;
         Fixture WingAFixture = body.createFixture(winga);
 
         Part c_part1 = profile.getPart(PartType.WING1);
@@ -384,6 +403,7 @@ public class SlothShip extends GameObject {
         FixtureDef wingb = new FixtureDef();
         wingb.shape = shape;
         wingb.density = 1.5f;
+        wingb.filter.groupIndex = -1;
         Fixture WingBFixture = body.createFixture(wingb);
 
         Part c_part2 = profile.getPart(PartType.WING2);
@@ -395,12 +415,17 @@ public class SlothShip extends GameObject {
     }
 
     public void createShield(Body body) {
-        CircleShape shape = new CircleShape();
-        shape.setRadius(2);
-        shape.setPosition(ScreenUtil.scaleVector(0, -35));
+        PolygonShape shape = new PolygonShape();
+        Vector2[] verts = {
+                new Vector2(0, -1), new Vector2(1, 1), new Vector2(0, -1.50f), new Vector2(1, -1.75f),
+                new Vector2(0, -1), new Vector2(-1, -1.75f), new Vector2(0, -2.56f), new Vector2(-1, 1)
+        };
+        shape.set(verts);
+
 
         FixtureDef shield_def = new FixtureDef();
         shield_def.shape = shape;
+        shield_def.filter.groupIndex = -1;
         Fixture shieldFixture = body.createFixture(shield_def);
 
         Part c_part = profile.getPart(PartType.SGENERATOR);
@@ -409,6 +434,8 @@ public class SlothShip extends GameObject {
         if(!c_part.getRGB().equalsIgnoreCase("none"))
             spriteObject.setColor(c_part.getColor());
         shieldFixture.setUserData(spriteObject);
+        profile.setShield(spriteObject);
+
 
         shape.dispose();
     }

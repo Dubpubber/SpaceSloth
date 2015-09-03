@@ -13,7 +13,7 @@ public class PlayerInputListener implements InputProcessor {
     private SpaceSloth game;
     private ContentHandler chandle;
 
-    public boolean w, s, a, d, left, right, pageup, space, button_left, shift;
+    public boolean w, s, a, d, left, right, pageup, space, button_left, shift, F1;
 
     public PlayerInputListener(SpaceSloth game, ContentHandler chandle) {
         this.game = game;
@@ -49,6 +49,9 @@ public class PlayerInputListener implements InputProcessor {
                 break;
             case Input.Keys.SHIFT_LEFT:
                 shift = true;
+                break;
+            case Input.Keys.F1:
+                F1 = !F1;
                 break;
         }
         return false;

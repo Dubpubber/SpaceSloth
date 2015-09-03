@@ -145,6 +145,10 @@ public class GameLevel extends GameScreen {
             }
         }
 
+        // Check debug button.
+        if(player != null)
+            setIsDebugView(player.getPlayerInputListener().F1);
+
         // Finally, we're going to draw the debugs
         if(isDebugView && LeadActor != null) {
             box2DCam.position.set(

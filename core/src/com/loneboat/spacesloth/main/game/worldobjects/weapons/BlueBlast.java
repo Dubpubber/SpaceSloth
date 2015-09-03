@@ -44,6 +44,7 @@ public class BlueBlast extends ProjectileObject {
         shape.setRadius(12 / Globals.PixelsPerMetre);
         bulletbody.shape = shape;
         bulletbody.density = 1.0f;
+        bulletbody.filter.groupIndex = -1;
 
         Fixture bulletFixture = body.createFixture(bulletbody);
 
