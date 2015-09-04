@@ -1,7 +1,9 @@
 package com.loneboat.spacesloth.main.game;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -17,6 +19,7 @@ import net.dermetfan.gdx.graphics.g2d.AnimatedBox2DSprite;
 import net.dermetfan.gdx.graphics.g2d.AnimatedSprite;
 import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
 
+import java.util.HashMap;
 import java.util.TreeMap;
 
 /**
@@ -24,7 +27,6 @@ import java.util.TreeMap;
  * Created by Dubpub on 8/6/2015.
  */
 public abstract class GameObject extends Actor implements GameObjectTracker {
-
     // Get our basics.
     public SpaceSloth game;
     public ContentHandler chandle;
@@ -46,9 +48,9 @@ public abstract class GameObject extends Actor implements GameObjectTracker {
 
     // Utility objects.
     public Sprite sprite;
-    public AnimatedSprite asprite;
-    public AnimatedBox2DSprite animatedBox2DSprite;
-    public Box2DSprite box2DSprite;
+
+    public HashMap<String, AnimatedBox2DSprite> animatedSprites;
+    public HashMap<String, Box2DSprite> sprites;
 
     // Local Animation storage.
     private TreeMap<String, Animation> animations;
@@ -79,6 +81,9 @@ public abstract class GameObject extends Actor implements GameObjectTracker {
         this.chandle = chandle;
         this.active_stage = active_stage;
         this.ObjLabel = ObjLabel;
+
+        sprites = new HashMap<String, Box2DSprite>();
+        animatedSprites = new HashMap<String, AnimatedBox2DSprite>();
     }
 
     /**
@@ -93,37 +98,9 @@ public abstract class GameObject extends Actor implements GameObjectTracker {
         this.active_stage = active_stage;
         this.world = world;
         this.ObjLabel = ObjLabel;
-    }
 
-    /**
-     * Creates an animation from an atlas.
-     * @param key - Name of the animation for reference in the TreeMap.
-     * @param regions - String array of the names of the textures of the atlas.
-     * @param atlas - Atlas the method will be retrieving the textures from.
-     * @param speed - Speed of the animation.
-     */
-    public void addAnimation(String key, String[] regions, TextureAtlas atlas, float speed) {
-        TextureRegion[] tregion = new TextureRegion[regions.length];
-        for(int i = 0; i < regions.length; i++) {
-            tregion[i] = atlas.findRegion(regions[i]);
-        }
-        animations.put(key, new Animation(speed, tregion));
-        if(sprite == null && animatedBox2DSprite == null) {
-            // If our sprites are null, create them.
-            sprite = new AnimatedSprite(animations.get(key));
-            if (world != null) {
-                // It's a box2d object!
-                animatedBox2DSprite = new AnimatedBox2DSprite(asprite);
-            }
-        }
-    }
-
-    /**
-     * Sets the box 2d sprite for the game object.
-     * @param sprite - The created sprite in the extended class.
-     */
-    public void setBox2DSprite(Box2DSprite sprite) {
-        this.box2DSprite = sprite;
+        sprites = new HashMap<String, Box2DSprite>();
+        animatedSprites = new HashMap<String, AnimatedBox2DSprite>();
     }
 
     /**
@@ -378,6 +355,18 @@ public abstract class GameObject extends Actor implements GameObjectTracker {
             return body.getMass();
         else
             return 0;
+    }
+
+    public AnimatedBox2DSprite createNewAnimatedBox2dObject(String tag, Animation anime) {
+        if(!animatedSprites.containsKey(tag))
+            animatedSprites.put(tag, new AnimatedBox2DSprite(new AnimatedSprite(anime)));
+        return animatedSprites.get(tag);
+    }
+
+    public Box2DSprite createNewBox2dObject(String tag, Texture texture) {
+        if(!sprites.containsKey(tag))
+            sprites.put(tag, new Box2DSprite(texture));
+        return sprites.get(tag);
     }
 
 }

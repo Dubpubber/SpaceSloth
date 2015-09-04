@@ -8,10 +8,10 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.loneboat.spacesloth.main.Globals;
 import com.loneboat.spacesloth.main.SpaceSloth;
 import com.loneboat.spacesloth.main.content.ContentHandler;
-import com.loneboat.spacesloth.main.game.Box2DSpriteObject;
 import com.loneboat.spacesloth.main.game.GameObject;
 import com.loneboat.spacesloth.main.game.actors.SlothShip;
 import com.loneboat.spacesloth.main.util.ScreenUtil;
+import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
 
 /**
  * com.loneboat.spacesloth.main.game.worldobjects
@@ -42,6 +42,7 @@ public class AsteroidBomb extends GameObject {
         bdef.type = BodyDef.BodyType.DynamicBody;
 
         Body body = world.createBody(bdef);
+        body.setUserData(this);
 
         shape.setRadius(64 / Globals.PixelsPerMetre);
         asteroidBody.shape = shape;
@@ -51,10 +52,9 @@ public class AsteroidBomb extends GameObject {
 
         // Create the base ship model from the body def so far.
         Texture texture = chandle.getManager().get("Sprites/Asteroid_2_bomb.png", Texture.class);
-        Box2DSpriteObject sprite = new Box2DSpriteObject(texture, this);
+        Box2DSprite sprite = createNewBox2dObject("asteroidbomb", texture);
         shipFixture.setUserData(sprite);
 
-        setBox2DSprite(sprite);
         setBody(body);
 
         body.setLinearVelocity((player.getBodyX() - getBodyX()) * 0.75f, (player.getBodyY() - getBodyY()) * 0.75f);

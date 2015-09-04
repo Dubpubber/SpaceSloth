@@ -4,8 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.loneboat.spacesloth.main.SpaceSloth;
 import com.loneboat.spacesloth.main.content.partsystem.PartFactory;
 
@@ -61,7 +63,6 @@ public class ContentHandler {
         manager.load("Sprites/mouseSprite.png", Texture.class);
         manager.load("Sprites/Thruster_A1.png", Texture.class);
         manager.load("Sprites/GunMount_A1.png", Texture.class);
-        manager.load("Sprites/Asteroid_2_smallball.png", Texture.class);
         manager.load("Sprites/Asteroid_2_bomb.png", Texture.class);
         manager.load("Sprites/BlueBlast_A1.png", Texture.class);
         manager.load("Sprites/HUDSprite.png", Texture.class);
@@ -77,6 +78,9 @@ public class ContentHandler {
 
         // Load ship systems
         manager.load("Parts/Sprites/ShieldBase.png", Texture.class);
+
+        // Load animation packs!
+        manager.load("Animations/ss_asteroidpack.pack", TextureAtlas.class);
     }
 
     /**
@@ -107,6 +111,14 @@ public class ContentHandler {
 
     public float getProgress() {
         return progress * 100;
+    }
+
+    public Animation getAnimation(String textureAtlas, String handle, float duration) {
+        if(manager.isLoaded(textureAtlas)) {
+            TextureAtlas atlas = manager.get(textureAtlas, TextureAtlas.class);
+            return new Animation(duration, atlas.findRegions(handle));
+        } else
+            return null;
     }
 
 }

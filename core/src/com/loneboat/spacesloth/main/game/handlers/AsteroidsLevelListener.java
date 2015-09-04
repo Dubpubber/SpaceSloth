@@ -1,8 +1,10 @@
 package com.loneboat.spacesloth.main.game.handlers;
 
-import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.ContactImpulse;
+import com.badlogic.gdx.physics.box2d.ContactListener;
+import com.badlogic.gdx.physics.box2d.Manifold;
 import com.loneboat.spacesloth.main.SpaceSloth;
-import com.loneboat.spacesloth.main.game.Box2DSpriteObject;
 import com.loneboat.spacesloth.main.game.GameObject;
 import com.loneboat.spacesloth.main.game.ProjectileObject;
 
@@ -20,43 +22,32 @@ public class AsteroidsLevelListener implements ContactListener {
 
     @Override
     public void beginContact(Contact contact) {
-        Fixture A = contact.getFixtureA();
-        Fixture B = contact.getFixtureB();
+        GameObject A = (GameObject) contact.getFixtureA().getBody().getUserData();
+        GameObject B = (GameObject) contact.getFixtureB().getBody().getUserData();
 
-        // World object collision.
-        if(A.getUserData() instanceof Box2DSpriteObject && B.getUserData() instanceof  Box2DSpriteObject) {
-            Box2DSpriteObject sA = (Box2DSpriteObject) A.getUserData();
-            Box2DSpriteObject sB = (Box2DSpriteObject) B.getUserData();
-            GameObject oA = sA.getGameObject();
-            GameObject oB = sB.getGameObject();
-
-            // Projectile check.
-            if(oA instanceof ProjectileObject) {
-                ProjectileObject pO1 = (ProjectileObject) oA;
-                // Check if collision is applicable with object.
-                if(pO1.hasCollisionApplicableObject(oB)) {
-                    oB.subtrackHealth(pO1.getDamage());
-                    if(oB.isDead())
-                        oB.queueDestroy();
+        // Check collision!
+        if(A instanceof ProjectileObject) {
+            ProjectileObject pO1 = (ProjectileObject) A;
+            if(pO1.hasCollisionApplicableObject(A)) {
+                B.subtrackHealth(pO1.getDamage());
+                if(B.isDead()) {
+                    B.queueDestroy();
+                }
+                if(!((ProjectileObject) A).isSplitter()) {
+                    B.queueDestroy();
                 }
             }
-
-            if(oB instanceof ProjectileObject) {
-                ProjectileObject pO1 = (ProjectileObject) oB;
-                // Check if collision is applicable with object.
-                if(pO1.hasCollisionApplicableObject(oA)) {
-                    oA.subtrackHealth(pO1.getDamage());
-                    game.getLogger().info(oA.ObjLabel + " was hit for " + pO1.getDamage() + " current health is " + oA.getHealth());
-                    if(oA.isDead()) {
-                        // Object's health has been depleted.
-                        oA.queueDestroy();
-                    }
-                    if(!((ProjectileObject) oB).isSplitter()) {
-                        oB.queueDestroy();
-                    }
+        } else {
+            ProjectileObject pO1 = (ProjectileObject) B;
+            if(pO1.hasCollisionApplicableObject(A)) {
+                A.subtrackHealth(pO1.getDamage());
+                if(A.isDead()) {
+                    A.queueDestroy();
+                }
+                if(!((ProjectileObject) B).isSplitter()) {
+                    B.queueDestroy();
                 }
             }
-
         }
 
     }

@@ -7,10 +7,10 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.loneboat.spacesloth.main.Globals;
 import com.loneboat.spacesloth.main.SpaceSloth;
 import com.loneboat.spacesloth.main.content.ContentHandler;
-import com.loneboat.spacesloth.main.game.Box2DSpriteObject;
 import com.loneboat.spacesloth.main.game.ProjectileObject;
 import com.loneboat.spacesloth.main.game.actors.SlothShip;
 import com.loneboat.spacesloth.main.util.ScreenUtil;
+import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
 
 /**
  * com.loneboat.spacesloth.main.game.worldobjects.weapons
@@ -40,6 +40,7 @@ public class BlueBlast extends ProjectileObject {
         bdef.position.set(impulse);
 
         Body body = world.createBody(bdef);
+        body.setUserData(this);
 
         shape.setRadius(12 / Globals.PixelsPerMetre);
         bulletbody.shape = shape;
@@ -49,13 +50,12 @@ public class BlueBlast extends ProjectileObject {
         Fixture bulletFixture = body.createFixture(bulletbody);
 
         Texture bulletTexture = chandle.getManager().get("Sprites/BlueBlast_A1.png", Texture.class);
-        Box2DSpriteObject sprite = new Box2DSpriteObject(bulletTexture, this);
+        Box2DSprite sprite = createNewBox2dObject("blueblast", bulletTexture);
         bulletFixture.setUserData(sprite);
 
         body.setBullet(true);
 
         setBody(body);
-        setBox2DSprite(sprite);
         setSpeed(50f);
 
         Vector2 forceOffset = ScreenUtil.getPositionOffset(body.getPosition(), player.getBody().getPosition(), getSpeed());

@@ -12,11 +12,11 @@ import com.loneboat.spacesloth.main.content.ContentHandler;
 import com.loneboat.spacesloth.main.content.partsystem.Part;
 import com.loneboat.spacesloth.main.content.partsystem.PartFactory;
 import com.loneboat.spacesloth.main.content.partsystem.PartType;
-import com.loneboat.spacesloth.main.game.Box2DSpriteObject;
 import com.loneboat.spacesloth.main.game.GameObject;
 import com.loneboat.spacesloth.main.game.worldobjects.weapons.BlueBlast;
 import com.loneboat.spacesloth.main.util.PlayerInputListener;
 import com.loneboat.spacesloth.main.util.ScreenUtil;
+import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
 
 /**
  * com.loneboat.spacesloth.main.game.actors
@@ -45,7 +45,7 @@ public class SlothShip extends GameObject {
         private SlothShip sloth;
         private Part[] currentParts;
 
-        private Box2DSpriteObject shield;
+        private Box2DSprite shield;
 
         public Profile(SlothShip sloth) {
             this.sloth = sloth;
@@ -103,21 +103,17 @@ public class SlothShip extends GameObject {
             return currentParts[4].getProperty("Torque").asFloat();
         }
 
-        public void setShield(Box2DSpriteObject sprite) {
+        public void setShield(Box2DSprite sprite) {
             this.shield = sprite;
         }
 
-        public Box2DSpriteObject getShield() {
+        public Box2DSprite getShield() {
             return shield;
-        }
-
-        public Body getShieldBody() {
-            return shield.getGameObject().getBody();
         }
 
     }
 
-    private Box2DSpriteObject gunMount_sprite;
+    private Box2DSprite gunMount_sprite;
 
     /**
      * Creates a new game object that is animated but not a box2d object.
@@ -244,10 +240,9 @@ public class SlothShip extends GameObject {
         return ip;
     }
 
-    public Box2DSpriteObject getGunMountSprite() {
+    public Box2DSprite getGunMountSprite() {
         return gunMount_sprite;
     }
-
 
     public float getBoostCap() {
         return boostCap;
@@ -308,10 +303,10 @@ public class SlothShip extends GameObject {
 
         Part c_part = profile.getPart(PartType.COCKPIT);
         Texture texture = chandle.getManager().get(c_part.getFileName());
-        Box2DSpriteObject spriteObject = new Box2DSpriteObject(texture, this);
+        Box2DSprite sprite = createNewBox2dObject("cockpit", texture);
         if(!c_part.getRGB().equalsIgnoreCase("none"))
-            spriteObject.setColor(c_part.getColor());
-        cockpitFixture.setUserData(spriteObject);
+            sprite.setColor(c_part.getColor());
+        cockpitFixture.setUserData(sprite);
     }
 
     public void createGunMount(Body body, PolygonShape shape) {
@@ -328,10 +323,10 @@ public class SlothShip extends GameObject {
 
         Part c_part = profile.getPart(PartType.GUNMOUNT);
         Texture texture = chandle.getManager().get(c_part.getFileName());
-        Box2DSpriteObject spriteObject = new Box2DSpriteObject(texture, this);
+        Box2DSprite sprite = createNewBox2dObject("gunmount", texture);
         if(!c_part.getRGB().equalsIgnoreCase("none"))
-            spriteObject.setColor(c_part.getColor());
-        gunMountFixture.setUserData(spriteObject);
+            sprite.setColor(c_part.getColor());
+        gunMountFixture.setUserData(sprite);
     }
 
     public void createHull(Body body, PolygonShape shape) {
@@ -348,10 +343,10 @@ public class SlothShip extends GameObject {
 
         Part c_part = profile.getPart(PartType.HULL);
         Texture texture = chandle.getManager().get(c_part.getFileName());
-        Box2DSpriteObject spriteObject = new Box2DSpriteObject(texture, this);
+        Box2DSprite sprite = createNewBox2dObject("hull", texture);
         if(!c_part.getRGB().equalsIgnoreCase("none"))
-            spriteObject.setColor(c_part.getColor());
-        hullFixture.setUserData(spriteObject);
+            sprite.setColor(c_part.getColor());
+        hullFixture.setUserData(sprite);
     }
 
     public void createThrusters(Body body, PolygonShape shape) {
@@ -368,10 +363,10 @@ public class SlothShip extends GameObject {
 
         Part c_part = profile.getPart(PartType.THRUSTERS);
         Texture texture = chandle.getManager().get(c_part.getFileName());
-        Box2DSpriteObject spriteObject = new Box2DSpriteObject(texture, this);
+        Box2DSprite sprite = createNewBox2dObject("thrusters", texture);
         if(!c_part.getRGB().equalsIgnoreCase("none"))
-            spriteObject.setColor(c_part.getColor());
-        thrusterFixture.setUserData(spriteObject);
+            sprite.setColor(c_part.getColor());
+        thrusterFixture.setUserData(sprite);
     }
 
     public void createWings(Body body, PolygonShape shape) {
@@ -389,10 +384,10 @@ public class SlothShip extends GameObject {
 
         Part c_part1 = profile.getPart(PartType.WING1);
         Texture texture1 = chandle.getManager().get(c_part1.getFileName());
-        Box2DSpriteObject spriteObject1 = new Box2DSpriteObject(texture1, this);
+        Box2DSprite sprite1 = createNewBox2dObject("winga", texture1);
         if(!c_part1.getRGB().equalsIgnoreCase("none"))
-            spriteObject1.setColor(c_part1.getColor());
-        WingAFixture.setUserData(spriteObject1);
+            sprite1.setColor(c_part1.getColor());
+        WingAFixture.setUserData(sprite1);
 
         // Create the second wing.
         shape = new PolygonShape();
@@ -408,10 +403,10 @@ public class SlothShip extends GameObject {
 
         Part c_part2 = profile.getPart(PartType.WING2);
         Texture texture2 = chandle.getManager().get(c_part2.getFileName());
-        Box2DSpriteObject spriteObject2 = new Box2DSpriteObject(texture2, this);
+        Box2DSprite sprite2 = createNewBox2dObject("wingb", texture2);
         if(!c_part2.getRGB().equalsIgnoreCase("none"))
-            spriteObject2.setColor(c_part2.getColor());
-        WingBFixture.setUserData(spriteObject2);
+            sprite2.setColor(c_part2.getColor());
+        WingBFixture.setUserData(sprite2);
     }
 
     public void createShield(Body body) {
@@ -430,11 +425,11 @@ public class SlothShip extends GameObject {
 
         Part c_part = profile.getPart(PartType.SGENERATOR);
         Texture texture = chandle.getManager().get(c_part.getFileName());
-        Box2DSpriteObject spriteObject = new Box2DSpriteObject(texture, this);
+        Box2DSprite sprite = createNewBox2dObject("shield", texture);
         if(!c_part.getRGB().equalsIgnoreCase("none"))
-            spriteObject.setColor(c_part.getColor());
-        shieldFixture.setUserData(spriteObject);
-        profile.setShield(spriteObject);
+            sprite.setColor(c_part.getColor());
+        shieldFixture.setUserData(sprite);
+        profile.setShield(sprite);
 
 
         shape.dispose();

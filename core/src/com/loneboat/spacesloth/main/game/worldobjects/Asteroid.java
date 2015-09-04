@@ -1,6 +1,6 @@
 package com.loneboat.spacesloth.main.game.worldobjects;
 
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -9,9 +9,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.loneboat.spacesloth.main.Globals;
 import com.loneboat.spacesloth.main.SpaceSloth;
 import com.loneboat.spacesloth.main.content.ContentHandler;
-import com.loneboat.spacesloth.main.game.Box2DSpriteObject;
 import com.loneboat.spacesloth.main.game.GameObject;
 import com.loneboat.spacesloth.main.util.ScreenUtil;
+import net.dermetfan.gdx.graphics.g2d.AnimatedBox2DSprite;
 
 /**
  * com.loneboat.spacesloth.main.game.worldobjects
@@ -29,7 +29,6 @@ public class Asteroid extends GameObject {
      */
     public Asteroid(SpaceSloth game, ContentHandler chandle, Stage active_stage, World world, int diameter, int maxDistance) {
         super(game, chandle, active_stage, world, "Asteroid");
-
         int size = MathUtils.random(12, diameter);
 
         BodyDef bdef = new BodyDef();
@@ -41,6 +40,7 @@ public class Asteroid extends GameObject {
         bdef.type = BodyDef.BodyType.DynamicBody;
 
         Body body = world.createBody(bdef);
+        body.setUserData(this);
 
         shape.setRadius(size / Globals.PixelsPerMetre);
         asteroidBody.shape = shape;
@@ -49,12 +49,12 @@ public class Asteroid extends GameObject {
         Fixture shipFixture = body.createFixture(asteroidBody);
 
         // Create the base ship model from the body def so far.
-        Texture texture = chandle.getManager().get("Sprites/Asteroid_2_smallball.png", Texture.class);
-        Box2DSpriteObject sprite = new Box2DSpriteObject(texture, this);
+        Animation anime = chandle.getAnimation("Animations/ss_asteroidpack.pack", "Asteroid", 0.25f);
+        AnimatedBox2DSprite sprite = createNewAnimatedBox2dObject("asteroid1", anime);
+        sprite.setPlaying(false);
         shipFixture.setUserData(sprite);
 
         setBody(body);
-        setBox2DSprite(sprite);
         ID = MathUtils.random(1000);
         setMaxHealth(body.getMass());
         replenishHealth();
