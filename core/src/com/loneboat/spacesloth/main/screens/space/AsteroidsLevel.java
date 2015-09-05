@@ -3,6 +3,7 @@ package com.loneboat.spacesloth.main.screens.space;
 import com.badlogic.gdx.graphics.Texture;
 import com.loneboat.spacesloth.main.SpaceSloth;
 import com.loneboat.spacesloth.main.content.ContentHandler;
+import com.loneboat.spacesloth.main.game.actors.UI.Background;
 import com.loneboat.spacesloth.main.game.handlers.AsteroidsLevelListener;
 import com.loneboat.spacesloth.main.screens.GameLevel;
 
@@ -25,6 +26,7 @@ public class AsteroidsLevel extends GameLevel {
         setIsDebugView(true);
 
         setStaticBackground(chandle.getManager().get("Sprites/SpaceBackground_1.png", Texture.class));
+        MainStage.addActor(new Background(static_background));
     }
 
     @Override

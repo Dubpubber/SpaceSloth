@@ -8,8 +8,12 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.loneboat.spacesloth.main.SpaceSloth;
 import com.loneboat.spacesloth.main.content.partsystem.PartFactory;
+
+import javax.swing.text.View;
 
 /**
  * com.loneboat.spacesloth.main.content
@@ -27,6 +31,7 @@ public class ContentHandler {
     // Our general camera references will be kept here.
     private OrthographicCamera main_cam;
     private OrthographicCamera hud_cam;
+    private Viewport fit;
     public static SpriteBatch batch;
     public static BitmapFont debugfont;
 
@@ -52,6 +57,7 @@ public class ContentHandler {
         main_cam.setToOrtho(false, GAMEWIDTH, GAMEHEIGHT);
         hud_cam = new OrthographicCamera();
         hud_cam.setToOrtho(false, GAMEWIDTH, GAMEHEIGHT);
+        fit = new FitViewport(GAMEWIDTH, GAMEHEIGHT);
 
         PartFactory.function(game);
 
@@ -119,6 +125,10 @@ public class ContentHandler {
             return new Animation(duration, atlas.findRegions(handle));
         } else
             return null;
+    }
+
+    public Viewport getHudViewport() {
+        return fit;
     }
 
 }

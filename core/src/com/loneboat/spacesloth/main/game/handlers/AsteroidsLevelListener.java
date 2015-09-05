@@ -26,30 +26,31 @@ public class AsteroidsLevelListener implements ContactListener {
         GameObject B = (GameObject) contact.getFixtureB().getBody().getUserData();
 
         // Check collision!
-        if(A instanceof ProjectileObject) {
-            ProjectileObject pO1 = (ProjectileObject) A;
-            if(pO1.hasCollisionApplicableObject(A)) {
-                B.subtrackHealth(pO1.getDamage());
-                if(B.isDead()) {
-                    B.queueDestroy();
+        if (A instanceof ProjectileObject || B instanceof ProjectileObject) {
+            if (A instanceof ProjectileObject) {
+                ProjectileObject pO1 = (ProjectileObject) A;
+                if (pO1.hasCollisionApplicableObject(A)) {
+                    B.subtrackHealth(pO1.getDamage());
+                    if (B.isDead()) {
+                        B.queueDestroy();
+                    }
+                    if (!((ProjectileObject) A).isSplitter()) {
+                        B.queueDestroy();
+                    }
                 }
-                if(!((ProjectileObject) A).isSplitter()) {
-                    B.queueDestroy();
-                }
-            }
-        } else {
-            ProjectileObject pO1 = (ProjectileObject) B;
-            if(pO1.hasCollisionApplicableObject(A)) {
-                A.subtrackHealth(pO1.getDamage());
-                if(A.isDead()) {
-                    A.queueDestroy();
-                }
-                if(!((ProjectileObject) B).isSplitter()) {
-                    B.queueDestroy();
+            } else {
+                ProjectileObject pO1 = (ProjectileObject) B;
+                if (pO1.hasCollisionApplicableObject(A)) {
+                    A.subtrackHealth(pO1.getDamage());
+                    if (A.isDead()) {
+                        A.queueDestroy();
+                    }
+                    if (!((ProjectileObject) B).isSplitter()) {
+                        B.queueDestroy();
+                    }
                 }
             }
         }
-
     }
 
     @Override

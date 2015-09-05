@@ -3,6 +3,7 @@ package com.loneboat.spacesloth.main.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.loneboat.spacesloth.main.Globals;
@@ -11,6 +12,7 @@ import com.loneboat.spacesloth.main.content.ContentHandler;
 import com.loneboat.spacesloth.main.game.GameObject;
 import com.loneboat.spacesloth.main.game.ProjectileObject;
 import com.loneboat.spacesloth.main.game.actors.SlothShip;
+import com.loneboat.spacesloth.main.game.actors.UI.Background;
 import com.loneboat.spacesloth.main.game.actors.UI.PlayerHUD;
 import com.loneboat.spacesloth.main.game.worldobjects.Asteroid;
 import com.loneboat.spacesloth.main.game.worldobjects.enemies.AsteroidBomb;
@@ -95,18 +97,11 @@ public class GameLevel extends GameScreen {
             // Update that camera
             main_cam.update();
         }
+
         // Now we're going to update the mouse relative to the screen.
         Vector3 worldcoords = new Vector3(Gdx.input.getX(), (Gdx.graphics.getHeight() - Gdx.input.getY()), 0);
         hud_cam.unproject(worldcoords);
         mouseLoc = new Vector2(worldcoords.x, worldcoords.y);
-
-        // Then, draw the background. (So it's always just the background. This must always be rendered first!)
-        batch.setProjectionMatrix(hud_cam.combined);
-        if(static_background != null) {
-            batch.begin();
-            batch.draw(static_background, 0, 0, WIDTH, HEIGHT);
-            batch.end();
-        }
 
         batch.setProjectionMatrix(main_cam.combined);
         // Fourth, draw all our game objects using box2d-utils!
