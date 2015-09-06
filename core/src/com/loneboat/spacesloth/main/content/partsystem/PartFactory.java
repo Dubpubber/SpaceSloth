@@ -7,6 +7,7 @@ import com.loneboat.spacesloth.main.SpaceSloth;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 /**
  * com.loneboat.spacesloth.main.content.systems
@@ -17,6 +18,7 @@ import java.util.HashMap;
  */
 public class PartFactory {
 
+    private static Random rand;
     private static SpaceSloth game;
     public static Json SeriesA;
     public static HashMap<String, Part> parts;
@@ -52,6 +54,7 @@ public class PartFactory {
 
     public static PartFactory function(SpaceSloth game) {
         PartFactory.game = game;
+        rand = new Random();
         SeriesA = new Json();
         parts = new HashMap<String, Part>();
         ArrayList<?> list = SeriesA.fromJson(ArrayList.class, Gdx.files.internal("Parts/Series.json"));
@@ -92,4 +95,16 @@ public class PartFactory {
         return null;
     }
 
+    public static Part fetchIncrementPart(Part toReplace) {
+        return null;
+    }
+
+    public static Part fetchRandomPart(PartType pa) {
+        Object[] values = parts.values().toArray();
+        Part randomPartOfType;
+        do {
+            randomPartOfType = (Part) values[rand.nextInt(values.length)];
+        } while(!randomPartOfType.getPartType().equals(pa));
+        return randomPartOfType;
+    }
 }

@@ -37,7 +37,7 @@ public class PlayerHUD extends Actor {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
-        batch.draw(hudsprite, (ContentHandler.GAMEWIDTH - hudsprite.getWidth()) / 2, 10);
+        batch.draw(hudsprite, 195, 10);
         updateHUD();
     }
 

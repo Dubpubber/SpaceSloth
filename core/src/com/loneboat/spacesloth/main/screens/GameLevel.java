@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.loneboat.spacesloth.main.Globals;
 import com.loneboat.spacesloth.main.SpaceSloth;
 import com.loneboat.spacesloth.main.content.ContentHandler;
@@ -103,6 +104,14 @@ public class GameLevel extends GameScreen {
         hud_cam.unproject(worldcoords);
         mouseLoc = new Vector2(worldcoords.x, worldcoords.y);
 
+        // TODO: fix background rendering later. Workaround for now!
+        batch.setProjectionMatrix(hud_cam.combined);
+        if(static_background != null) {
+            batch.begin();
+            batch.draw(static_background, -640, HEIGHT - static_background.getHeight());
+            batch.end();
+        }
+
         batch.setProjectionMatrix(main_cam.combined);
         // Fourth, draw all our game objects using box2d-utils!
         // - Notice how the projection matrix is set to project onto the main camera.
@@ -121,8 +130,8 @@ public class GameLevel extends GameScreen {
                     projectiles.remove(go);
                 } else
                     removeFromCount(go);
-                go.destroy();
-                itr.remove();
+                if(go.destroy())
+                    itr.remove();
             }
         }
 
@@ -162,8 +171,8 @@ public class GameLevel extends GameScreen {
             font.draw(batch, "Frames: " + Gdx.graphics.getFramesPerSecond(), 3, 450);
             font.draw(batch, "Current body count: " + world.getBodyCount(), 3, 425);
             font.draw(batch, "Memory Usage: " + ((runtime.totalMemory() - runtime.freeMemory()) / mb) + " mb", 3, 400);
-            font.draw(batch, "Current ship velocity: " + player.getCurVelocity().x + " " + player.getCurVelocity().y + " / " + player.getMaxVelocity().x + " " + player.getMaxVelocity().y, 3, 375);
-            font.draw(batch, "isBoosting: " + player.isBoosting + " cBoost: " + player.getCurBoost(), 3, 350);
+            font.draw(batch, "Current ship velocity: " + player.getCurVelocity().x + " " + player.getCurVelocity().y + " / " + player.getMaxVelocity().x + " " + player.getMaxVelocity().y + " isBoosting: " + player.isBoosting, 3, 375);
+            font.draw(batch, "Current Health: " + player.getHealth() + " Total Health: " + player.getMaxHealth() + " Parts Equipped Count: " + player.getProfile().getEquippedPartCount(), 3, 350);
             batch.end();
         }
 

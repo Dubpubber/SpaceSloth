@@ -1,5 +1,7 @@
 package com.loneboat.spacesloth.main.game.actors;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
@@ -45,6 +47,8 @@ public class SlothShip extends GameObject {
         private SlothShip sloth;
         private Part[] currentParts;
 
+        private int equipedPartCount = 0;
+
         private Box2DSprite shield;
 
         public Profile(SlothShip sloth) {
@@ -62,9 +66,9 @@ public class SlothShip extends GameObject {
          * Called if no previous profile is created.
          */
         public void loadDefaultParts() {
-            currentParts[0] = PartFactory.fetchPart("rankecockpit");
-            currentParts[1] = PartFactory.fetchPart("rankegunmount");
-            currentParts[2] = PartFactory.fetchPart("rankehull");
+            currentParts[0] = PartFactory.fetchPart("rankfcockpit");
+            currentParts[1] = PartFactory.fetchPart("rankfgunmount");
+            currentParts[2] = PartFactory.fetchPart("rankfhull");
             currentParts[3] = PartFactory.fetchPart("rankfthrusters");
             currentParts[4] = PartFactory.fetchPart("rankfwinga");
             currentParts[5] = PartFactory.fetchPart("rankfwingb");
@@ -99,6 +103,32 @@ public class SlothShip extends GameObject {
             return currentParts[0];
         }
 
+        public void setPart(Part part) {
+            switch(part.getPartType()) {
+                case COCKPIT:
+                    currentParts[0] = part;
+                    break;
+                case GUNMOUNT:
+                    currentParts[1] = part;
+                    break;
+                case HULL:
+                    currentParts[2] = part;
+                    break;
+                case THRUSTERS:
+                    currentParts[3] = part;
+                    break;
+                case WING1:
+                    currentParts[4] = part;
+                    break;
+                case WING2:
+                    currentParts[5] = part;
+                    break;
+                case SGENERATOR:
+                    currentParts[6] = part;
+                    break;
+            }
+        }
+
         public float getTorque() {
             return currentParts[4].getProperty("Torque").asFloat();
         }
@@ -109,6 +139,49 @@ public class SlothShip extends GameObject {
 
         public Box2DSprite getShield() {
             return shield;
+        }
+
+        public void calculateTotalHealth() {
+            float totalHealth = 0;
+            for(Part part : currentParts) {
+                if(part != null) {
+                    totalHealth += part.getHealth();
+                }
+            }
+            setMaxHealth(totalHealth);
+        }
+
+        public void calculateEquippedPartCount() {
+            equipedPartCount = 0;
+            for(Part part : currentParts) {
+                if(part != null)
+                    equipedPartCount += 1;
+            }
+        }
+
+        public int getEquippedPartCount() {
+            return equipedPartCount;
+        }
+
+        public void shuffleDefaultParts() {
+            game.getLogger().info("--- BEGIN SHIP SHUFFLE ---");
+            for(Part part : currentParts) {
+                if(part != null) {
+                    game.getLogger().info("Shuffling part " + part.getLocalName() + "!");
+                    Part newPart = PartFactory.fetchRandomPart(part.getPartType());
+                    game.getLogger().info("Found new part for " + part.getLocalName() + "! New part: " + newPart.getLocalName());
+                    setPart(newPart);
+                }
+            }
+            game.getLogger().info("--- END SHIP SHUFFLE ---");
+        }
+
+        public void rebuild() {
+            calculateEquippedPartCount();
+            calculateTotalHealth();
+            replenishHealth();
+            setBoostCap(100);
+            replenishBoost();
         }
 
     }
@@ -133,20 +206,8 @@ public class SlothShip extends GameObject {
         bdef.type = BodyDef.BodyType.DynamicBody;
         Body body = world.createBody(bdef);
 
-        PolygonShape shape = new PolygonShape();
-
-        createCockpit(body, shape);
-        createGunMount(body, shape);
-        createHull(body, shape);
-        createThrusters(body, shape);
-        createWings(body, shape);
-
-        // Shield!
-        createShield(body);
-
-        shape.dispose();
-
         setBody(body);
+        rebuildShip();
 
         ip = new PlayerInputListener(game, chandle);
         setOrigin(getWidth() / 2, getHeight() / 2);
@@ -154,17 +215,25 @@ public class SlothShip extends GameObject {
         setCurVelocity(new Vector2(0.0f, 0.0f));
         setMaxVelocity(new Vector2(0.075f, 0.075f));
         setMaxBoostVelocity(new Vector2(0.090f, 0.090f));
-        setHealth(100.0f);
 
         getBody().setAngularDamping(2.5f);
 
         getBody().setAngularDamping(2.5f);
 
         setMaxProjectileCount(30);
-        setMaxHealth(1000);
-        replenishHealth();
-        setBoostCap(100);
-        replenishBoost();
+    }
+
+    public void rebuildShip() {
+        destroyAllFixtures();
+        PolygonShape shape = new PolygonShape();
+        createCockpit(body, shape);
+        createGunMount(body, shape);
+        createHull(body, shape);
+        createThrusters(body, shape);
+        createWings(body, shape);
+        createShield(body);
+        shape.dispose();
+        profile.rebuild();
     }
 
     /**
@@ -221,6 +290,11 @@ public class SlothShip extends GameObject {
             bb.setLevel(level);
             setCurrentProjectile(bb);
             fire();
+        }
+
+        if(Gdx.input.isKeyJustPressed(Input.Keys.F2)) {
+            profile.shuffleDefaultParts();
+            rebuildShip();
         }
 
         if (!isBoosting)

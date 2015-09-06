@@ -109,6 +109,7 @@ public class ScreenUtil {
         return angle;
     }
 
+    // TODO: known bug: the farther away the shooter is from the origin, the more inaccurate the direction.
     public static Vector2 getAngleOffset(GameObject object, float radius) {
         float angleCos = -MathUtils.cos(object.getBody().getAngle() - (MathUtils.PI / 2));
         float angleSin = MathUtils.sin(object.getBody().getAngle() + (MathUtils.PI / 2));
@@ -117,6 +118,7 @@ public class ScreenUtil {
         return new Vector2(x, y);
     }
 
+    // TODO: known bug: the farther away the shooter is from the origin, the more inaccurate the direction.
     public static Vector2 getPositionOffset(Vector2 v1, Vector2 v2, float scale) {
         return new Vector2(
                 v1.x - v2.x,

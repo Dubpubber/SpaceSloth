@@ -280,10 +280,27 @@ public abstract class GameObject extends Actor implements GameObjectTracker {
         this.lives += lives;
     }
 
-    public void destroy() {
-        if(world != null && body != null)
-            world.destroyBody(body);
-        remove();
+    public boolean destroy() {
+        game.getLogger().info("Destroy check: " + ObjLabel);
+        if(world != null && body != null) {
+            // If this game object has a destroy animation, play it and wait until it's destroyed to remove it from the world.
+            if(animatedSprites.size() > 0 && animatedSprites.containsKey("destroy")) {
+                AnimatedBox2DSprite sprite = animatedSprites.get("destroy");
+                if(!sprite.isPlaying()) {
+                    sprite.setPlaying(true);
+                } else if(sprite.isAnimationFinished()) {
+                    // The animation is now done playing, remove it.
+                    world.destroyBody(body);
+                    remove();
+                    return true;
+                }
+            } else {
+                world.destroyBody(body);
+                remove();
+                return true;
+            }
+        }
+        return false;
     }
 
     public void queueDestroy() {
@@ -368,5 +385,13 @@ public abstract class GameObject extends Actor implements GameObjectTracker {
             sprites.put(tag, new Box2DSprite(texture));
         return sprites.get(tag);
     }
+
+    public void destroyAllFixtures() {
+        if(body != null)
+            for(Fixture fixture : body.getFixtureList())
+                body.destroyFixture(fixture);
+    }
+
+
 
 }

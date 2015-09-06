@@ -12,6 +12,8 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.loneboat.spacesloth.main.Globals;
 import com.loneboat.spacesloth.main.SpaceSloth;
 import com.loneboat.spacesloth.main.content.ContentHandler;
@@ -79,7 +81,7 @@ public abstract class GameScreen implements Screen {
 
         // Create the stage objects.
         MainStage = new Stage();
-        HudStage = new Stage();
+        HudStage = new Stage(new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
         batch = ContentHandler.batch;
         font = ContentHandler.debugfont;
     }
@@ -188,6 +190,7 @@ public abstract class GameScreen implements Screen {
     public void resize(int width, int height) {
         this.WIDTH = width;
         this.HEIGHT = height;
+        game.getLogger().info("W/H: " + WIDTH + " " + HEIGHT);
         // Update the main camera.
         main_cam.viewportWidth = width / 25;
         main_cam.viewportHeight = height / 25;
@@ -200,6 +203,7 @@ public abstract class GameScreen implements Screen {
         hud_cam.viewportHeight = height;
         hud_cam.update();
 
+        HudStage.getViewport().update(WIDTH, HEIGHT, false);
         HudStage.getBatch().setProjectionMatrix(hud_cam.combined);
 
         // Update the box2d debug camera.

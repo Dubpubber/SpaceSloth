@@ -57,7 +57,6 @@ public class ContentHandler {
         main_cam.setToOrtho(false, GAMEWIDTH, GAMEHEIGHT);
         hud_cam = new OrthographicCamera();
         hud_cam.setToOrtho(false, GAMEWIDTH, GAMEHEIGHT);
-        fit = new FitViewport(GAMEWIDTH, GAMEHEIGHT);
 
         PartFactory.function(game);
 
@@ -65,7 +64,6 @@ public class ContentHandler {
     }
 
     private void queueAssets() {
-        manager.load("Backgrounds/spacebackground_1.jpg", Texture.class);
         manager.load("Sprites/mouseSprite.png", Texture.class);
         manager.load("Sprites/Thruster_A1.png", Texture.class);
         manager.load("Sprites/GunMount_A1.png", Texture.class);

@@ -49,8 +49,8 @@ public class Asteroid extends GameObject {
         Fixture shipFixture = body.createFixture(asteroidBody);
 
         // Create the base ship model from the body def so far.
-        Animation anime = chandle.getAnimation("Animations/ss_asteroidpack.pack", "Asteroid", 0.25f);
-        AnimatedBox2DSprite sprite = createNewAnimatedBox2dObject("asteroid1", anime);
+        Animation anime = chandle.getAnimation("Animations/ss_asteroidpack.pack", "Asteroid", 0.15f);
+        AnimatedBox2DSprite sprite = createNewAnimatedBox2dObject("destroy", anime);
         sprite.setPlaying(false);
         shipFixture.setUserData(sprite);
 
