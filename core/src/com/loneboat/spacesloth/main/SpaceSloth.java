@@ -7,6 +7,9 @@ import com.badlogic.gdx.utils.Logger;
 import com.loneboat.spacesloth.main.content.ContentHandler;
 import com.loneboat.spacesloth.main.screens.utilscreens.LoadingScreen;
 
+/**
+ * Created by Dubpub, inspirited by friends.
+ */
 public class SpaceSloth extends Game {
 	// Create our asset manager.
 	public ContentHandler chandle;
