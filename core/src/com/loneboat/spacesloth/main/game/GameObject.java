@@ -289,7 +289,7 @@ public abstract class GameObject extends Actor implements GameObjectTracker {
                 if(!sprite.isPlaying()) {
                     sprite.setPlaying(true);
                 } else if(sprite.isAnimationFinished()) {
-                    // The animation is now done playing, remove it.
+                    // The animation is now done playing, remove it
                     world.destroyBody(body);
                     remove();
                     return true;

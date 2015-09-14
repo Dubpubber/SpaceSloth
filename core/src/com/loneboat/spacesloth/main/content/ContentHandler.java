@@ -8,12 +8,9 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.loneboat.spacesloth.main.SpaceSloth;
 import com.loneboat.spacesloth.main.content.partsystem.PartFactory;
-
-import javax.swing.text.View;
 
 /**
  * com.loneboat.spacesloth.main.content
@@ -73,15 +70,15 @@ public class ContentHandler {
         manager.load("Sprites/SpaceBackground_1.png", Texture.class);
 
         // Load ship parts
-        manager.load("Parts/Sprites/SeriesA/RankF_Cockpit.png", Texture.class);
-        manager.load("Parts/Sprites/SeriesA/RankF_GunMount.png", Texture.class);
-        manager.load("Parts/Sprites/SeriesA/RankF_Hull.png", Texture.class);
-        manager.load("Parts/Sprites/SeriesA/RankF_Thrusters.png", Texture.class);
-        manager.load("Parts/Sprites/SeriesA/RankF_Wing1.png", Texture.class);
-        manager.load("Parts/Sprites/SeriesA/RankF_Wing2.png", Texture.class);
+        manager.load("Parts/Sprites/BaseCockpit.png", Texture.class);
+        manager.load("Parts/Sprites/BaseGunMount.png", Texture.class);
+        manager.load("Parts/Sprites/BaseHull.png", Texture.class);
+        manager.load("Parts/Sprites/BaseThrusters.png", Texture.class);
+        manager.load("Parts/Sprites/BaseWing1.png", Texture.class);
+        manager.load("Parts/Sprites/BaseWing2.png", Texture.class);
 
         // Load ship systems
-        manager.load("Parts/Sprites/ShieldBase.png", Texture.class);
+        manager.load("Parts/Sprites/BaseShield.png", Texture.class);
 
         // Load animation packs!
         manager.load("Animations/ss_asteroidpack.pack", TextureAtlas.class);

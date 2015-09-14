@@ -39,7 +39,7 @@ import java.util.ArrayList;
  *      Tier 1 list of parts.
  *  [A1-F1]
  *      Tier 2 list of parts.
- *  [A2-F3]
+ *  [A2-F2]
  *      Tier 3 list of parts.
  *  [S-X]
  *      Tier 4 list of parts.

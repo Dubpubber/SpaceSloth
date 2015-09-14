@@ -1,185 +1,144 @@
-[{
-  "Rank":"F",
-  "Health":50,
-  "RepairFactor":1,
-  "Cost": 0.00,
-  "Visible":true,
-  "LocalName":"Rank F Standard Cockpit",
-  "FileName":"Parts/Sprites/SeriesA/RankF_Cockpit.png",
-  "RGB":"9A9A9A",
-  "Alpha":1,
-  "Shorthand":"rankfcockpit",
-  "PartType":"COCKPIT",
-  "Properties":[
-    {
-      "key": "HUD_ID",
-      "value": {
+[
+  {
+    "Rank": "F",
+    "Health": 50.0,
+    "RepairFactor": 1.0,
+    "Cost": 0.0,
+    "Visible": true,
+    "LocalName": "Rank F Standard Cockpit",
+    "FileName": "Parts/Sprites/BaseCockpit.png",
+    "RGB": "9A9A9A",
+    "Alpha": 1.0,
+    "ShortHand": "rankfcockpit",
+    "PartType": "COCKPIT",
+    "Properties": [
+      {
+        "key": "HUD_ID",
         "value": "0"
       }
-    }
-  ]
-}, {
-  "Rank":"F",
-  "Health":50,
-  "RepairFactor":1,
-  "Cost": 0.00,
-  "Visible":true,
-  "LocalName":"Rank F Standard Gun Mount",
-  "FileName":"Parts/Sprites/SeriesA/RankF_GunMount.png",
-  "RGB":"9A9A9A",
-  "Alpha":"1",
-  "Shorthand":"rankfgunmount",
-  "PartType":"GUNMOUNT",
-  "Properties":[
-    {
-      "key": "Firerate",
-      "value": {
+    ]
+  },
+  {
+    "Rank": "F",
+    "Health": 50.0,
+    "RepairFactor": 1.0,
+    "Cost": 0.0,
+    "Visible": true,
+    "LocalName": "Rank F Standard Gun Mount",
+    "FileName": "Parts/Sprites/BaseGunMount.png",
+    "RGB": "9A9A9A",
+    "Alpha": 1.0,
+    "ShortHand": "rankfgunmount",
+    "PartType": "GUNMOUNT",
+    "Properties": [
+      {
+        "key": "Firerate",
         "value": "1.0"
       }
-    }
-  ]
-}, {
-  "Rank":"F",
-  "Health":50,
-  "RepairFactor":1,
-  "Cost": 0.00,
-  "Visible":true,
-  "LocalName":"Rank F Standard Hull",
-  "FileName":"Parts/Sprites/SeriesA/RankF_Hull.png",
-  "RGB":"9A9A9A",
-  "Alpha":"1",
-  "Shorthand":"rankfhull",
-  "PartType":"HULL",
-  "Properties":[
-    {
-      "key": "Capacity",
-      "value": {
+    ]
+  },
+  {
+    "Rank": "F",
+    "Health": 50.0,
+    "RepairFactor": 1.0,
+    "Cost": 0.0,
+    "Visible": true,
+    "LocalName": "Rank F Standard Hull",
+    "FileName": "Parts/Sprites/BaseHull.png",
+    "RGB": "9A9A9A",
+    "Alpha": 1.0,
+    "ShortHand": "rankfhull",
+    "PartType": "HULL",
+    "Properties": [
+      {
+        "key": "Capacity",
         "value": "100"
       }
-    }
-  ]
-}, {
-  "Rank":"F",
-  "Health":50,
-  "RepairFactor":1,
-  "Cost": 0.00,
-  "Visible":true,
-  "LocalName":"Rank F Standard Thrusters",
-  "FileName":"Parts/Sprites/SeriesA/RankF_Thrusters.png",
-  "RGB":"9A9A9A",
-  "Alpha":"1",
-  "Shorthand":"rankfthrusters",
-  "PartType":"THRUSTERS"
-}, {
-  "Rank":"F",
-  "Health":50,
-  "RepairFactor":1,
-  "Cost": 0.00,
-  "Visible":true,
-  "LocalName":"Rank F Standard Wing A",
-  "FileName":"Parts/Sprites/SeriesA/RankF_Wing1.png",
-  "RGB":"9A9A9A",
-  "Alpha":"1",
-  "Shorthand":"rankfwinga",
-  "PartType":"WING1",
-  "Properties":[
-    {
-      "key": "Torque",
-      "value": {
+    ]
+  },
+  {
+    "Rank": "F",
+    "Health": 50.0,
+    "RepairFactor": 1.0,
+    "Cost": 0.0,
+    "Visible": true,
+    "LocalName": "Rank F Standard Thrusters",
+    "FileName": "Parts/Sprites/BaseThrusters.png",
+    "RGB": "9A9A9A",
+    "Alpha": 1.0,
+    "ShortHand": "rankfthrusters",
+    "PartType": "THRUSTERS",
+    "Properties": []
+  },
+  {
+    "Rank": "F",
+    "Health": 50.0,
+    "RepairFactor": 1.0,
+    "Cost": 0.0,
+    "Visible": true,
+    "LocalName": "Rank F Standard Wing A",
+    "FileName": "Parts/Sprites/BaseWing1.png",
+    "RGB": "9A9A9A",
+    "Alpha": 1.0,
+    "ShortHand": "rankfwinga",
+    "PartType": "WING1",
+    "Properties": [
+      {
+        "key": "Torque",
         "value": "1.85"
       }
-    }
-  ]
-}, {
-  "Rank":"F",
-  "Health":50,
-  "RepairFactor":1,
-  "Cost": 0.00,
-  "Visible":true,
-  "LocalName":"Rank F Standard Wing B",
-  "FileName":"Parts/Sprites/SeriesA/RankF_Wing2.png",
-  "RGB":"9A9A9A",
-  "Alpha":"1",
-  "Shorthand":"rankfwingb",
-  "PartType":"WING2",
-  "Properties":[
-    {
-      "key": "Torque",
-      "value": {
+    ]
+  },
+  {
+    "Rank": "F",
+    "Health": 50.0,
+    "RepairFactor": 1.0,
+    "Cost": 0.0,
+    "Visible": true,
+    "LocalName": "Rank F Standard Wing B",
+    "FileName": "Parts/Sprites/BaseWing2.png",
+    "RGB": "9A9A9A",
+    "Alpha": 1.0,
+    "ShortHand": "rankfwingb",
+    "PartType": "WING2",
+    "Properties": [
+      {
+        "key": "Torque",
         "value": "1.85"
       }
-    }
-  ]
-}, {
-  "Rank":"F",
-  "Health":250,
-  "RepairFactor":1,
-  "Cost": 0.00,
-  "Visible":true,
-  "LocalName":"Rank F Standard Shield Generator",
-  "FileName":"Parts/Sprites/ShieldBase.png",
-  "RGB":"73D8DF",
-  "Alpha":"0.25",
-  "Shorthand":"rankfshield",
-  "PartType":"SGENERATOR"
-},{
-  "Rank":"E",
-  "Health":75,
-  "RepairFactor":1.1,
-  "Cost": 25.0,
-  "Visible":true,
-  "LocalName":"Rank E Patched Cockpit",
-  "FileName":"Parts/Sprites/SeriesA/RankF_Cockpit.png",
-  "RGB":"BA4343",
-  "Alpha":"1.0",
-  "Shorthand":"rankecockpit",
-  "PartType":"COCKPIT"
-}, {
-  "Rank":"E",
-  "Health":75,
-  "RepairFactor":1.1,
-  "Cost": 50.0,
-  "Visible":true,
-  "LocalName":"Rank E Patched GunMount",
-  "FileName":"Parts/Sprites/SeriesA/RankF_GunMount.png",
-  "RGB":"BA4343",
-  "Alpha":"1.0",
-  "Shorthand":"rankegunmount",
-  "PartType":"GUNMOUNT"
-}, {
-  "Rank":"E",
-  "Health":100,
-  "RepairFactor":1.1,
-  "Cost": 150.0,
-  "Visible":true,
-  "LocalName":"Rank E Patched Hull",
-  "FileName":"Parts/Sprites/SeriesA/RankF_Hull.png",
-  "RGB":"BA4343",
-  "Alpha":"1.0",
-  "Shorthand":"rankehull",
-  "PartType":"HULL"
-}, {
-  "Rank":"E",
-  "Health":100,
-  "RepairFactor":1.1,
-  "Cost": 150.0,
-  "Visible":true,
-  "LocalName":"Rank E Patched Wings",
-  "FileName":"Parts/Sprites/SeriesA/RankF_Wing1.png",
-  "RGB":"BA4343",
-  "Alpha":"1.0",
-  "Shorthand":"rankewing1",
-  "PartType":"WINGA"
-}, {
-  "Rank":"E",
-  "Health":100,
-  "RepairFactor":1.1,
-  "Cost": 150.0,
-  "Visible":true,
-  "LocalName":"Rank E Patched Wings",
-  "FileName":"Parts/Sprites/SeriesA/RankF_Wing2.png",
-  "RGB":"BA4343",
-  "Alpha":"1.0",
-  "Shorthand":"rankewing2",
-  "PartType":"WINGB"
-}]
+    ]
+  },
+  {
+    "Rank": "F",
+    "Health": 250.0,
+    "RepairFactor": 1.0,
+    "Cost": 0.0,
+    "Visible": true,
+    "LocalName": "Rank F Standard Shield Generator",
+    "FileName": "Parts/Sprites/BaseShield.png",
+    "RGB": "73D8DF",
+    "Alpha": 0.25,
+    "ShortHand": "rankfshield",
+    "PartType": "SGENERATOR",
+    "Properties": []
+  },
+  {
+    "Rank": "A",
+    "Health": 100.0,
+    "RepairFactor": 1.0,
+    "Cost": 100.0,
+    "Visible": true,
+    "LocalName": "wer",
+    "FileName": "Parts/Sprites/BaseWing1.png",
+    "RGB": "000000",
+    "Alpha": 1.0,
+    "ShortHand": "wer",
+    "PartType": "WING1",
+    "Properties": [
+      {
+        "key": "Torque",
+        "value": "1.0"
+      }
+    ]
+  }
+]
