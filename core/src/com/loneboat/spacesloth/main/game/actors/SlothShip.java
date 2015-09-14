@@ -70,9 +70,9 @@ public class SlothShip extends GameObject {
             currentParts[1] = PartFactory.fetchPart("rankfgunmount");
             currentParts[2] = PartFactory.fetchPart("rankfhull");
             currentParts[3] = PartFactory.fetchPart("rankfthrusters");
-            currentParts[4] = PartFactory.fetchPart("rankfwinga");
-            currentParts[5] = PartFactory.fetchPart("rankfwingb");
-            currentParts[6] = PartFactory.fetchPart("rankfshield");
+            currentParts[4] = PartFactory.fetchPart("rankfwing1");
+            currentParts[5] = PartFactory.fetchPart("rankfwing2");
+            currentParts[6] = PartFactory.fetchPart("rankfshieldgenerator");
         }
 
         public boolean load() {
