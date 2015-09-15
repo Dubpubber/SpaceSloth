@@ -3,22 +3,23 @@ package com.loneboat.spacesloth.main.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Pool;
 import com.loneboat.spacesloth.main.Globals;
 import com.loneboat.spacesloth.main.SpaceSloth;
 import com.loneboat.spacesloth.main.content.ContentHandler;
 import com.loneboat.spacesloth.main.game.GameObject;
 import com.loneboat.spacesloth.main.game.ProjectileObject;
 import com.loneboat.spacesloth.main.game.actors.SlothShip;
-import com.loneboat.spacesloth.main.game.actors.UI.Background;
 import com.loneboat.spacesloth.main.game.actors.UI.PlayerHUD;
 import com.loneboat.spacesloth.main.game.worldobjects.Asteroid;
 import com.loneboat.spacesloth.main.game.worldobjects.enemies.AsteroidBomb;
+import com.loneboat.spacesloth.main.game.worldobjects.ores.Ore;
 import net.dermetfan.gdx.graphics.g2d.AnimatedBox2DSprite;
 import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
+import sun.applet.Main;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -128,10 +129,12 @@ public class GameLevel extends GameScreen {
                 if(go instanceof ProjectileObject) {
                     ((ProjectileObject) go).getShooter().decProjectileCount(1);
                     projectiles.remove(go);
-                } else
+                } else {
                     removeFromCount(go);
-                if(go.destroy())
+                }
+                if(go.destroy()) {
                     itr.remove();
+                }
             }
         }
 
@@ -207,6 +210,10 @@ public class GameLevel extends GameScreen {
         }
     }
 
+    public boolean isQueuedForDestroy(GameObject gameObject) {
+        return removables.contains(gameObject);
+    }
+
     public void queueDestroyObject(GameObject gameObject) {
         if(!removables.contains(gameObject))
             removables.add(gameObject);
@@ -217,6 +224,8 @@ public class GameLevel extends GameScreen {
         worldlyObjects.put("Asteroid_c", new AtomicInteger(0));
         worldlyObjects.put("AsteroidBomb", new AtomicInteger(10 * levelDifficulty.getLevel()));
         worldlyObjects.put("AsteroidBomb_c", new AtomicInteger(0));
+        worldlyObjects.put("RandomOre", new AtomicInteger(50));
+        worldlyObjects.put("RandomOre_c", new AtomicInteger(0));
     }
 
     public boolean checkPopulationLimit(GameObject obj) {
@@ -292,6 +301,14 @@ public class GameLevel extends GameScreen {
                 MainStage.addActor(asteroidBomb);
                 addToCount(asteroidBomb);
             }
+        }
+    }
+
+    public void spawnOre(GameObject gameObject) {
+        if(checkPopulationLimit("RandomOre")) {
+            Ore item = new Ore(game, chandle, MainStage, world);
+            item.setContainer(gameObject);
+            addToCount(item);
         }
     }
 

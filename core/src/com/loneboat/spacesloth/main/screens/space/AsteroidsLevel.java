@@ -1,13 +1,10 @@
 package com.loneboat.spacesloth.main.screens.space;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.loneboat.spacesloth.main.SpaceSloth;
 import com.loneboat.spacesloth.main.content.ContentHandler;
-import com.loneboat.spacesloth.main.game.actors.UI.Background;
 import com.loneboat.spacesloth.main.game.handlers.AsteroidsLevelListener;
 import com.loneboat.spacesloth.main.screens.GameLevel;
-import sun.applet.Main;
 
 /**
  * com.loneboat.spacesloth.main.screens.space

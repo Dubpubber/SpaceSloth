@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -290,6 +291,9 @@ public abstract class GameObject extends Actor implements GameObjectTracker {
                     sprite.setPlaying(true);
                 } else if(sprite.isAnimationFinished()) {
                     // The animation is now done playing, remove it
+                    for(int i = 0; i < MathUtils.random(1, 3); i++) {
+                        level.spawnOre(this);
+                    }
                     world.destroyBody(body);
                     remove();
                     return true;
@@ -301,6 +305,10 @@ public abstract class GameObject extends Actor implements GameObjectTracker {
             }
         }
         return false;
+    }
+
+    public boolean isQueuedForDestroy() {
+        return level != null && level.isQueuedForDestroy(this);
     }
 
     public void queueDestroy() {
@@ -384,6 +392,13 @@ public abstract class GameObject extends Actor implements GameObjectTracker {
         if(!sprites.containsKey(tag))
             sprites.put(tag, new Box2DSprite(texture));
         return sprites.get(tag);
+    }
+
+    public void updateBox2DSprite(String tag, Texture texture) {
+        if(sprites.containsKey(tag)) {
+            sprites.replace(tag, sprites.get(tag), new Box2DSprite(texture));
+            game.getLogger().info("Box2DSprite updated for " + ObjLabel + ".");
+        }
     }
 
     public void destroyAllFixtures() {

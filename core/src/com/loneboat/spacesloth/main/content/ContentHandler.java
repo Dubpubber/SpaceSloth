@@ -58,6 +58,7 @@ public class ContentHandler {
         PartFactory.function(game);
 
         queueAssets();
+
     }
 
     private void queueAssets() {
@@ -79,6 +80,12 @@ public class ContentHandler {
 
         // Load ship systems
         manager.load("Parts/Sprites/BaseShield.png", Texture.class);
+
+        // Load ores
+        manager.load("Sprites/Ore_1.png", Texture.class);
+        manager.load("Sprites/Ore_2.png", Texture.class);
+        manager.load("Sprites/Ore_3.png", Texture.class);
+        manager.load("Sprites/Ore_4.png", Texture.class);
 
         // Load animation packs!
         manager.load("Animations/ss_asteroidpack.pack", TextureAtlas.class);

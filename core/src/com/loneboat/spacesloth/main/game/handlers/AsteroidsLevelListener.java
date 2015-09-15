@@ -7,6 +7,8 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 import com.loneboat.spacesloth.main.SpaceSloth;
 import com.loneboat.spacesloth.main.game.GameObject;
 import com.loneboat.spacesloth.main.game.ProjectileObject;
+import com.loneboat.spacesloth.main.game.actors.SlothShip;
+import com.loneboat.spacesloth.main.game.worldobjects.ores.Ore;
 
 /**
  * com.loneboat.spacesloth.main.game.handlers
@@ -25,7 +27,7 @@ public class AsteroidsLevelListener implements ContactListener {
         GameObject A = (GameObject) contact.getFixtureA().getBody().getUserData();
         GameObject B = (GameObject) contact.getFixtureB().getBody().getUserData();
 
-        // Check collision!
+        // Check collision with projectiles!
         if (A instanceof ProjectileObject || B instanceof ProjectileObject) {
             if (A instanceof ProjectileObject) {
                 ProjectileObject pO1 = (ProjectileObject) A;
@@ -51,6 +53,30 @@ public class AsteroidsLevelListener implements ContactListener {
                 }
             }
         }
+
+        // Check player collisions, check if either object is a player.
+        if(A instanceof SlothShip || B instanceof SlothShip) {
+            SlothShip player = null;
+            boolean ab = false;
+            // If so, find which one is a player.
+            if(A instanceof SlothShip) {
+                player = (SlothShip) A;
+                ab = true;
+            } else {
+                player = (SlothShip) B;
+                ab = false;
+            }
+
+            // Now, check for player applicable collision.
+            // Ores first! //
+            if(ab && B instanceof Ore) {
+                B.queueDestroy();
+            } else if(!ab && A instanceof Ore) {
+                A.queueDestroy();
+            }
+
+        }
+
     }
 
     @Override

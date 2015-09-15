@@ -207,6 +207,7 @@ public class SlothShip extends GameObject {
         Body body = world.createBody(bdef);
 
         setBody(body);
+        body.setUserData(this);
         rebuildShip();
 
         ip = new PlayerInputListener(game, chandle);
@@ -295,6 +296,10 @@ public class SlothShip extends GameObject {
         if(Gdx.input.isKeyJustPressed(Input.Keys.F2)) {
             profile.shuffleDefaultParts();
             rebuildShip();
+        }
+
+        if(Gdx.input.isKeyJustPressed(Input.Keys.F3)) {
+            level.spawnOre(this);
         }
 
         if (!isBoosting)

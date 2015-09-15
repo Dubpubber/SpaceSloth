@@ -82,7 +82,7 @@ public class ProjectileObject extends GameObject {
     }
 
     public boolean hasCollisionApplicableObject(GameObject gameObject) {
-        return affectedObjects.contains(gameObject.ObjLabel);
+        return gameObject != null && affectedObjects.contains(gameObject.ObjLabel);
     }
 
     public boolean hasCollisionApplicableObject(String label) {
