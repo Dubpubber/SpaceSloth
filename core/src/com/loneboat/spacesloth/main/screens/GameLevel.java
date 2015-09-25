@@ -19,7 +19,6 @@ import com.loneboat.spacesloth.main.game.worldobjects.enemies.AsteroidBomb;
 import com.loneboat.spacesloth.main.game.worldobjects.ores.Ore;
 import net.dermetfan.gdx.graphics.g2d.AnimatedBox2DSprite;
 import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
-import sun.applet.Main;
 
 import java.util.ArrayList;
 import java.util.HashMap;

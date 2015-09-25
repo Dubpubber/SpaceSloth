@@ -56,7 +56,7 @@ public class PartFactory {
         PartFactory.game = game;
         rand = new Random();
         SeriesA = new Json();
-        parts = new HashMap<>();
+        parts = new HashMap<String, Part>();
         ArrayList<?> list = SeriesA.fromJson(ArrayList.class, Gdx.files.internal("Parts/Series.json"));
         for(Object o : list) {
             if(o instanceof JsonValue) {
