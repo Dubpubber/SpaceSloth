@@ -79,3 +79,7 @@ project(":core") {
 tasks.eclipse.doLast {
     delete ".project"
 }
+
+task getHomeDir << {
+    println gradle.gradleHomeDir
+}
