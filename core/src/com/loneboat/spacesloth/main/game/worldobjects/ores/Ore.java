@@ -3,13 +3,17 @@ package com.loneboat.spacesloth.main.game.worldobjects.ores;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.loneboat.spacesloth.main.Globals;
 import com.loneboat.spacesloth.main.SpaceSloth;
 import com.loneboat.spacesloth.main.content.ContentHandler;
 import com.loneboat.spacesloth.main.game.GameObject;
+import com.loneboat.spacesloth.main.util.ScreenUtil;
 import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
+
+import java.math.BigDecimal;
 
 /**
  * com.loneboat.spacesloth.main.game.worldobjects.ores
@@ -21,16 +25,22 @@ public class Ore extends GameObject {
     private OreType type;
 
     public enum OreType {
-        ROCK(25), GOLD(5), PLATINUM(1);
+        ROCK(50, new BigDecimal(20.0)), GOLD(5, new BigDecimal(50.0)), PLATINUM(1, new BigDecimal(500.0));
 
         private final int weight;
+        private final BigDecimal worth;
 
-        OreType(int weight) {
+        OreType(int weight, BigDecimal worth) {
             this.weight = weight;
+            this.worth = worth;
         }
 
         public int getWeight() {
             return this.weight;
+        }
+
+        public BigDecimal getWorth() {
+            return this.worth;
         }
 
         static int addWeights() {
@@ -52,6 +62,8 @@ public class Ore extends GameObject {
             }
             return OreType.ROCK;
         }
+
+
     }
 
     public Ore(SpaceSloth game, ContentHandler chandle, Stage active_stage, World world) {
@@ -83,7 +95,7 @@ public class Ore extends GameObject {
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(0, 0);
+        bodyDef.position.set(container.getBodyX(), container.getBodyY());
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
@@ -94,6 +106,8 @@ public class Ore extends GameObject {
         // Set the fields of GameObject
         setBody(body);
         body.setUserData(this);
+        Vector2 force = ScreenUtil.randomVector2(1, 10);
+        body.applyLinearImpulse(force.x, force.y, getBodyX(), getBodyY(), true);
         fixture = oreFixture;
 
         updateTexture();

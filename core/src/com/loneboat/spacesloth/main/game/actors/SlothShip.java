@@ -15,10 +15,13 @@ import com.loneboat.spacesloth.main.content.partsystem.Part;
 import com.loneboat.spacesloth.main.content.partsystem.PartFactory;
 import com.loneboat.spacesloth.main.content.partsystem.PartType;
 import com.loneboat.spacesloth.main.game.GameObject;
+import com.loneboat.spacesloth.main.game.worldobjects.ores.Ore;
 import com.loneboat.spacesloth.main.game.worldobjects.weapons.BlueBlast;
 import com.loneboat.spacesloth.main.util.PlayerInputListener;
 import com.loneboat.spacesloth.main.util.ScreenUtil;
 import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
+
+import java.math.BigDecimal;
 
 /**
  * com.loneboat.spacesloth.main.game.actors
@@ -46,6 +49,7 @@ public class SlothShip extends GameObject {
     public class Profile {
         private SlothShip sloth;
         private Part[] currentParts;
+        private BigDecimal money;
 
         private int equipedPartCount = 0;
 
@@ -54,6 +58,7 @@ public class SlothShip extends GameObject {
         public Profile(SlothShip sloth) {
             this.sloth = sloth;
             this.currentParts = new Part[20];
+            this.money = new BigDecimal(100.0);
             //  TODO: remove when loading and saving is implemented.
             loadDefaultParts();
         }
@@ -512,6 +517,10 @@ public class SlothShip extends GameObject {
 
 
         shape.dispose();
+    }
+
+    public void processOreContact(Ore ore) {
+        
     }
 
 }

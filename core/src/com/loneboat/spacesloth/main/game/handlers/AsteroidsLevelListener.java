@@ -31,7 +31,7 @@ public class AsteroidsLevelListener implements ContactListener {
         if (A instanceof ProjectileObject || B instanceof ProjectileObject) {
             if (A instanceof ProjectileObject) {
                 ProjectileObject pO1 = (ProjectileObject) A;
-                if (pO1.hasCollisionApplicableObject(A)) {
+                if (pO1.hasCollisionApplicableObject(B)) {
                     B.subtrackHealth(pO1.getDamage());
                     if (B.isDead()) {
                         B.queueDestroy();
@@ -48,7 +48,7 @@ public class AsteroidsLevelListener implements ContactListener {
                         A.queueDestroy();
                     }
                     if (!((ProjectileObject) B).isSplitter()) {
-                        B.queueDestroy();
+                        A.queueDestroy();
                     }
                 }
             }
@@ -70,8 +70,10 @@ public class AsteroidsLevelListener implements ContactListener {
             // Now, check for player applicable collision.
             // Ores first! //
             if(ab && B instanceof Ore) {
+                player.processOreContact((Ore) B);
                 B.queueDestroy();
             } else if(!ab && A instanceof Ore) {
+                player.processOreContact((Ore) A);
                 A.queueDestroy();
             }
 

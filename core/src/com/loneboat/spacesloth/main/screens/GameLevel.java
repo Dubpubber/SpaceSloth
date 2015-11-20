@@ -264,37 +264,33 @@ public class GameLevel extends GameScreen {
     }
 
     public void spawnAsteroid() {
-        if(checkPopulationLimit("Asteroid")) {
-            Asteroid asteroid = new Asteroid(game, chandle, MainStage, world, 100, 10000);
-            asteroid.setLevel(this);
-            MainStage.addActor(asteroid);
-            addToCount(asteroid);
-        }
+        createAsteroid("Asteroid");
     }
 
     public void spawnAsteroids(int amount) {
         for(int i = 0; i < amount; i++) {
-            if(checkPopulationLimit("Asteroid")) {
-                Asteroid asteroid = new Asteroid(game, chandle, MainStage, world, 100, 10000);
-                asteroid.setLevel(this);
-                MainStage.addActor(asteroid);
-                addToCount(asteroid);
-            }
+            createAsteroid("Asteroid");
         }
     }
 
     public void spawnAsteroidBomb() {
-        if(checkPopulationLimit("AsteroidBomb")) {
-            AsteroidBomb asteroidBomb = new AsteroidBomb(game, chandle, MainStage, world, getPlayer());
-            asteroidBomb.setLevel(this);
-            MainStage.addActor(asteroidBomb);
-            addToCount(asteroidBomb);
-        }
+        createAsteroid("AsteroidBomb");
     }
 
     public void spawnAsteroidBombs(int amount) {
         for(int i = 0; i < amount; i++) {
-            if(checkPopulationLimit("AsteroidBomb")) {
+            createAsteroid("AsteroidBomb");
+        }
+    }
+
+    public void createAsteroid(String asteroid_type) {
+        if(checkPopulationLimit(asteroid_type)) {
+            if(asteroid_type.contains("Asteroid")) {
+                Asteroid asteroid = new Asteroid(game, chandle, MainStage, world, 100, 10000);
+                asteroid.setLevel(this);
+                MainStage.addActor(asteroid);
+                addToCount(asteroid);
+            } else {
                 AsteroidBomb asteroidBomb = new AsteroidBomb(game, chandle, MainStage, world, getPlayer());
                 asteroidBomb.setLevel(this);
                 MainStage.addActor(asteroidBomb);
@@ -306,6 +302,7 @@ public class GameLevel extends GameScreen {
     public void spawnOre(GameObject gameObject) {
         if(checkPopulationLimit("RandomOre")) {
             Ore item = new Ore(game, chandle, MainStage, world);
+            item.setLevel(gameObject.level);
             item.setContainer(gameObject);
             addToCount(item);
         }
