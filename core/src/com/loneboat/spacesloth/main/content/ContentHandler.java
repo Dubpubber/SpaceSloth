@@ -62,6 +62,8 @@ public class ContentHandler {
     }
 
     private void queueAssets() {
+        manager.load("SS_ControlPanel.png", Texture.class);
+
         manager.load("Sprites/mouseSprite.png", Texture.class);
         manager.load("Sprites/Thruster_A1.png", Texture.class);
         manager.load("Sprites/GunMount_A1.png", Texture.class);

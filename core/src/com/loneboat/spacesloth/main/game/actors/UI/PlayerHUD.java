@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.loneboat.spacesloth.main.content.ContentHandler;
 import com.loneboat.spacesloth.main.game.actors.SlothShip;
+import com.loneboat.spacesloth.main.screens.GameScreen;
 
 /**
  * com.loneboat.spacesloth.main.game.actors.UI
@@ -29,7 +30,7 @@ public class PlayerHUD extends Actor {
         this.player = player;
         this.chandle = chandle;
         this.HudStage = HudStage;
-        hudsprite = chandle.getManager().get("Sprites/HUDSprite.png", Texture.class);
+        hudsprite = chandle.getManager().get("SS_ControlPanel.png", Texture.class);
         hudcam = chandle.getHudCamera();
         createBars();
     }
@@ -37,7 +38,7 @@ public class PlayerHUD extends Actor {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
-        batch.draw(hudsprite, 195, 10);
+        batch.draw(hudsprite, 0, 0, HudStage.getViewport().getScreenWidth(), HudStage.getViewport().getScreenHeight());
         updateHUD();
     }
 

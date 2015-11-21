@@ -80,6 +80,14 @@ public class Ore extends GameObject {
         createBody();
     }
 
+    public OreType getType() {
+        return type;
+    }
+
+    public BigDecimal getOreWorth() {
+        return type.worth;
+    }
+
     public GameObject getContainer() {
         return container;
     }

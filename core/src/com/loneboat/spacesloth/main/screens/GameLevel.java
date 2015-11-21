@@ -308,4 +308,8 @@ public class GameLevel extends GameScreen {
         }
     }
 
+    public void writeTextToScreen(String text) {
+
+    }
+
 }

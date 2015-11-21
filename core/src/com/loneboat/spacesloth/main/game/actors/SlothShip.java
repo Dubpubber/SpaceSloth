@@ -132,6 +132,7 @@ public class SlothShip extends GameObject {
                     currentParts[6] = part;
                     break;
             }
+
         }
 
         public float getTorque() {
@@ -187,6 +188,28 @@ public class SlothShip extends GameObject {
             replenishHealth();
             setBoostCap(100);
             replenishBoost();
+        }
+
+        /**
+         * Gets this profiles total cash.
+         * @return
+         */
+        public BigDecimal getMoney() {
+            return money;
+        }
+
+        /**
+         * Adds money to this profile.
+         */
+        public void addMoney(BigDecimal money) {
+            money = money.add(money);
+        }
+
+        /**
+         * Subtracts money from this profile.
+         */
+        public void subMoney(BigDecimal money) {
+            money = money.subtract(money);
         }
 
     }
@@ -520,7 +543,8 @@ public class SlothShip extends GameObject {
     }
 
     public void processOreContact(Ore ore) {
-        
+        // When the refinery is integrated, this is where we'd use its efficiency module.
+
     }
 
 }
