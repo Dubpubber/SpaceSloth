@@ -544,7 +544,7 @@ public class SlothShip extends GameObject {
 
     public void processOreContact(Ore ore) {
         // When the refinery is integrated, this is where we'd use its efficiency module.
-
+        profile.addMoney(ore.getOreWorth());
     }
 
 }
