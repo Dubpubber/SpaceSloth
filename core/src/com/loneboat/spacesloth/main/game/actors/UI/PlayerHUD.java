@@ -1,13 +1,18 @@
 package com.loneboat.spacesloth.main.game.actors.UI;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.loneboat.spacesloth.main.Globals;
 import com.loneboat.spacesloth.main.content.ContentHandler;
 import com.loneboat.spacesloth.main.game.actors.SlothShip;
 import com.loneboat.spacesloth.main.screens.GameScreen;
@@ -21,6 +26,7 @@ public class PlayerHUD extends Actor {
     private SlothShip player;
     private ContentHandler chandle;
     private Stage HudStage;
+    private Pixmap hudpix;
     private Texture hudsprite;
     private OrthographicCamera hudcam;
     private ProgressBar healthbar;
@@ -30,15 +36,14 @@ public class PlayerHUD extends Actor {
         this.player = player;
         this.chandle = chandle;
         this.HudStage = HudStage;
-        hudsprite = chandle.getManager().get("SS_ControlPanel.png", Texture.class);
         hudcam = chandle.getHudCamera();
+        createControlPanel();
         createBars();
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
-        batch.draw(hudsprite, 0, 0, HudStage.getViewport().getScreenWidth(), HudStage.getViewport().getScreenHeight());
         updateHUD();
     }
 
@@ -77,7 +82,7 @@ public class PlayerHUD extends Actor {
         healthbar.setAnimateDuration(1.0f);
         healthbar.setValue(player.getHealth());
         healthbar.setSize(57, 56);
-        healthbar.setPosition(199, 14);
+        healthbar.setPosition(5, 5);
 
         ProgressBar.ProgressBarStyle boostbarstyle = new ProgressBar.ProgressBarStyle(skin.newDrawable("background"), skin.newDrawable("boost"));
         boostbarstyle.knobBefore = boostbarstyle.knob;
@@ -85,7 +90,7 @@ public class PlayerHUD extends Actor {
         boostbar.setAnimateDuration(0.5f);
         boostbar.setValue(player.getCurBoost());
         boostbar.setSize(57, 56);
-        boostbar.setPosition(384, 14);
+        boostbar.setPosition(65, 5);
 
         px.dispose();
 
@@ -94,7 +99,25 @@ public class PlayerHUD extends Actor {
 
     }
 
+    public void createControlPanel() {
+        hudpix = new Pixmap(Gdx.graphics.getWidth(), 66, Pixmap.Format.RGBA8888);
+        hudpix.setColor(Color.LIGHT_GRAY);
+        hudpix.fill();
+        hudsprite = new Texture(hudpix);
+        hudpix.dispose();
+
+        Image HudImage = new Image(new TextureRegion(hudsprite));
+
+        HudStage.addActor(HudImage);
+    }
+
     public void updateHUD() {
+        hudpix = new Pixmap(Gdx.graphics.getWidth(), 66, Pixmap.Format.RGBA8888);
+        hudpix.setColor(Color.LIGHT_GRAY);
+        hudpix.fill();
+        hudsprite = new Texture(hudpix);
+        hudpix.dispose();
+
         healthbar.setValue(player.getHealth());
         boostbar.setValue(player.getCurBoost());
     }
