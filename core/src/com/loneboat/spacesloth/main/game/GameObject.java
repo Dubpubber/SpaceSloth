@@ -137,6 +137,12 @@ public abstract class GameObject extends Actor implements GameObjectTracker {
     }
 
     /**
+     * Get the relative Box2d world position to a vector.
+     * @return - Vector of the position.
+     */
+    public Vector2 getPosition() { return new Vector2(getBodyX(), getBodyY()); }
+
+    /**
      * Sets the screen object, Game Screen object, for this game object.
      * @param level - Upon creation, sets from the extended game object.
      */

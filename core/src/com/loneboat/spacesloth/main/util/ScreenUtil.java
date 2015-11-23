@@ -2,10 +2,12 @@ package com.loneboat.spacesloth.main.util;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.utils.Array;
 import com.loneboat.spacesloth.main.Globals;
 import com.loneboat.spacesloth.main.game.GameObject;
 
-import java.util.Random;
+import java.util.*;
 
 /**
  * com.loneboat.spacesloth.main.util
@@ -132,6 +134,25 @@ public class ScreenUtil {
 
     public static Vector2 scaleVector(float x, float y) {
         return new Vector2(x / Globals.PixelsPerMetre, y / Globals.PixelsPerMetre);
+    }
+
+    public static ArrayList<GameObject> getObjectsNearbyActor(GameObject gobj, int range) {
+        Array<Actor> actors = gobj.getStage().getActors();
+        Iterator iterator = actors.iterator();
+        ArrayList<GameObject> gobjs = new ArrayList<>();
+
+        while(iterator.hasNext()) {
+            Object nact = iterator.next();
+            if(nact instanceof GameObject) {
+                GameObject gobj2 = (GameObject) nact;
+                if(isWithinDistance(gobj.getPosition(), gobj2.getPosition(), range)) {
+                    gobjs.add((GameObject) nact);
+                }
+            }
+        }
+
+        return gobjs;
+
     }
 
 }
