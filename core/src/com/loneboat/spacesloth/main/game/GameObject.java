@@ -288,7 +288,6 @@ public abstract class GameObject extends Actor implements GameObjectTracker {
     }
 
     public boolean destroy() {
-        game.getLogger().info("Destroy check: " + ObjLabel);
         if(world != null && body != null) {
             // If this game object has a destroy animation, play it and wait until it's destroyed to remove it from the world.
             if(animatedSprites.size() > 0 && animatedSprites.containsKey("destroy")) {

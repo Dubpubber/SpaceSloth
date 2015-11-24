@@ -111,6 +111,17 @@ public class ScreenUtil {
         return angle;
     }
 
+    public static float calculateNormalAngle(float angle) {
+        angle = MathUtils.radiansToDegrees * angle;
+        while (angle <= 0){
+            angle += 360;
+        }
+        while (angle > 360){
+            angle -= 360;
+        }
+        return angle;
+    }
+
     // TODO: known bug: the farther away the shooter is from the origin, the more inaccurate the direction.
     public static Vector2 getAngleOffset(GameObject object, float radius) {
         float angleCos = -MathUtils.cos(object.getBody().getAngle() - (MathUtils.PI / 2));
@@ -128,14 +139,24 @@ public class ScreenUtil {
         ).scl(scale);
     }
 
-    public static Vector2 scaleVector(Vector2 vector2) {
+    public static Vector2 divideVectorByPPM(Vector2 vector2) {
         return new Vector2(vector2.x / Globals.PixelsPerMetre, vector2.y / Globals.PixelsPerMetre);
+    }
+
+    public static Vector2 multiplyVectorByPPM(Vector2 vector2) {
+        return new Vector2(vector2.x * Globals.PixelsPerMetre, vector2.y * Globals.PixelsPerMetre);
     }
 
     public static Vector2 scaleVector(float x, float y) {
         return new Vector2(x / Globals.PixelsPerMetre, y / Globals.PixelsPerMetre);
     }
 
+    /**
+     * Get an arraylist of nearby objects
+     * @param gobj - The gameobject for the origin point.
+     * @param range - Range of scan
+     * @return - a list of game objects nearby gobj
+     */
     public static ArrayList<GameObject> getObjectsNearbyActor(GameObject gobj, int range) {
         Array<Actor> actors = gobj.getStage().getActors();
         Iterator iterator = actors.iterator();

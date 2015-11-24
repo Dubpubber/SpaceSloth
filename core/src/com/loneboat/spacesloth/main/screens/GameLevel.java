@@ -14,6 +14,7 @@ import com.loneboat.spacesloth.main.game.GameObject;
 import com.loneboat.spacesloth.main.game.ProjectileObject;
 import com.loneboat.spacesloth.main.game.actors.SlothShip;
 import com.loneboat.spacesloth.main.game.actors.UI.PlayerHUD;
+import com.loneboat.spacesloth.main.game.systems.PlayerRadar;
 import com.loneboat.spacesloth.main.game.worldobjects.Asteroid;
 import com.loneboat.spacesloth.main.game.worldobjects.enemies.AsteroidBomb;
 import com.loneboat.spacesloth.main.game.worldobjects.ores.Ore;
@@ -59,6 +60,7 @@ public class GameLevel extends GameScreen {
         adjustLimits();
         spawnPlayer();
         addPlayerHUD();
+        addSystems();
     }
 
     public enum DIFFICULTY {
@@ -201,6 +203,10 @@ public class GameLevel extends GameScreen {
 
     public void addPlayerHUD() {
         HudStage.addActor(new PlayerHUD(player, chandle, HudStage));
+    }
+
+    public void addSystems() {
+        HudStage.addActor(new PlayerRadar(player, HudStage, MainStage));
     }
 
     public void addProjectile(ProjectileObject object) {

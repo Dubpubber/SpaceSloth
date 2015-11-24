@@ -422,7 +422,7 @@ public class SlothShip extends GameObject {
         shape = new PolygonShape();
         shape.setAsBox(
                 12 / Globals.PixelsPerMetre, 20 / Globals.PixelsPerMetre,
-                ScreenUtil.scaleVector(new Vector2(0, 65)), 0
+                ScreenUtil.divideVectorByPPM(new Vector2(0, 65)), 0
         );
         FixtureDef gunMount = new FixtureDef();
         gunMount.shape = shape;
@@ -442,7 +442,7 @@ public class SlothShip extends GameObject {
         shape = new PolygonShape();
         shape.setAsBox(
                 40 / Globals.PixelsPerMetre, 81 / Globals.PixelsPerMetre,
-                ScreenUtil.scaleVector(new Vector2(0, -127)), 0
+                ScreenUtil.divideVectorByPPM(new Vector2(0, -127)), 0
         );
         FixtureDef hull = new FixtureDef();
         hull.shape = shape;
@@ -462,7 +462,7 @@ public class SlothShip extends GameObject {
         shape = new PolygonShape();
         shape.setAsBox(
                 42 / Globals.PixelsPerMetre, 16 / Globals.PixelsPerMetre,
-                ScreenUtil.scaleVector(new Vector2(0, -225)), 0
+                ScreenUtil.divideVectorByPPM(new Vector2(0, -225)), 0
         );
         FixtureDef thruster = new FixtureDef();
         thruster.shape = shape;
@@ -483,7 +483,7 @@ public class SlothShip extends GameObject {
         shape = new PolygonShape();
         shape.setAsBox(
                 37 / Globals.PixelsPerMetre, 38 / Globals.PixelsPerMetre,
-                ScreenUtil.scaleVector(new Vector2(60, -150)), 0
+                ScreenUtil.divideVectorByPPM(new Vector2(60, -150)), 0
         );
         FixtureDef winga = new FixtureDef();
         winga.shape = shape;
@@ -502,7 +502,7 @@ public class SlothShip extends GameObject {
         shape = new PolygonShape();
         shape.setAsBox(
                 37 / Globals.PixelsPerMetre, 38 / Globals.PixelsPerMetre,
-                ScreenUtil.scaleVector(new Vector2(-60, -150)), 0
+                ScreenUtil.divideVectorByPPM(new Vector2(-60, -150)), 0
         );
         FixtureDef wingb = new FixtureDef();
         wingb.shape = shape;
