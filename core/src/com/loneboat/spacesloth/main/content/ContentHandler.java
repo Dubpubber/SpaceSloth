@@ -69,6 +69,7 @@ public class ContentHandler {
         manager.load("Sprites/BlueBlast_A1.png", Texture.class);
         manager.load("Sprites/HUDSprite.png", Texture.class);
         manager.load("Sprites/SpaceBackground_1.png", Texture.class);
+        manager.load("Sprites/radar_background.png", Texture.class);
 
         // Load ship parts
         manager.load("Parts/Sprites/BaseCockpit.png", Texture.class);

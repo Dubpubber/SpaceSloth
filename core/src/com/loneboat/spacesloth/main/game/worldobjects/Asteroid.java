@@ -62,8 +62,8 @@ public class Asteroid extends GameObject {
         replenishHealth();
         shape.dispose();
 
-        bp = new BlipProfile(this, Color.NAVY, 0);
-        bp.setSize(3, 3);
+        bp = new BlipProfile(this, Color.WHITE, 0);
+        bp.setSize(2, 2);
     }
 
     @Override

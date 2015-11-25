@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.loneboat.spacesloth.main.content.ContentHandler;
 import com.loneboat.spacesloth.main.game.GameObject;
 import com.loneboat.spacesloth.main.game.actors.SlothShip;
 import com.loneboat.spacesloth.main.screens.GameLevel;
@@ -33,7 +34,7 @@ public class PlayerRadar extends Actor {
 
     private Image radarLine;
     private Image background;
-    private Image backdrop;
+    private Texture backdrop;
     private Image cover;
 
     private Color coverColor;
@@ -92,7 +93,6 @@ public class PlayerRadar extends Actor {
             rotationCount++;
         }
         degrees += RadarScanSpeed;
-
         batch.end();
         // Begin Drawing //
         Gdx.gl.glEnable(GL20.GL_BLEND);
@@ -108,20 +108,19 @@ public class PlayerRadar extends Actor {
                 1, 1, 0
         );
 
-        // RADAR BACKDROP //
-        sr.setColor(Color.BLACK);
-        sr.rect(backdrop.getX(), backdrop.getY(),
-                backdrop.getOriginX(), backdrop.getOriginY(),
-                backdrop.getWidth(), backdrop.getHeight(),
-                1, 1, 0
-        );
+        sr.end();
+
+        batch.begin();
+        batch.draw(backdrop, 510, 5, 100, 100);
+        batch.end();
+
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        sr.setProjectionMatrix(level.HudStage.getCamera().combined);
+        sr.begin(ShapeRenderer.ShapeType.Filled);
 
         sr.setColor(0, 1, 0, coverColor.a);
-        sr.rect(cover.getX(), cover.getY(),
-                cover.getOriginX(), cover.getOriginY(),
-                cover.getWidth(), cover.getHeight(),
-                1, 1, 0
-        );
+        sr.circle(rship.get("center_x"), rship.get("center_y") + 5, 50);
 
         // sr.triangle(10, 10, 30, 50, 50, 10);
         sr.setColor(1, 1, 1, coverColor.a);
@@ -142,9 +141,9 @@ public class PlayerRadar extends Actor {
 
         // RADAR LINE //
         sr.setColor(0, 1, 0, 1);
-        sr.circle(rship.get("center_x"), rship.get("center_y"), 4);
+        sr.circle(rship.get("center_x"), rship.get("center_y") + 5, 4);
 
-        sr.rect(radarLine.getX(), radarLine.getY(),
+        sr.rect(radarLine.getX(), radarLine.getY() + 5,
                 radarLine.getOriginX(), radarLine.getOriginY(),
                 radarLine.getWidth(), radarLine.getHeight(),
                 1, 1, degrees
@@ -164,13 +163,6 @@ public class PlayerRadar extends Actor {
         Skin skin = new Skin();
 
         Pixmap px = new Pixmap(100, 100, Pixmap.Format.RGBA8888);
-        px.setColor(0, 0, 0, 1);
-        px.fill();
-        Texture pxRadarBackdrop = new Texture(px);
-
-        skin.add("backdrop", pxRadarBackdrop);
-
-        px = new Pixmap(100, 100, Pixmap.Format.RGBA8888);
         px.setColor(0, 0.5f, 0, 1);
         px.fill();
         Texture pxRadarCover = new Texture(px);
@@ -199,19 +191,13 @@ public class PlayerRadar extends Actor {
         );
         this.background = radarBackground;
 
-        Image radarBackdrop = new Image(skin.getDrawable("backdrop"));
-        radarBackdrop.setSize(100, 100);
-        radarBackdrop.setPosition(
-                510,
-                5
-        );
-        this.backdrop = radarBackdrop;
+        backdrop = ContentHandler.manager.get("Sprites/radar_background.png", Texture.class);
 
         Image radarCover = new Image(skin.getDrawable("cover"));
-        radarCover.setSize(radarBackdrop.getWidth(), radarBackdrop.getHeight());
+        radarCover.setSize(backdrop.getWidth(), backdrop.getHeight());
         radarCover.setPosition(
-                radarBackdrop.getX(),
-                radarBackdrop.getY()
+                510,
+                5
         );
         this.cover = radarCover;
 

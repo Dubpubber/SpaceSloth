@@ -314,6 +314,7 @@ public class GameLevel extends GameScreen {
             Ore item = new Ore(game, chandle, MainStage, world);
             item.setLevel(gameObject.level);
             item.setContainer(gameObject);
+            MainStage.addActor(item);
             addToCount(item);
         }
     }

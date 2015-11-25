@@ -1,5 +1,6 @@
 package com.loneboat.spacesloth.main.game.worldobjects.ores;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
@@ -10,6 +11,7 @@ import com.loneboat.spacesloth.main.Globals;
 import com.loneboat.spacesloth.main.SpaceSloth;
 import com.loneboat.spacesloth.main.content.ContentHandler;
 import com.loneboat.spacesloth.main.game.GameObject;
+import com.loneboat.spacesloth.main.game.systems.BlipProfile;
 import com.loneboat.spacesloth.main.util.ScreenUtil;
 import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
 
@@ -130,12 +132,18 @@ public class Ore extends GameObject {
                     oreTypeOfTexture = chandle.getManager().get("Sprites/Ore_1.png", Texture.class);
                 else
                     oreTypeOfTexture = chandle.getManager().get("Sprites/Ore_2.png", Texture.class);
+                this.bp = new BlipProfile(container, Color.GRAY, 0);
+                this.bp.setSize(2, 2);
                 break;
             case GOLD:
                 oreTypeOfTexture = chandle.getManager().get("Sprites/Ore_4.png", Texture.class);
+                this.bp = new BlipProfile(container, Color.YELLOW, 0);
+                this.bp.setSize(2, 2);
                 break;
             case PLATINUM:
                 oreTypeOfTexture = chandle.getManager().get("Sprites/Ore_3.png", Texture.class);
+                this.bp = new BlipProfile(container, Color.WHITE, 0);
+                this.bp.setSize(2, 2);
                 break;
         }
 
