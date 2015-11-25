@@ -151,6 +151,10 @@ public class ScreenUtil {
         return new Vector2(x / Globals.PixelsPerMetre, y / Globals.PixelsPerMetre);
     }
 
+    public static float getAngleFromObject(GameObject obj, GameObject obj2) {
+        return (float) Math.atan2(obj2.getBodyY() - obj.getBodyY(), obj2.getBodyX() - obj.getBodyX());
+    }
+
     /**
      * Get an arraylist of nearby objects
      * @param gobj - The gameobject for the origin point.
@@ -171,6 +175,8 @@ public class ScreenUtil {
                 }
             }
         }
+
+        gobjs.remove(gobj);
 
         return gobjs;
 

@@ -11,6 +11,7 @@ import com.loneboat.spacesloth.main.Globals;
 import com.loneboat.spacesloth.main.SpaceSloth;
 import com.loneboat.spacesloth.main.content.ContentHandler;
 import com.loneboat.spacesloth.main.game.GameObject;
+import com.loneboat.spacesloth.main.game.systems.BlipProfile;
 import com.loneboat.spacesloth.main.util.ScreenUtil;
 import net.dermetfan.gdx.graphics.g2d.AnimatedBox2DSprite;
 
@@ -31,6 +32,7 @@ public class Asteroid extends GameObject {
     public Asteroid(SpaceSloth game, ContentHandler chandle, Stage active_stage, World world, int diameter, int maxDistance) {
         super(game, chandle, active_stage, world, "Asteroid");
         int size = MathUtils.random(12, diameter);
+        bp = new BlipProfile(this, Color.RED, 0);
 
         BodyDef bdef = new BodyDef();
         FixtureDef asteroidBody = new FixtureDef();

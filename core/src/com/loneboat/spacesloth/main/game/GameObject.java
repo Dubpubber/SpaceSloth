@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.loneboat.spacesloth.main.SpaceSloth;
 import com.loneboat.spacesloth.main.content.ContentHandler;
+import com.loneboat.spacesloth.main.game.systems.BlipProfile;
 import com.loneboat.spacesloth.main.screens.GameLevel;
 import com.loneboat.spacesloth.main.util.GameObjectTracker;
 import net.dermetfan.gdx.graphics.g2d.AnimatedBox2DSprite;
@@ -70,6 +71,8 @@ public abstract class GameObject extends Actor implements GameObjectTracker {
 
     // Ignore delay
     private boolean ignoreDelay = false;
+
+    public BlipProfile bp;
 
     /**
      * Creates a new game object that is animated but not a box2d object.

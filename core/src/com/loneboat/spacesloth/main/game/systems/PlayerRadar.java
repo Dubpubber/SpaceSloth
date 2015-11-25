@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.loneboat.spacesloth.main.game.GameObject;
 import com.loneboat.spacesloth.main.game.actors.SlothShip;
 import com.loneboat.spacesloth.main.screens.GameLevel;
+import com.loneboat.spacesloth.main.util.ScreenUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,13 +38,13 @@ public class PlayerRadar extends Actor {
 
     private Color coverColor;
 
-    private int RadarRange = 10;
+    private int RadarRange = 40;
     private float RadarScanSpeed = 3.5f;
     private float degrees = 0;
 
     private int rotationCount = 0;
 
-    private HashMap<String, int[]> rship;
+    private HashMap<String, Integer> rship;
     private ArrayList<BlipProfile> bps;
 
     public PlayerRadar(SlothShip player, GameLevel level) {
@@ -56,9 +57,19 @@ public class PlayerRadar extends Actor {
 
         // Add the ship radar coordinates //
         rship = new HashMap<>();
-        rship.put("left", new int[] {555, 45});
-        rship.put("top", new int[] {560, 60});
-        rship.put("right", new int[] {565, 45});
+        rship.put("left_x", 555);
+        rship.put("left_y", 45);
+
+        rship.put("top_x", 560);
+        rship.put("top_y", 60);
+
+        rship.put("right_x", 565);
+        rship.put("right_y", 45);
+
+        rship.put("center_x", (555 + 560 + 565) / 3);
+        rship.put("center_y", (45 + 60 + 45) / 3);
+
+        bps = new ArrayList<>();
     }
 
     @Override
@@ -66,9 +77,9 @@ public class PlayerRadar extends Actor {
         super.draw(batch, parentAlpha);
 
         if(rotationCount == 1) {
-            level.getLogger().info("Tick!");
             rotationCount = 0;
             coverColor.a = 1;
+            updateRadar();
         } else {
             coverColor.a -= RadarScanSpeed / 200.0f;
         }
@@ -119,6 +130,15 @@ public class PlayerRadar extends Actor {
                 565, 45
         );
 
+        for(BlipProfile bp : bps) {
+            sr.setColor(bp.getColor().r, bp.getColor().g, bp.getColor().b, coverColor.a);
+            sr.rect(bp.getX(), bp.getY(),
+                    bp.getX(), bp.getY(),
+                    bp.getWidth(), bp.getHeight(),
+                    1, 1, 0
+            );
+        }
+
         // RADAR LINE //
         sr.setColor(0, 1, 0, 1);
         sr.rect(radarLine.getX(), radarLine.getY(),
@@ -129,8 +149,6 @@ public class PlayerRadar extends Actor {
         sr.end();
         Gdx.gl.glDisable(GL20.GL_BLEND);
         batch.begin();
-
-        updateRadar();
 
     }
 
@@ -208,7 +226,20 @@ public class PlayerRadar extends Actor {
 
 
     public void updateRadar() {
-        //ArrayList<GameObject> list =
+        ArrayList<GameObject> list = ScreenUtil.getObjectsNearbyActor(player, RadarRange);
+        list.stream().filter(obj -> obj.bp != null).forEach(obj -> {
+            // Now that we got the local objects of interest, process them in relation to the ship's blip so the shape renderer can render them.
+            // First, get the angle.
+            float angle = ScreenUtil.getAngleFromObject(player, obj);
+            // Second, get the distance.
+            float distance = player.getPosition().dst(obj.getPosition());
+            // ((cos(angle) * distance) + x) = new x
+            // ((sin(angle) * distance) + y) = new y
+            float x0 = (float) ((Math.cos(angle) * distance) + rship.get("center_x"));
+            float y0 = (float) ((Math.sin(angle) * distance) + rship.get("center_y"));
+            obj.bp.updateLocation(x0, y0);
+            bps.add(obj.bp);
+        });
     }
 
 }

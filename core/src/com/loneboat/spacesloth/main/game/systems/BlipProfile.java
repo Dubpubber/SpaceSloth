@@ -13,6 +13,8 @@ public class BlipProfile {
     private GameObject object;
     private float x;
     private float y;
+    private float width;
+    private float height;
     private Color color;
     private int level;
 
@@ -20,6 +22,8 @@ public class BlipProfile {
         this.object = object;
         this.color = color;
         this.level = level;
+        this.width = 3;
+        this.height = 3;
     }
 
     public float getX() {
@@ -42,6 +46,27 @@ public class BlipProfile {
 
     public Vector2 getLocation() {
         return new Vector2(x, y);
+    }
+
+    public void setWidth(float width) {
+        this.width = width;
+    }
+
+    public void setHeight(float height) {
+        this.height = height;
+    }
+
+    public float getWidth() {
+        return width;
+    }
+
+    public float getHeight() {
+        return height;
+    }
+
+    public void setSize(float width, float height) {
+        this.width = width;
+        this.height = height;
     }
 
     public Color getColor() {
