@@ -52,7 +52,6 @@ public class PlayerRadar extends Actor {
         this.level = level;
         this.hstage = level.HudStage;
         this.sr = new ShapeRenderer();
-        createGUIRadar();
         coverColor = Color.GREEN;
 
         // Add the ship radar coordinates //
@@ -70,6 +69,8 @@ public class PlayerRadar extends Actor {
         rship.put("center_y", (45 + 60 + 45) / 3);
 
         bps = new ArrayList<>();
+
+        createGUIRadar();
     }
 
     @Override
@@ -141,6 +142,8 @@ public class PlayerRadar extends Actor {
 
         // RADAR LINE //
         sr.setColor(0, 1, 0, 1);
+        sr.circle(rship.get("center_x"), rship.get("center_y"), 4);
+
         sr.rect(radarLine.getX(), radarLine.getY(),
                 radarLine.getOriginX(), radarLine.getOriginY(),
                 radarLine.getWidth(), radarLine.getHeight(),
@@ -215,8 +218,8 @@ public class PlayerRadar extends Actor {
         Image radarLine = new Image(skin.getDrawable("radarline"));
         radarLine.setSize(2, 45);
         radarLine.setPosition(
-                radarBackdrop.getX() + (radarBackdrop.getWidth() / 2),
-                radarBackdrop.getY() + (radarBackdrop.getHeight() / 2)
+                rship.get("center_x") - 1,
+                rship.get("center_y")
         );
         radarLine.setOrigin(radarLine.getWidth() / 2,  0);
         this.radarLine = radarLine;
@@ -226,6 +229,7 @@ public class PlayerRadar extends Actor {
 
 
     public void updateRadar() {
+        bps.clear();
         ArrayList<GameObject> list = ScreenUtil.getObjectsNearbyActor(player, RadarRange);
         list.stream().filter(obj -> obj.bp != null).forEach(obj -> {
             // Now that we got the local objects of interest, process them in relation to the ship's blip so the shape renderer can render them.

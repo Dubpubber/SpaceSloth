@@ -32,7 +32,6 @@ public class Asteroid extends GameObject {
     public Asteroid(SpaceSloth game, ContentHandler chandle, Stage active_stage, World world, int diameter, int maxDistance) {
         super(game, chandle, active_stage, world, "Asteroid");
         int size = MathUtils.random(12, diameter);
-        bp = new BlipProfile(this, Color.RED, 0);
 
         BodyDef bdef = new BodyDef();
         FixtureDef asteroidBody = new FixtureDef();
@@ -62,6 +61,9 @@ public class Asteroid extends GameObject {
         setMaxHealth(body.getMass());
         replenishHealth();
         shape.dispose();
+
+        bp = new BlipProfile(this, Color.NAVY, 0);
+        bp.setSize(3, 3);
     }
 
     @Override
