@@ -2,10 +2,13 @@ package com.loneboat.spacesloth.main.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Logger;
 import com.badlogic.gdx.utils.Pool;
 import com.loneboat.spacesloth.main.Globals;
 import com.loneboat.spacesloth.main.SpaceSloth;
@@ -177,6 +180,7 @@ public class GameLevel extends GameScreen {
             font.draw(batch, "Memory Usage: " + ((runtime.totalMemory() - runtime.freeMemory()) / mb) + " mb", 3, 400);
             font.draw(batch, "Current ship velocity: " + player.getCurVelocity().x + " " + player.getCurVelocity().y + " / " + player.getMaxVelocity().x + " " + player.getMaxVelocity().y + " isBoosting: " + player.isBoosting, 3, 375);
             font.draw(batch, "Current Health: " + player.getHealth() + " Total Health: " + player.getMaxHealth() + " Parts Equipped Count: " + player.getProfile().getEquippedPartCount(), 3, 350);
+            font.draw(batch, "Mouse X/Y: " + mouseLoc.x + " " + mouseLoc.y, 3, 325);
             batch.end();
         }
 
@@ -206,7 +210,7 @@ public class GameLevel extends GameScreen {
     }
 
     public void addSystems() {
-        HudStage.addActor(new PlayerRadar(player, HudStage, MainStage));
+        HudStage.addActor(new PlayerRadar(player, this));
     }
 
     public void addProjectile(ProjectileObject object) {
@@ -316,6 +320,10 @@ public class GameLevel extends GameScreen {
 
     public void writeTextToScreen(String text) {
 
+    }
+
+    public Logger getLogger() {
+        return game.getLogger();
     }
 
 }

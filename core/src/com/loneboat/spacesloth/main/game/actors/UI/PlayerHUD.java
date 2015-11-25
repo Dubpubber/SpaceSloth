@@ -27,8 +27,8 @@ public class PlayerHUD extends Actor {
     private ContentHandler chandle;
     private Stage HudStage;
     private Pixmap hudpix;
-    private Texture hudsprite;
     private OrthographicCamera hudcam;
+    private Image hudImage;
     private ProgressBar healthbar;
     private ProgressBar boostbar;
 
@@ -44,6 +44,17 @@ public class PlayerHUD extends Actor {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
+        hudImage.draw(batch, parentAlpha);
+
+        /* Health bar act and draw */
+        healthbar.draw(batch, parentAlpha);
+        healthbar.act(parentAlpha);
+
+        /* Boost bar act and draw */
+        boostbar.draw(batch, parentAlpha);
+        boostbar.act(parentAlpha);
+
+        /* Update the HUD */
         updateHUD();
     }
 
@@ -94,30 +105,18 @@ public class PlayerHUD extends Actor {
 
         px.dispose();
 
-        HudStage.addActor(healthbar);
-        HudStage.addActor(boostbar);
-
     }
 
     public void createControlPanel() {
         hudpix = new Pixmap(Gdx.graphics.getWidth(), 66, Pixmap.Format.RGBA8888);
         hudpix.setColor(Color.LIGHT_GRAY);
         hudpix.fill();
-        hudsprite = new Texture(hudpix);
+        hudImage = new Image(new TextureRegion(new Texture(hudpix)));
+        hudImage.setPosition(0, 0);
         hudpix.dispose();
-
-        Image HudImage = new Image(new TextureRegion(hudsprite));
-
-        HudStage.addActor(HudImage);
     }
 
     public void updateHUD() {
-        hudpix = new Pixmap(Gdx.graphics.getWidth(), 66, Pixmap.Format.RGBA8888);
-        hudpix.setColor(Color.LIGHT_GRAY);
-        hudpix.fill();
-        hudsprite = new Texture(hudpix);
-        hudpix.dispose();
-
         healthbar.setValue(player.getHealth());
         boostbar.setValue(player.getCurBoost());
     }

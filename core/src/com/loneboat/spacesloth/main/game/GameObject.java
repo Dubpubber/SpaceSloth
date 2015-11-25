@@ -412,6 +412,4 @@ public abstract class GameObject extends Actor implements GameObjectTracker {
                 body.destroyFixture(fixture);
     }
 
-
-
 }

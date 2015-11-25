@@ -2,26 +2,21 @@ package com.loneboat.spacesloth.main.game.systems;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.Timer;
-import com.loneboat.spacesloth.main.Globals;
 import com.loneboat.spacesloth.main.game.GameObject;
 import com.loneboat.spacesloth.main.game.actors.SlothShip;
-import com.loneboat.spacesloth.main.util.ScreenUtil;
+import com.loneboat.spacesloth.main.screens.GameLevel;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.HashMap;
 
 /**
  * com.loneboat.spacesloth.main.game.systems
@@ -30,54 +25,113 @@ import java.util.Iterator;
 public class PlayerRadar extends Actor {
 
     private SlothShip player;
+    private GameLevel level;
     private Stage hstage;
-    private Stage mstage;
-
-    private Image radarLine;
-
-    private int RadarRange = 10;
-    private float RadarScanSpeed = 3;
-    private float degrees = 0;
 
     private ShapeRenderer sr;
 
-    public PlayerRadar(SlothShip player, Stage mainstage, Stage hudstage) {
+    private Image radarLine;
+    private Image background;
+    private Image backdrop;
+    private Image cover;
+
+    private Color coverColor;
+
+    private int RadarRange = 10;
+    private float RadarScanSpeed = 3.5f;
+    private float degrees = 0;
+
+    private int rotationCount = 0;
+
+    private HashMap<String, int[]> rship;
+    private ArrayList<BlipProfile> bps;
+
+    public PlayerRadar(SlothShip player, GameLevel level) {
         this.player = player;
-        this.hstage = hudstage;
-        this.mstage = mainstage;
+        this.level = level;
+        this.hstage = level.HudStage;
+        this.sr = new ShapeRenderer();
         createGUIRadar();
-        new Timer().scheduleTask(new Timer.Task() {
-            @Override
-            public void run() {
-                createRadarGridFromScan();
-            }
-        }, 1, 1);
-        sr = new ShapeRenderer();
+        coverColor = Color.GREEN;
+
+        // Add the ship radar coordinates //
+        rship = new HashMap<>();
+        rship.put("left", new int[] {555, 45});
+        rship.put("top", new int[] {560, 60});
+        rship.put("right", new int[] {565, 45});
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
+
+        if(rotationCount == 1) {
+            level.getLogger().info("Tick!");
+            rotationCount = 0;
+            coverColor.a = 1;
+        } else {
+            coverColor.a -= RadarScanSpeed / 200.0f;
+        }
+
         if(degrees < 360) {
             radarLine.setRotation(degrees);
         } else {
             degrees = 0;
+            rotationCount++;
         }
-        degrees = degrees + 2;
-        radarLine.draw(batch, parentAlpha);
+        degrees += RadarScanSpeed;
 
-        sr.setProjectionMatrix(hstage.getCamera().combined);
-        sr.begin(ShapeRenderer.ShapeType.Line);
-        ArrayList<GameObject> actors = ScreenUtil.getObjectsNearbyActor(player, RadarRange);
-        for (GameObject obj : actors) {
-            if(!(obj instanceof SlothShip)) {
-                sr.line(new Vector2(
-                        hstage.getViewport().getWorldWidth() / 2, hstage.getViewport().getWorldHeight() / 2),
-                        obj.getPosition()
-                );
-            }
-        }
+        batch.end();
+        // Begin Drawing //
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        sr.setProjectionMatrix(level.HudStage.getCamera().combined);
+        sr.begin(ShapeRenderer.ShapeType.Filled);
+
+        // RADAR BACKGROUND //
+        sr.setColor(Color.LIGHT_GRAY);
+        sr.rect(background.getX(), background.getY(),
+                background.getOriginX(), background.getOriginY(),
+                background.getWidth(), background.getHeight(),
+                1, 1, 0
+        );
+
+        // RADAR BACKDROP //
+        sr.setColor(Color.BLACK);
+        sr.rect(backdrop.getX(), backdrop.getY(),
+                backdrop.getOriginX(), backdrop.getOriginY(),
+                backdrop.getWidth(), backdrop.getHeight(),
+                1, 1, 0
+        );
+
+        sr.setColor(0, 1, 0, coverColor.a);
+        sr.rect(cover.getX(), cover.getY(),
+                cover.getOriginX(), cover.getOriginY(),
+                cover.getWidth(), cover.getHeight(),
+                1, 1, 0
+        );
+
+        // sr.triangle(10, 10, 30, 50, 50, 10);
+        sr.setColor(1, 1, 1, coverColor.a);
+        sr.triangle(
+                555, 45,
+                560, 60,
+                565, 45
+        );
+
+        // RADAR LINE //
+        sr.setColor(0, 1, 0, 1);
+        sr.rect(radarLine.getX(), radarLine.getY(),
+                radarLine.getOriginX(), radarLine.getOriginY(),
+                radarLine.getWidth(), radarLine.getHeight(),
+                1, 1, degrees
+        );
         sr.end();
+        Gdx.gl.glDisable(GL20.GL_BLEND);
+        batch.begin();
+
+        updateRadar();
+
     }
 
     @Override
@@ -95,6 +149,13 @@ public class PlayerRadar extends Actor {
 
         skin.add("backdrop", pxRadarBackdrop);
 
+        px = new Pixmap(100, 100, Pixmap.Format.RGBA8888);
+        px.setColor(0, 0.5f, 0, 1);
+        px.fill();
+        Texture pxRadarCover = new Texture(px);
+
+        skin.add("cover", pxRadarCover);
+
         px = new Pixmap(120, 120, Pixmap.Format.RGBA8888);
         px.setColor(Color.LIGHT_GRAY);
         px.fill();
@@ -111,32 +172,43 @@ public class PlayerRadar extends Actor {
 
         Image radarBackground = new Image(skin.getDrawable("background"));
         radarBackground.setSize(120, 120);
-        radarBackground.setPosition(490, 0);
-        hstage.addActor(radarBackground);
+        radarBackground.setPosition(
+                500,
+                -5
+        );
+        this.background = radarBackground;
 
         Image radarBackdrop = new Image(skin.getDrawable("backdrop"));
         radarBackdrop.setSize(100, 100);
-        radarBackdrop.setPosition(500, 7);
-        hstage.addActor(radarBackdrop);
+        radarBackdrop.setPosition(
+                510,
+                5
+        );
+        this.backdrop = radarBackdrop;
+
+        Image radarCover = new Image(skin.getDrawable("cover"));
+        radarCover.setSize(radarBackdrop.getWidth(), radarBackdrop.getHeight());
+        radarCover.setPosition(
+                radarBackdrop.getX(),
+                radarBackdrop.getY()
+        );
+        this.cover = radarCover;
 
         Image radarLine = new Image(skin.getDrawable("radarline"));
         radarLine.setSize(2, 45);
-        radarLine.setPosition(549, 56);
+        radarLine.setPosition(
+                radarBackdrop.getX() + (radarBackdrop.getWidth() / 2),
+                radarBackdrop.getY() + (radarBackdrop.getHeight() / 2)
+        );
         radarLine.setOrigin(radarLine.getWidth() / 2,  0);
         this.radarLine = radarLine;
 
         px.dispose();
     }
 
-    public void createRadarGridFromScan() {
-        Vector2 playerVec = player.getPosition();
-        // First get the nearby actors
-        ArrayList<GameObject> actors = ScreenUtil.getObjectsNearbyActor(player, RadarRange);
-        for (GameObject obj : actors) {
-            Vector2 tempVec = obj.getPosition();
-            float angle = MathUtils.atan2(tempVec.y, tempVec.x) - MathUtils.atan2(playerVec.y, playerVec.x);
-            System.out.println("Angle of " + obj.ObjLabel + ": " + ScreenUtil.calculateNormalAngle(angle));
-        }
+
+    public void updateRadar() {
+        //ArrayList<GameObject> list =
     }
 
 }
