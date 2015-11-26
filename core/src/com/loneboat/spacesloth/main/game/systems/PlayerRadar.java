@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -35,6 +36,7 @@ public class PlayerRadar extends Actor {
     private Image radarLine;
     private Image background;
     private Texture backdrop;
+    private Texture radarShip;
     private Image cover;
 
     private Color coverColor;
@@ -58,13 +60,13 @@ public class PlayerRadar extends Actor {
         // Add the ship radar coordinates //
         rship = new HashMap<>();
         rship.put("left_x", 555);
-        rship.put("left_y", 45);
+        rship.put("left_y", 51);
 
         rship.put("top_x", 560);
-        rship.put("top_y", 60);
+        rship.put("top_y", 62);
 
         rship.put("right_x", 565);
-        rship.put("right_y", 45);
+        rship.put("right_y", 51);
 
         rship.put("center_x", (555 + 560 + 565) / 3);
         rship.put("center_y", (45 + 60 + 45) / 3);
@@ -123,12 +125,40 @@ public class PlayerRadar extends Actor {
         sr.circle(rship.get("center_x"), rship.get("center_y") + 5, 50);
 
         // sr.triangle(10, 10, 30, 50, 50, 10);
-        sr.setColor(1, 1, 1, coverColor.a);
-        sr.triangle(
-                555, 45,
-                560, 60,
-                565, 45
+        /*sr.triangle(
+                555, 51,
+                560, 62,
+                565, 51
+        );*/
+        sr.end();
+
+        batch.begin();
+        /*batch.draw(
+                Texture texture, float x, float y,
+            float originX, float originY,
+            float width, float height,
+            float scaleX, float scaleY,
+            float rotation, int srcX, int srcY,
+            int srcWidth, int srcHeight,
+            boolean flipX, boolean flipY
+        );*/
+        batch.draw(
+                radarShip,
+                (rship.get("right_x") - (radarShip.getWidth() / 2) - 3), rship.get("center_y"),
+                6, 6,
+                12, 12,
+                1, 1,
+                ScreenUtil.calculateNormalAngle(player.getBody().getAngle()),
+                0, 0,
+                radarShip.getWidth(), radarShip.getHeight(),
+                false, false
         );
+        batch.end();
+
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        sr.setProjectionMatrix(level.HudStage.getCamera().combined);
+        sr.begin(ShapeRenderer.ShapeType.Filled);
 
         for(BlipProfile bp : bps) {
             sr.setColor(bp.getColor().r, bp.getColor().g, bp.getColor().b, coverColor.a);
@@ -209,6 +239,8 @@ public class PlayerRadar extends Actor {
         );
         radarLine.setOrigin(radarLine.getWidth() / 2,  0);
         this.radarLine = radarLine;
+
+        radarShip = ContentHandler.manager.get("Sprites/radar_ship.png", Texture.class);
 
         px.dispose();
     }
