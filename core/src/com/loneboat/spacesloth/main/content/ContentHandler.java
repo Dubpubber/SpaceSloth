@@ -2,15 +2,23 @@ package com.loneboat.spacesloth.main.content;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.FileHandleResolver;
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
+import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.loneboat.spacesloth.main.SpaceSloth;
 import com.loneboat.spacesloth.main.content.partsystem.PartFactory;
+import sun.font.TrueTypeFont;
 
 /**
  * com.loneboat.spacesloth.main.content
@@ -91,6 +99,18 @@ public class ContentHandler {
 
         // Load animation packs!
         manager.load("Animations/ss_asteroidpack.pack", TextureAtlas.class);
+
+        // Load the fonts
+        FileHandleResolver resolver = new InternalFileHandleResolver();
+        manager.setLoader(FreeTypeFontGenerator.class, new FreeTypeFontGeneratorLoader(resolver));
+        manager.setLoader(BitmapFont.class, ".ttf", new FreetypeFontLoader(resolver));
+
+        FreetypeFontLoader.FreeTypeFontLoaderParameter s1 = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
+        s1.fontFileName = "Fonts/AnonymousPro-Regular.ttf";
+        s1.fontParameters.size = 18;
+        s1.fontParameters.minFilter = Texture.TextureFilter.Linear;
+        s1.fontParameters.magFilter = Texture.TextureFilter.Linear;
+        manager.load("Fonts/AnonymousPro-Regular.ttf", BitmapFont.class, s1);
     }
 
     /**

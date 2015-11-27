@@ -6,7 +6,9 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -16,6 +18,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.loneboat.spacesloth.main.content.ContentHandler;
 import com.loneboat.spacesloth.main.game.actors.SlothShip;
 import org.apache.commons.collections4.queue.CircularFifoQueue;
+
+import java.awt.*;
 
 /**
  * com.loneboat.spacesloth.main.game.actors.UI
@@ -35,6 +39,7 @@ public class PlayerHUD extends Actor {
 
     private TextField console;
     private TextField.TextFieldStyle consoleStyle;
+    private BitmapFont consoleFont;
     private int selection = 0;
     private CircularFifoQueue<String> consoleHistory;
 
@@ -119,8 +124,9 @@ public class PlayerHUD extends Actor {
         px.fill();
         skin.add("consoleBackground", new Texture(px));
 
+        consoleFont = chandle.getManager().get("Fonts/AnonymousPro-Regular.ttf", BitmapFont.class);
         consoleStyle = new TextField.TextFieldStyle(
-                ContentHandler.debugfont,
+                consoleFont,
                 Color.YELLOW,
                 null,
                 null,
@@ -130,9 +136,6 @@ public class PlayerHUD extends Actor {
         console = new TextField("", consoleStyle);
         console.setPosition(126, 5);
         console.setSize(300, 56);
-        log("Fuck");
-        log("Shit");
-        log("Faggot");
 
         px.dispose();
 
@@ -176,6 +179,10 @@ public class PlayerHUD extends Actor {
     public void updateHUD() {
         healthbar.setValue(player.getHealth());
         boostbar.setValue(player.getCurBoost());
+    }
+
+    public void resizeFont(int width, int height) {
+        consoleFont.getData().setScale(.9f, .9f);
     }
 
 }

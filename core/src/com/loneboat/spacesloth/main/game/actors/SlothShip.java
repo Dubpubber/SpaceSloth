@@ -559,12 +559,19 @@ public class SlothShip extends GameObject {
     }
 
     public void processOreContact(Ore ore) {
+        BigDecimal worth = ore.getOreWorth();
         // When the refinery is integrated, this is where we'd use its efficiency module.
-        profile.addMoney(ore.getOreWorth());
+        profile.addMoney(worth);
+        // Log this to the player's console!
+        hud.log(ore.getType().name() + " collected. Worth: $" + worth.doubleValue());
     }
 
     public void setPlayerHud(PlayerHUD hud) {
         this.hud = hud;
+    }
+
+    public PlayerHUD getPlayerHud() {
+        return hud;
     }
 
 }
