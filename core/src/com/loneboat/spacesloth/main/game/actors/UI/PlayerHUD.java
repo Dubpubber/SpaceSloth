@@ -12,10 +12,10 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.loneboat.spacesloth.main.Globals;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.loneboat.spacesloth.main.content.ContentHandler;
 import com.loneboat.spacesloth.main.game.actors.SlothShip;
-import com.loneboat.spacesloth.main.screens.GameScreen;
+import org.apache.commons.collections4.queue.CircularFifoQueue;
 
 /**
  * com.loneboat.spacesloth.main.game.actors.UI
@@ -28,17 +28,24 @@ public class PlayerHUD extends Actor {
     private Stage HudStage;
     private Pixmap hudpix;
     private OrthographicCamera hudcam;
+
     private Image hudImage;
     private ProgressBar healthbar;
     private ProgressBar boostbar;
+
+    private TextField console;
+    private TextField.TextFieldStyle consoleStyle;
+    private int selection = 0;
+    private CircularFifoQueue<String> consoleHistory;
 
     public PlayerHUD(SlothShip player, ContentHandler chandle, Stage HudStage) {
         this.player = player;
         this.chandle = chandle;
         this.HudStage = HudStage;
         hudcam = chandle.getHudCamera();
+        consoleHistory = new CircularFifoQueue<>(25);
         createControlPanel();
-        createBars();
+        createHUD();
     }
 
     @Override
@@ -54,6 +61,10 @@ public class PlayerHUD extends Actor {
         boostbar.draw(batch, parentAlpha);
         boostbar.act(parentAlpha);
 
+        /* Console animation */
+        console.draw(batch, parentAlpha);
+        console.act(parentAlpha);
+
         /* Update the HUD */
         updateHUD();
     }
@@ -63,7 +74,7 @@ public class PlayerHUD extends Actor {
         super.act(delta);
     }
 
-    public void createBars() {
+    public void createHUD() {
         // First create the healthbar.
         // Create a pixmap for the filler of the healthbar.
         Skin skin = new Skin();
@@ -103,6 +114,26 @@ public class PlayerHUD extends Actor {
         boostbar.setSize(57, 56);
         boostbar.setPosition(65, 5);
 
+        px = new Pixmap(300, 50, Pixmap.Format.RGBA8888);
+        px.setColor(Color.BLACK);
+        px.fill();
+        skin.add("consoleBackground", new Texture(px));
+
+        consoleStyle = new TextField.TextFieldStyle(
+                ContentHandler.debugfont,
+                Color.YELLOW,
+                null,
+                null,
+                skin.getDrawable("consoleBackground")
+        );
+
+        console = new TextField("", consoleStyle);
+        console.setPosition(126, 5);
+        console.setSize(300, 56);
+        log("Fuck");
+        log("Shit");
+        log("Faggot");
+
         px.dispose();
 
     }
@@ -113,7 +144,33 @@ public class PlayerHUD extends Actor {
         hudpix.fill();
         hudImage = new Image(new TextureRegion(new Texture(hudpix)));
         hudImage.setPosition(0, 0);
-        hudpix.dispose();
+    }
+
+    public void log(String out) {
+        consoleHistory.add(" $ " + out);
+        console.setText(consoleHistory.get(0));
+    }
+
+    public void moveDownSelection() {
+        if(selection < consoleHistory.size() - 1) {
+            selection++;
+        } else {
+            selection = 0;
+        }
+        console.setText(consoleHistory.get(selection));
+    }
+
+    public void moveUpSelection() {
+        if(selection > 0) {
+            selection--;
+        } else {
+            selection = consoleHistory.size() - 1;
+        }
+        console.setText(consoleHistory.get(selection));
+    }
+
+    public void moveToRecentEntry() {
+        console.setText(consoleHistory.get(0));
     }
 
     public void updateHUD() {

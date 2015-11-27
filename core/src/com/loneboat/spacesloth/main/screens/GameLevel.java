@@ -206,7 +206,9 @@ public class GameLevel extends GameScreen {
     }
 
     public void addPlayerHUD() {
-        HudStage.addActor(new PlayerHUD(player, chandle, HudStage));
+        PlayerHUD hud = new PlayerHUD(player, chandle, HudStage);
+        HudStage.addActor(hud);
+        player.setPlayerHud(hud);
     }
 
     public void addSystems() {

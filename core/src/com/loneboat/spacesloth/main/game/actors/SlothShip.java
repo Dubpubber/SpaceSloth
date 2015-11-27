@@ -17,6 +17,7 @@ import com.loneboat.spacesloth.main.content.partsystem.Part;
 import com.loneboat.spacesloth.main.content.partsystem.PartFactory;
 import com.loneboat.spacesloth.main.content.partsystem.PartType;
 import com.loneboat.spacesloth.main.game.GameObject;
+import com.loneboat.spacesloth.main.game.actors.UI.PlayerHUD;
 import com.loneboat.spacesloth.main.game.worldobjects.ores.Ore;
 import com.loneboat.spacesloth.main.game.worldobjects.weapons.BlueBlast;
 import com.loneboat.spacesloth.main.util.PlayerInputListener;
@@ -33,6 +34,7 @@ public class SlothShip extends GameObject {
 
     private PlayerInputListener ip;
     private Profile profile;
+    private PlayerHUD hud;
 
     private float steeringTorque = 0;
 
@@ -329,7 +331,19 @@ public class SlothShip extends GameObject {
         }
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.F3)) {
-            level.spawnOre(this);
+            hud.log("Hey!");
+        }
+
+        if(Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) {
+            hud.moveDownSelection();
+        }
+
+        if(Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
+            hud.moveUpSelection();
+        }
+
+        if(Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
+            hud.moveToRecentEntry();
         }
 
         if (!isBoosting)
@@ -547,6 +561,10 @@ public class SlothShip extends GameObject {
     public void processOreContact(Ore ore) {
         // When the refinery is integrated, this is where we'd use its efficiency module.
         profile.addMoney(ore.getOreWorth());
+    }
+
+    public void setPlayerHud(PlayerHUD hud) {
+        this.hud = hud;
     }
 
 }
