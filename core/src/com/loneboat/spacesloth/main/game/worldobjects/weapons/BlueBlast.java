@@ -58,16 +58,17 @@ public class BlueBlast extends ProjectileObject {
         setBody(body);
         setSpeed(50f);
 
-        Vector2 forceOffset = ScreenUtil.getPositionOffset(body.getPosition(), player.getBody().getPosition(), getSpeed());
+        Vector2 forceOffset = ScreenUtil.getFiringAngle(player.getPosition(), this.getPosition(), 1.0f);
 
         // Define what can collide with this projectile.
         addCollisionApplicableObject("Asteroid");
         addCollisionApplicableObject("AsteroidBomb");
 
-        body.setLinearVelocity(forceOffset);
+        body.setLinearVelocity(forceOffset.scl(getSpeed()));
 
         setSplitter(false);
         setDamage(10);
         shape.dispose();
     }
+
 }

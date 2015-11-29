@@ -1,11 +1,13 @@
 package com.loneboat.spacesloth.main.util;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
 import com.loneboat.spacesloth.main.Globals;
 import com.loneboat.spacesloth.main.game.GameObject;
+import com.loneboat.spacesloth.main.game.ProjectileObject;
 
 import java.util.*;
 
@@ -131,6 +133,19 @@ public class ScreenUtil {
         return new Vector2(x, y);
     }
 
+    /**
+     * Calculates the firing angle from an object
+     * @param shooter
+     * @param pobj
+     * @param speed
+     * @return
+     */
+    public static Vector2 getFiringAngle(Vector2 shooter, Vector2 pobj, float speed) {
+        Vector2 vect = new Vector2();
+        vect.set(pobj.x - shooter.x, pobj.y - shooter.y).nor().scl(Math.min(shooter.dst(pobj.x, pobj.y), speed));
+        return vect;
+    }
+
     // TODO: known bug: the farther away the shooter is from the origin, the more inaccurate the direction.
     public static Vector2 getPositionOffset(Vector2 v1, Vector2 v2, float scale) {
         return new Vector2(
@@ -153,6 +168,10 @@ public class ScreenUtil {
 
     public static float getAngleFromObject(GameObject obj, GameObject obj2) {
         return (float) Math.atan2(obj2.getBodyY() - obj.getBodyY(), obj2.getBodyX() - obj.getBodyX());
+    }
+
+    public static float getAngleFromMouseByObject(Vector2 object) {
+        return calculateNormalAngle((float) Math.atan2(object.y - Gdx.input.getY(), object.x - Gdx.input.getY()));
     }
 
     /**

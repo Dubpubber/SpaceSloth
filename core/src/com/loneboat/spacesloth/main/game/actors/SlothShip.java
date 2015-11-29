@@ -7,9 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.Array;
 import com.loneboat.spacesloth.main.Globals;
 import com.loneboat.spacesloth.main.SpaceSloth;
 import com.loneboat.spacesloth.main.content.ContentHandler;
@@ -243,7 +241,6 @@ public class SlothShip extends GameObject {
         rebuildShip();
 
         ip = new PlayerInputListener(game, chandle);
-        setOrigin(getWidth() / 2, getHeight() / 2);
 
         setCurVelocity(new Vector2(0.0f, 0.0f));
         setMaxVelocity(new Vector2(0.075f, 0.075f));
@@ -302,11 +299,11 @@ public class SlothShip extends GameObject {
         }
 
         if (ip.a) {
-            steeringTorque = profile.getTorque() * getMass();
+            steeringTorque = (profile.getTorque() * getMass()) + 3;
         }
 
         if(ip.d) {
-            steeringTorque = -profile.getTorque() * getMass();
+            steeringTorque = (-profile.getTorque() * getMass()) - 3;
         }
 
         if(!ip.a && !ip.d) {
@@ -349,7 +346,7 @@ public class SlothShip extends GameObject {
         if (!isBoosting)
             restoreBoosters();
         else
-            depleatBoosters();
+            depleteBoosters();
 
         getBody().applyTorque(steeringTorque, true);
 
@@ -395,7 +392,7 @@ public class SlothShip extends GameObject {
         return curBoost >= boostCap;
     }
 
-    public void depleatBoosters() {
+    public void depleteBoosters() {
         if(hasBoost())
             curBoost -= 1.0f;
     }

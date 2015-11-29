@@ -21,6 +21,7 @@ import com.loneboat.spacesloth.main.game.systems.PlayerRadar;
 import com.loneboat.spacesloth.main.game.worldobjects.Asteroid;
 import com.loneboat.spacesloth.main.game.worldobjects.enemies.AsteroidBomb;
 import com.loneboat.spacesloth.main.game.worldobjects.ores.Ore;
+import com.loneboat.spacesloth.main.util.ScreenUtil;
 import net.dermetfan.gdx.graphics.g2d.AnimatedBox2DSprite;
 import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
 
