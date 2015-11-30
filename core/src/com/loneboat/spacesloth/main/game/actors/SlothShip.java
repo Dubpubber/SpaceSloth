@@ -257,11 +257,11 @@ public class SlothShip extends GameObject {
         destroyAllFixtures();
         PolygonShape shape = new PolygonShape();
         createCockpit(body, shape);
-        createGunMount(body, shape);
+        createWings(body, shape);
+        //createGunMount(body, shape);
         createHull(body, shape);
         createThrusters(body, shape);
-        createWings(body, shape);
-        createShield(body);
+        //createShield(body);
         shape.dispose();
         profile.rebuild();
     }
@@ -281,7 +281,7 @@ public class SlothShip extends GameObject {
 
         if(ip.w) {
             if(!isBoosting) {
-                incCurVelocity(new Vector2(0.01f, 0.01f));
+                incCurVelocity(new Vector2(0.03f, 0.03f));
             } else {
                 setCurVelocity(getMaxBoostVelocity());
                 if(!hasBoost())
@@ -291,7 +291,7 @@ public class SlothShip extends GameObject {
             getBody().applyLinearImpulse(force.x, force.y, getBodyX(), getBodyY(), true);
         } else {
             setCurVelocity(new Vector2(0.0f, 0.0f));
-            getBody().setLinearDamping(0.75f);
+            getBody().setLinearDamping(2.55f);
         }
 
         if(ip.shift && useBoost()) {
@@ -299,11 +299,11 @@ public class SlothShip extends GameObject {
         }
 
         if (ip.a) {
-            steeringTorque = (profile.getTorque() * getMass()) + 3;
+            steeringTorque = (profile.getTorque() * getMass());
         }
 
         if(ip.d) {
-            steeringTorque = (-profile.getTorque() * getMass()) - 3;
+            steeringTorque = (-profile.getTorque() * getMass());
         }
 
         if(!ip.a && !ip.d) {
@@ -413,7 +413,7 @@ public class SlothShip extends GameObject {
     public void createCockpit(Body body, PolygonShape shape) {
         shape = new PolygonShape();
         shape.setAsBox(
-               41 / Globals.PixelsPerMetre, 40 / Globals.PixelsPerMetre, new Vector2(0,0), 0
+               62 / Globals.PixelsPerMetre, 62 / Globals.PixelsPerMetre, new Vector2(0,0), 0
         );
         FixtureDef cockpit = new FixtureDef();
         cockpit.shape = shape;
@@ -452,8 +452,8 @@ public class SlothShip extends GameObject {
     public void createHull(Body body, PolygonShape shape) {
         shape = new PolygonShape();
         shape.setAsBox(
-                40 / Globals.PixelsPerMetre, 81 / Globals.PixelsPerMetre,
-                ScreenUtil.divideVectorByPPM(new Vector2(0, -127)), 0
+                80 / Globals.PixelsPerMetre, 176 / Globals.PixelsPerMetre,
+                ScreenUtil.divideVectorByPPM(new Vector2(0, -206)), 0
         );
         FixtureDef hull = new FixtureDef();
         hull.shape = shape;
@@ -472,8 +472,8 @@ public class SlothShip extends GameObject {
     public void createThrusters(Body body, PolygonShape shape) {
         shape = new PolygonShape();
         shape.setAsBox(
-                42 / Globals.PixelsPerMetre, 16 / Globals.PixelsPerMetre,
-                ScreenUtil.divideVectorByPPM(new Vector2(0, -225)), 0
+                84 / Globals.PixelsPerMetre, 106 / Globals.PixelsPerMetre,
+                ScreenUtil.divideVectorByPPM(new Vector2(0, -400)), 0
         );
         FixtureDef thruster = new FixtureDef();
         thruster.shape = shape;
@@ -493,8 +493,8 @@ public class SlothShip extends GameObject {
         // Create the first wing.
         shape = new PolygonShape();
         shape.setAsBox(
-                37 / Globals.PixelsPerMetre, 38 / Globals.PixelsPerMetre,
-                ScreenUtil.divideVectorByPPM(new Vector2(60, -150)), 0
+                102 / Globals.PixelsPerMetre, 132 / Globals.PixelsPerMetre,
+                ScreenUtil.divideVectorByPPM(new Vector2(120, -195)), 0
         );
         FixtureDef winga = new FixtureDef();
         winga.shape = shape;
@@ -512,8 +512,8 @@ public class SlothShip extends GameObject {
         // Create the second wing.
         shape = new PolygonShape();
         shape.setAsBox(
-                37 / Globals.PixelsPerMetre, 38 / Globals.PixelsPerMetre,
-                ScreenUtil.divideVectorByPPM(new Vector2(-60, -150)), 0
+                102 / Globals.PixelsPerMetre, 132 / Globals.PixelsPerMetre,
+                ScreenUtil.divideVectorByPPM(new Vector2(-120, -195)), 0
         );
         FixtureDef wingb = new FixtureDef();
         wingb.shape = shape;

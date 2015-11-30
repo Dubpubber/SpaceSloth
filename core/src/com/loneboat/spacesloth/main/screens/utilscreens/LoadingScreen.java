@@ -17,6 +17,8 @@ import com.loneboat.spacesloth.main.screens.space.AsteroidsLevel;
  */
 public class LoadingScreen extends GameScreen {
     private boolean finished;
+    private BitmapFont titleScreenFont;
+    private BitmapFont bodyFont;
     private GlyphLayout glyph;
     /**
      * Constructor.
@@ -31,17 +33,20 @@ public class LoadingScreen extends GameScreen {
         Gdx.input.setInputProcessor(MainStage);
 
         game.getLogger().info("Switched to LoadingScreen.");
+        titleScreenFont = ContentHandler.generateAllerFont(24);
+        bodyFont = ContentHandler.generateAllerFont(14);
         glyph = new GlyphLayout();
-        glyph.setText(font, "Loading parts...");
+        glyph.setText(titleScreenFont, "Loading parts...");
     }
 
     @Override
     public void render(float delta) {
         super.render(delta);
-
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Gdx.gl.glClearColor(222/255f, 208/255f, 121/225f, 1f);
-        glyph.setText(font, "Loading " + chandle.getManager().getQueuedAssets() + " assets... " + (chandle.getProgress()) + "%");
+        font.setColor(Color.valueOf("e3e3e3"));
+        font.getData().setScale(1.0f);
+        glyph.setText(bodyFont, "Loading " + chandle.getManager().getQueuedAssets() + " assets... " + (chandle.getProgress()) + "%");
         // Update the manager
         if(chandle.updateManager()) {
             if(!finished) {
@@ -51,12 +56,15 @@ public class LoadingScreen extends GameScreen {
             if(Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)) {
                 game.setCurrentScreen(new AsteroidsLevel(game, chandle));
             }
-            glyph.setText(font, "Finished loading all game assets! press any button to continue.");
+            glyph.setText(bodyFont, "Finished loading all game assets! press any button to continue.");
         }
         batch.setProjectionMatrix(hud_cam.combined);
         batch.begin();
         batch.setColor(Color.BLACK);
-        font.draw(batch, glyph, (ContentHandler.GAMEWIDTH - glyph.width) / 2, ContentHandler.GAMEHEIGHT / 2);
+        bodyFont.draw(batch, glyph, (ContentHandler.GAMEWIDTH - glyph.width) / 2, ContentHandler.GAMEHEIGHT / 2);
+        font.setColor(Color.valueOf("fafa00"));
+        glyph.setText(titleScreenFont, "SpaceSloth");
+        titleScreenFont.draw(batch, glyph, (ContentHandler.GAMEWIDTH - glyph.width) / 2, 350);
         batch.end();
     }
 

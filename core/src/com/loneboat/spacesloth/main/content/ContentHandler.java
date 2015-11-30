@@ -38,12 +38,19 @@ public class ContentHandler {
     private OrthographicCamera hud_cam;
     private Viewport fit;
     public static SpriteBatch batch;
-    public static BitmapFont debugfont;
 
     // The updating progress of the asset manager.
     private float progress;
 
+    // For the parts, duh.
+    // TODO: Rename PartFactory to PartFactoryAssemblyObjectDroneProduct (joking)
     public PartFactory partFactory;
+
+    // All the fonts for the game. So cool! Right?!
+    public static BitmapFont debugfont;
+    public static BitmapFont consoleFont;
+    public static BitmapFont h1Font;
+    public static BitmapFont bodyFont;
 
     /**
      * Constructor for the content handler, this class manages most global objects needed for the game.
@@ -71,11 +78,8 @@ public class ContentHandler {
 
     private void queueAssets() {
         manager.load("Sprites/mouseSprite.png", Texture.class);
-        manager.load("Sprites/Thruster_A1.png", Texture.class);
-        manager.load("Sprites/GunMount_A1.png", Texture.class);
         manager.load("Sprites/Asteroid_2_bomb.png", Texture.class);
         manager.load("Sprites/BlueBlast_A1.png", Texture.class);
-        manager.load("Sprites/HUDSprite.png", Texture.class);
         manager.load("Sprites/SpaceBackground_1.png", Texture.class);
         manager.load("Sprites/radar_background.png", Texture.class);
         manager.load("Sprites/radar_ship.png", Texture.class);
@@ -87,6 +91,13 @@ public class ContentHandler {
         manager.load("Parts/Sprites/BaseThrusters.png", Texture.class);
         manager.load("Parts/Sprites/BaseWing1.png", Texture.class);
         manager.load("Parts/Sprites/BaseWing2.png", Texture.class);
+
+        manager.load("Parts/Sprites/BaseCockpit_1.png", Texture.class);
+        manager.load("Parts/Sprites/BaseGunMount_1.png", Texture.class);
+        manager.load("Parts/Sprites/BaseHull_1.png", Texture.class);
+        manager.load("Parts/Sprites/BaseThrusters_1.png", Texture.class);
+        manager.load("Parts/Sprites/BaseWing1_1.png", Texture.class);
+        manager.load("Parts/Sprites/BaseWing2_1.png", Texture.class);
 
         // Load ship systems
         manager.load("Parts/Sprites/BaseShield.png", Texture.class);
@@ -107,7 +118,6 @@ public class ContentHandler {
 
         FreetypeFontLoader.FreeTypeFontLoaderParameter s1 = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
         s1.fontFileName = "Fonts/AnonymousPro-Regular.ttf";
-        s1.fontParameters.size = 18;
         s1.fontParameters.minFilter = Texture.TextureFilter.Linear;
         s1.fontParameters.magFilter = Texture.TextureFilter.Linear;
         manager.load("Fonts/AnonymousPro-Regular.ttf", BitmapFont.class, s1);
@@ -153,6 +163,19 @@ public class ContentHandler {
 
     public Viewport getHudViewport() {
         return fit;
+    }
+
+    public void loadFonts() {
+
+    }
+
+    public static BitmapFont generateAllerFont(int size) {
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("Fonts/Aller.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = size;
+        parameter.minFilter = Texture.TextureFilter.Linear;
+        parameter.magFilter = Texture.TextureFilter.Linear;
+        return generator.generateFont(parameter);
     }
 
 }

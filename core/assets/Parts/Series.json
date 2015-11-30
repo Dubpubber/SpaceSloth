@@ -6,7 +6,7 @@
     "Cost": 0.0,
     "Visible": true,
     "LocalName": "Rank F Standard Cockpit",
-    "FileName": "Parts/Sprites/BaseCockpit.png",
+    "FileName": "Parts/Sprites/BaseCockpit_1.png",
     "RGB": "ABABAB",
     "Alpha": 1.0,
     "ShortHand": "rankfcockpit",
@@ -25,7 +25,7 @@
     "Cost": 0.0,
     "Visible": true,
     "LocalName": "Rank F Standard GunMount",
-    "FileName": "Parts/Sprites/BaseGunMount.png",
+    "FileName": "Parts/Sprites/BaseGunMount_1.png",
     "RGB": "ABABAB",
     "Alpha": 1.0,
     "ShortHand": "rankfgunmount",
@@ -44,7 +44,7 @@
     "Cost": 0.0,
     "Visible": true,
     "LocalName": "Rank F Standard Hull",
-    "FileName": "Parts/Sprites/BaseHull.png",
+    "FileName": "Parts/Sprites/BaseHull_1.png",
     "RGB": "ABABAB",
     "Alpha": 1.0,
     "ShortHand": "rankfhull",
@@ -63,7 +63,7 @@
     "Cost": 0.0,
     "Visible": true,
     "LocalName": "Rank F Standard Thrusters",
-    "FileName": "Parts/Sprites/BaseThrusters.png",
+    "FileName": "Parts/Sprites/BaseThrusters_1.png",
     "RGB": "ABABAB",
     "Alpha": 1.0,
     "ShortHand": "rankfthrusters",
@@ -82,7 +82,7 @@
     "Cost": 0.0,
     "Visible": true,
     "LocalName": "Rank F Standard Wing A",
-    "FileName": "Parts/Sprites/BaseWing1.png",
+    "FileName": "Parts/Sprites/BaseWing1_1.png",
     "RGB": "ABABAB",
     "Alpha": 1.0,
     "ShortHand": "rankfwing1",
@@ -90,7 +90,7 @@
     "Properties": [
       {
         "key": "Torque",
-        "value": "1.80"
+        "value": "6.25"
       }
     ]
   },
@@ -101,7 +101,7 @@
     "Cost": 0.0,
     "Visible": true,
     "LocalName": "Rank F Standard Wing B",
-    "FileName": "Parts/Sprites/BaseWing2.png",
+    "FileName": "Parts/Sprites/BaseWing2_1.png",
     "RGB": "ABABAB",
     "Alpha": 1.0,
     "ShortHand": "rankfwing2",
@@ -109,7 +109,7 @@
     "Properties": [
       {
         "key": "Torque",
-        "value": "1.80"
+        "value": "6.25"
       }
     ]
   },
@@ -205,63 +205,6 @@
       {
         "key": "RefineSpeed",
         "value": "1.0"
-      }
-    ]
-  },
-  {
-    "Rank": "E",
-    "Health": 115.0,
-    "RepairFactor": 1.0,
-    "Cost": 115.0,
-    "Visible": true,
-    "LocalName": "Rank E Durable Cockpit",
-    "FileName": "Parts/Sprites/BaseCockpit.png",
-    "RGB": "07B303",
-    "Alpha": 1.0,
-    "ShortHand": "rankecockpit",
-    "PartType": "COCKPIT",
-    "Properties": [
-      {
-        "key": "HudValue",
-        "value": "0"
-      }
-    ]
-  },
-  {
-    "Rank": "E",
-    "Health": 107.0,
-    "RepairFactor": 1.0,
-    "Cost": 115.0,
-    "Visible": true,
-    "LocalName": "Rank E Durable Gunmount",
-    "FileName": "Parts/Sprites/BaseGunMount.png",
-    "RGB": "07B303",
-    "Alpha": 1.0,
-    "ShortHand": "rankegunmount",
-    "PartType": "GUNMOUNT",
-    "Properties": [
-      {
-        "key": "FireRate",
-        "value": "1.0"
-      }
-    ]
-  },
-  {
-    "Rank": "E",
-    "Health": 150.0,
-    "RepairFactor": 1.0,
-    "Cost": 150.0,
-    "Visible": true,
-    "LocalName": "Rank E Durable Hull",
-    "FileName": "Parts/Sprites/BaseHull.png",
-    "RGB": "07B303",
-    "Alpha": 1.0,
-    "ShortHand": "rankehull",
-    "PartType": "HULL",
-    "Properties": [
-      {
-        "key": "Capacity",
-        "value": "105.0"
       }
     ]
   }
