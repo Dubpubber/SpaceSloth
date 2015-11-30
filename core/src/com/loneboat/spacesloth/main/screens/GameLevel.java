@@ -333,7 +333,6 @@ public class GameLevel extends GameScreen {
     @Override
     public void resize(int width, int height) {
         super.resize(width, height);
-        player.getPlayerHud().resizeFont(width, height);
     }
 
 }

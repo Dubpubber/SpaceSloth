@@ -48,9 +48,6 @@ public class ContentHandler {
 
     // All the fonts for the game. So cool! Right?!
     public static BitmapFont debugfont;
-    public static BitmapFont consoleFont;
-    public static BitmapFont h1Font;
-    public static BitmapFont bodyFont;
 
     /**
      * Constructor for the content handler, this class manages most global objects needed for the game.

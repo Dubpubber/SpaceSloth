@@ -66,10 +66,6 @@ public class PlayerHUD extends Actor {
         boostbar.draw(batch, parentAlpha);
         boostbar.act(parentAlpha);
 
-        /* Console animation */
-        console.draw(batch, parentAlpha);
-        console.act(parentAlpha);
-
         /* Update the HUD */
         updateHUD();
     }
@@ -108,41 +104,23 @@ public class PlayerHUD extends Actor {
         healthbar = new ProgressBar(0, player.getMaxHealth(), 1.0f, true, healhbarstyle);
         healthbar.setAnimateDuration(1.0f);
         healthbar.setValue(player.getHealth());
-        healthbar.setSize(57, 56);
-        healthbar.setPosition(5, 5);
+        healthbar.setSize(80, 75);
+        healthbar.setPosition(2, 5);
 
         ProgressBar.ProgressBarStyle boostbarstyle = new ProgressBar.ProgressBarStyle(skin.newDrawable("background"), skin.newDrawable("boost"));
         boostbarstyle.knobBefore = boostbarstyle.knob;
         boostbar = new ProgressBar(0, player.getBoostCap(), 1.0f, true, boostbarstyle);
         boostbar.setAnimateDuration(0.5f);
         boostbar.setValue(player.getCurBoost());
-        boostbar.setSize(57, 56);
+        boostbar.setSize(80, 75);
         boostbar.setPosition(65, 5);
-
-        px = new Pixmap(300, 50, Pixmap.Format.RGBA8888);
-        px.setColor(Color.BLACK);
-        px.fill();
-        skin.add("consoleBackground", new Texture(px));
-
-        consoleFont = chandle.getManager().get("Fonts/AnonymousPro-Regular.ttf", BitmapFont.class);
-        consoleStyle = new TextField.TextFieldStyle(
-                consoleFont,
-                Color.YELLOW,
-                null,
-                null,
-                skin.getDrawable("consoleBackground")
-        );
-
-        console = new TextField("", consoleStyle);
-        console.setPosition(126, 5);
-        console.setSize(300, 56);
 
         px.dispose();
 
     }
 
     public void createControlPanel() {
-        hudpix = new Pixmap(Gdx.graphics.getWidth(), 66, Pixmap.Format.RGBA8888);
+        hudpix = new Pixmap(ContentHandler.GAMEWIDTH, 84, Pixmap.Format.RGBA8888);
         hudpix.setColor(Color.LIGHT_GRAY);
         hudpix.fill();
         hudImage = new Image(new TextureRegion(new Texture(hudpix)));
@@ -179,10 +157,6 @@ public class PlayerHUD extends Actor {
     public void updateHUD() {
         healthbar.setValue(player.getHealth());
         boostbar.setValue(player.getCurBoost());
-    }
-
-    public void resizeFont(int width, int height) {
-        consoleFont.getData().setScale(.9f, .9f);
     }
 
 }

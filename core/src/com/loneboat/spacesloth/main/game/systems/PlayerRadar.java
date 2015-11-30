@@ -45,9 +45,15 @@ public class PlayerRadar extends Actor {
     private float RadarScanSpeed = 3.5f;
     private float degrees = 0;
 
+    private float RadarPositionX = 1250;
+    private float RadarPositionY = 5;
+
+    private float RadarSizeX = 250;
+    private float RadarSizeY = 250;
+
     private int rotationCount = 0;
 
-    private HashMap<String, Integer> rship;
+    private HashMap<String, Float> rship;
     private ArrayList<BlipProfile> bps;
 
     public PlayerRadar(SlothShip player, GameLevel level) {
@@ -59,17 +65,19 @@ public class PlayerRadar extends Actor {
 
         // Add the ship radar coordinates //
         rship = new HashMap<>();
-        rship.put("left_x", 555);
-        rship.put("left_y", 51);
+        rship.put("top_x", (RadarPositionX + 50));
+        rship.put("top_y", 62f);
 
-        rship.put("top_x", 560);
-        rship.put("top_y", 62);
+        rship.put("left_x", rship.get("top_x") - 5);
+        rship.put("left_y", 51f);
 
-        rship.put("right_x", 565);
-        rship.put("right_y", 51);
+        rship.put("right_x", rship.get("top_x") + 5);
+        rship.put("right_y", 51f);
 
-        rship.put("center_x", (555 + 560 + 565) / 3);
-        rship.put("center_y", (45 + 60 + 45) / 3);
+        rship.put("center_x", (rship.get("left_x") + rship.get("top_x") + rship.get("right_x")) / 3);
+        rship.put("center_y", (float) (Math.round(rship.get("left_y") + rship.get("top_y") + rship.get("right_y")) / 3) - 3);
+
+        level.getLogger().info("center x/y: " + rship.get("center_x") + " " + rship.get("center_y"));
 
         bps = new ArrayList<>();
 
@@ -80,6 +88,7 @@ public class PlayerRadar extends Actor {
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
 
+        // Update the radar and increase the cover color A
         if(rotationCount == 1) {
             rotationCount = 0;
             coverColor.a = 1;
@@ -88,6 +97,7 @@ public class PlayerRadar extends Actor {
             coverColor.a -= RadarScanSpeed / 200.0f;
         }
 
+        // Rotate the radar bar.
         if(degrees < 360) {
             radarLine.setRotation(degrees);
         } else {
@@ -95,6 +105,7 @@ public class PlayerRadar extends Actor {
             rotationCount++;
         }
         degrees += RadarScanSpeed;
+
         batch.end();
         // Begin Drawing //
         Gdx.gl.glEnable(GL20.GL_BLEND);
@@ -113,7 +124,7 @@ public class PlayerRadar extends Actor {
         sr.end();
 
         batch.begin();
-        batch.draw(backdrop, 510, 5, 100, 100);
+        batch.draw(backdrop, RadarPositionX, RadarPositionY, RadarSizeX, RadarSizeY);
         batch.end();
 
         Gdx.gl.glEnable(GL20.GL_BLEND);
@@ -122,7 +133,7 @@ public class PlayerRadar extends Actor {
         sr.begin(ShapeRenderer.ShapeType.Filled);
 
         sr.setColor(0, 1, 0, coverColor.a);
-        sr.circle(rship.get("center_x"), rship.get("center_y") + 5, 50);
+        sr.circle(rship.get("center_x"), rship.get("center_y") + 4, RadarSizeX / 2);
 
         // sr.triangle(10, 10, 30, 50, 50, 10);
         /*sr.triangle(
@@ -192,21 +203,21 @@ public class PlayerRadar extends Actor {
     private void createGUIRadar() {
         Skin skin = new Skin();
 
-        Pixmap px = new Pixmap(100, 100, Pixmap.Format.RGBA8888);
+        Pixmap px = new Pixmap((int) RadarSizeX, (int) RadarPositionY, Pixmap.Format.RGBA8888);
         px.setColor(0, 0.5f, 0, 1);
         px.fill();
         Texture pxRadarCover = new Texture(px);
 
         skin.add("cover", pxRadarCover);
 
-        px = new Pixmap(120, 120, Pixmap.Format.RGBA8888);
+        px = new Pixmap((int) RadarSizeX + 20, (int) RadarPositionY + 20, Pixmap.Format.RGBA8888);
         px.setColor(Color.LIGHT_GRAY);
         px.fill();
         Texture pxRadarBackground = new Texture(px);
 
         skin.add("background", pxRadarBackground);
 
-        px = new Pixmap(10, 45, Pixmap.Format.RGBA8888);
+        px = new Pixmap(10, (int) (RadarSizeY - 10), Pixmap.Format.RGBA8888);
         px.setColor(Color.GREEN);
         px.fill();
         Texture pxRadarLine = new Texture(px);
@@ -214,19 +225,21 @@ public class PlayerRadar extends Actor {
         skin.add("radarline", pxRadarLine);
 
         Image radarBackground = new Image(skin.getDrawable("background"));
-        radarBackground.setSize(120, 120);
+        radarBackground.setSize(RadarSizeX + 20, RadarSizeY + 20);
         radarBackground.setPosition(
-                500,
+                RadarPositionX - 10,
                 -5
         );
         this.background = radarBackground;
 
-        backdrop = ContentHandler.manager.get("Sprites/radar_background.png", Texture.class);
+        Texture bk = ContentHandler.manager.get("Sprites/radar_background.png", Texture.class);
+        bk.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        backdrop = bk;
 
         Image radarCover = new Image(skin.getDrawable("cover"));
-        radarCover.setSize(backdrop.getWidth(), backdrop.getHeight());
+        radarCover.setSize(RadarSizeX, RadarSizeY);
         radarCover.setPosition(
-                510,
+                RadarPositionX,
                 5
         );
         this.cover = radarCover;
