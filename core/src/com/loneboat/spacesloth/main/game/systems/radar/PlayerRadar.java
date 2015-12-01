@@ -1,4 +1,4 @@
-package com.loneboat.spacesloth.main.game.systems;
+package com.loneboat.spacesloth.main.game.systems.radar;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -41,7 +40,7 @@ public class PlayerRadar extends Actor {
 
     private Color coverColor;
 
-    private int RadarRange = 40;
+    private int RadarRange = 65;
     private float RadarScanSpeed = 3.5f;
     private float degrees = 0;
 
@@ -186,7 +185,7 @@ public class PlayerRadar extends Actor {
 
         sr.rect(radarLine.getX(), radarLine.getY() + 3,
                 radarLine.getOriginX(), radarLine.getOriginY(),
-                radarLine.getWidth(), radarLine.getHeight(),
+                radarLine.getWidth(), (RadarSizeY / 2) - 10,
                 1, 1, degrees
         );
         sr.end();

@@ -1,4 +1,4 @@
-package com.loneboat.spacesloth.main.game.systems;
+package com.loneboat.spacesloth.main.game.systems.radar;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;

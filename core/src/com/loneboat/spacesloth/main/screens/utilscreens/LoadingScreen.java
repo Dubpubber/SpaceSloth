@@ -86,7 +86,10 @@ public class LoadingScreen extends GameScreen {
         // Images and Textures
         // Re-draw the color so this stuff isn't blinking.
         batch.setColor(batch.getColor().r, batch.getColor().g, batch.getColor().b, 1f);
-        batch.draw(loadingScreenBackground, 0, 0, ContentHandler.GAMEWIDTH, ContentHandler.GAMEHEIGHT);
+        batch.draw(loadingScreenBackground,
+                (ContentHandler.GAMEWIDTH - loadingScreenBackground.getWidth()) / 2, 0,
+                loadingScreenBackground.getWidth(), ContentHandler.GAMEHEIGHT
+        );
 
         // Font stuffs
         bodyFont.draw(batch, glyph, (ContentHandler.GAMEWIDTH - glyph.width) / 2, ContentHandler.GAMEHEIGHT / 2);

@@ -11,7 +11,7 @@ import com.loneboat.spacesloth.main.Globals;
 import com.loneboat.spacesloth.main.SpaceSloth;
 import com.loneboat.spacesloth.main.content.ContentHandler;
 import com.loneboat.spacesloth.main.game.GameObject;
-import com.loneboat.spacesloth.main.game.systems.BlipProfile;
+import com.loneboat.spacesloth.main.game.systems.radar.BlipProfile;
 import com.loneboat.spacesloth.main.util.ScreenUtil;
 import net.dermetfan.gdx.graphics.g2d.AnimatedBox2DSprite;
 
@@ -63,7 +63,7 @@ public class Asteroid extends GameObject {
         shape.dispose();
 
         bp = new BlipProfile(this, Color.WHITE, 0);
-        bp.setSize(2, 2);
+        bp.setSize(5, 5);
     }
 
     @Override

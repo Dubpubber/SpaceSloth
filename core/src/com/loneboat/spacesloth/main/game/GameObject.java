@@ -14,7 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.loneboat.spacesloth.main.SpaceSloth;
 import com.loneboat.spacesloth.main.content.ContentHandler;
-import com.loneboat.spacesloth.main.game.systems.BlipProfile;
+import com.loneboat.spacesloth.main.game.systems.radar.BlipProfile;
 import com.loneboat.spacesloth.main.screens.GameLevel;
 import com.loneboat.spacesloth.main.util.GameObjectTracker;
 import net.dermetfan.gdx.graphics.g2d.AnimatedBox2DSprite;
