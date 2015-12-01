@@ -45,11 +45,11 @@ public class PlayerRadar extends Actor {
     private float RadarScanSpeed = 3.5f;
     private float degrees = 0;
 
-    private float RadarPositionX = 1250;
+    private float RadarPositionX = 1115;
     private float RadarPositionY = 5;
 
-    private float RadarSizeX = 250;
-    private float RadarSizeY = 250;
+    private float RadarSizeX = 200;
+    private float RadarSizeY = 200;
 
     private int rotationCount = 0;
 
@@ -65,17 +65,17 @@ public class PlayerRadar extends Actor {
 
         // Add the ship radar coordinates //
         rship = new HashMap<>();
-        rship.put("top_x", (RadarPositionX + 50));
-        rship.put("top_y", 62f);
+        rship.put("top_x", (RadarSizeX / 2) + RadarPositionX);
+        rship.put("top_y", (RadarSizeY / 2) + RadarPositionY);
 
         rship.put("left_x", rship.get("top_x") - 5);
-        rship.put("left_y", 51f);
+        rship.put("left_y", rship.get("top_y") - 5);
 
         rship.put("right_x", rship.get("top_x") + 5);
-        rship.put("right_y", 51f);
+        rship.put("right_y", rship.get("top_y") - 5);
 
         rship.put("center_x", (rship.get("left_x") + rship.get("top_x") + rship.get("right_x")) / 3);
-        rship.put("center_y", (float) (Math.round(rship.get("left_y") + rship.get("top_y") + rship.get("right_y")) / 3) - 3);
+        rship.put("center_y", (rship.get("left_y") + rship.get("top_y") + rship.get("right_y")) / 3);
 
         level.getLogger().info("center x/y: " + rship.get("center_x") + " " + rship.get("center_y"));
 
@@ -155,7 +155,7 @@ public class PlayerRadar extends Actor {
         );*/
         batch.draw(
                 radarShip,
-                (rship.get("right_x") - (radarShip.getWidth() / 2) - 3), rship.get("center_y"),
+                (rship.get("right_x") - (radarShip.getWidth() / 2) - 3.15f), rship.get("center_y"),
                 6, 6,
                 12, 12,
                 1, 1,
@@ -182,9 +182,9 @@ public class PlayerRadar extends Actor {
 
         // RADAR LINE //
         sr.setColor(0, 1, 0, 1);
-        sr.circle(rship.get("center_x"), rship.get("center_y") + 5, 4);
+        sr.circle(rship.get("center_x"), rship.get("center_y") + 3, 4);
 
-        sr.rect(radarLine.getX(), radarLine.getY() + 5,
+        sr.rect(radarLine.getX(), radarLine.getY() + 3,
                 radarLine.getOriginX(), radarLine.getOriginY(),
                 radarLine.getWidth(), radarLine.getHeight(),
                 1, 1, degrees
