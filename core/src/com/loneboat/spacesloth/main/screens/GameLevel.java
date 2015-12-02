@@ -12,6 +12,7 @@ import com.loneboat.spacesloth.main.content.ContentHandler;
 import com.loneboat.spacesloth.main.game.GameObject;
 import com.loneboat.spacesloth.main.game.ProjectileObject;
 import com.loneboat.spacesloth.main.game.actors.SlothShip;
+import com.loneboat.spacesloth.main.game.actors.UI.DynamicBackground;
 import com.loneboat.spacesloth.main.game.actors.UI.PlayerHUD;
 import com.loneboat.spacesloth.main.game.systems.radar.PlayerRadar;
 import com.loneboat.spacesloth.main.game.worldobjects.Asteroid;
@@ -48,13 +49,17 @@ public class GameLevel extends GameScreen {
     // Simple HashMap of Limit Tracking.
     private HashMap<String, AtomicInteger> worldlyObjects;
 
+    // Dynamic background object
+    private DynamicBackground background;
+
     public GameLevel(SpaceSloth game, ContentHandler chandle, DIFFICULTY levelDifficulty) {
         super(game, chandle);
 
         this.levelDifficulty = levelDifficulty;
-        projectiles = new ArrayList<ProjectileObject>();
-        removables = new ArrayList<GameObject>();
-        worldlyObjects = new HashMap<String, AtomicInteger>();
+        projectiles = new ArrayList<>();
+        removables = new ArrayList<>();
+        worldlyObjects = new HashMap<>();
+        background = new DynamicBackground(this);
         setMousePixmap();
         adjustLimits();
         spawnPlayer();
@@ -105,15 +110,13 @@ public class GameLevel extends GameScreen {
         hud_cam.unproject(worldcoords);
         mouseLoc = new Vector2(worldcoords.x, worldcoords.y);
 
-        // TODO: fix background rendering later. Workaround for now!
-        batch.setProjectionMatrix(hud_cam.combined);
-        if(static_background != null) {
-            batch.begin();
-            batch.draw(static_background, -640, HEIGHT - static_background.getHeight());
-            batch.end();
-        }
+
 
         batch.setProjectionMatrix(main_cam.combined);
+        // Draw our dynamic background.
+        background.draw(batch, delta);
+        background.act(delta);
+
         // Fourth, draw all our game objects using box2d-utils!
         // - Notice how the projection matrix is set to project onto the main camera.
         batch.begin();
@@ -269,6 +272,7 @@ public class GameLevel extends GameScreen {
         MainStage.setKeyboardFocus(player);
         setLeadActor(player, true);
         Gdx.input.setInputProcessor(player.getPlayerInputListener());
+        background.setPlayer(player);
     }
 
     public void spawnAsteroid() {
