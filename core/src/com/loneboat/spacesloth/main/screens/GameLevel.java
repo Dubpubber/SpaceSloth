@@ -1,8 +1,12 @@
 package com.loneboat.spacesloth.main.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Logger;
@@ -18,6 +22,7 @@ import com.loneboat.spacesloth.main.game.systems.radar.PlayerRadar;
 import com.loneboat.spacesloth.main.game.worldobjects.Asteroid;
 import com.loneboat.spacesloth.main.game.worldobjects.enemies.AsteroidBomb;
 import com.loneboat.spacesloth.main.game.worldobjects.ores.Ore;
+import com.loneboat.spacesloth.main.util.ScreenUtil;
 import net.dermetfan.gdx.graphics.g2d.AnimatedBox2DSprite;
 import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
 
@@ -51,20 +56,30 @@ public class GameLevel extends GameScreen {
 
     // Dynamic background object
     private DynamicBackground background;
+    private int levelSize;
+    public Vector2 lastLoc;
 
-    public GameLevel(SpaceSloth game, ContentHandler chandle, DIFFICULTY levelDifficulty) {
+    private BitmapFont warningText;
+    private GlyphLayout warningGlyph;
+
+    public GameLevel(SpaceSloth game, ContentHandler chandle, DIFFICULTY levelDifficulty, int levelSize) {
         super(game, chandle);
-
+        this.levelSize = levelSize;
         this.levelDifficulty = levelDifficulty;
         projectiles = new ArrayList<>();
         removables = new ArrayList<>();
         worldlyObjects = new HashMap<>();
         background = new DynamicBackground(this);
+        lastLoc = new Vector2(0, 0);
         setMousePixmap();
         adjustLimits();
         spawnPlayer();
         addPlayerHUD();
         addSystems();
+
+        warningText = ContentHandler.onScreenText;
+        warningGlyph = new GlyphLayout(warningText, "WARNING UNCHARTED TERRITORY!", Color.RED, 100, 10, false);
+
     }
 
     public enum DIFFICULTY {
@@ -81,6 +96,14 @@ public class GameLevel extends GameScreen {
 
     }
 
+    public int getLevelSize() {
+        return levelSize;
+    }
+
+    public void updateSize(int levelSize) {
+        this.levelSize = levelSize;
+    }
+
     @Override
     public void render(float delta) {
         // First, clear the screen.
@@ -95,14 +118,30 @@ public class GameLevel extends GameScreen {
         HudStage.act(delta);
 
         // Second; update the main camera's position.
-        if(LeadActor != null && CameraFollow) {
-            main_cam.position.set(
-                    LeadActor.getBodyX(),
-                    LeadActor.getBodyY(),
-                    0
-            );
-            // Update that camera
-            main_cam.update();
+        if(LeadActor != null) {
+            switch(CameraFollow) {
+                case ONTARGET:
+                    main_cam.position.set(
+                            LeadActor.getBodyX(),
+                            LeadActor.getBodyY(),
+                            0
+                    );
+                    // Update that camera
+                    main_cam.update();
+                    break;
+                case XYSPONGE:
+                    // x,y sponge attaches to the last known location of the player
+                    main_cam.position.set(
+                            MathUtils.clamp(lastLoc.x, lastLoc.x, player.getBodyX()),
+                            MathUtils.clamp(lastLoc.y, lastLoc.y, player.getBodyY()),
+                            0
+                    );
+                    // Update that camera
+                    main_cam.update();
+                    break;
+                case NONE:
+                    break;
+            }
         }
 
         // Now we're going to update the mouse relative to the screen.
@@ -183,6 +222,24 @@ public class GameLevel extends GameScreen {
             batch.end();
         }
 
+        if(!inMapCheck()) {
+            player.inMap = false;
+            CameraFollow = FollowType.XYSPONGE;
+        } else {
+            player.inMap = true;
+            lastLoc = player.getPosition();
+            CameraFollow = FollowType.ONTARGET;
+        }
+
+        if(!player.inMap) {
+            // Warn the player.
+            batch.setProjectionMatrix(hud_cam.combined);
+            batch.begin();
+            warningText.draw(batch, warningGlyph, (Gdx.graphics.getWidth() - warningGlyph.width) / 2, (Gdx.graphics.getHeight() / 2));
+            batch.end();
+        }
+
+        batch.setProjectionMatrix(main_cam.combined);
         MainStage.draw();
         HudStage.draw();
 
@@ -332,6 +389,10 @@ public class GameLevel extends GameScreen {
     @Override
     public void resize(int width, int height) {
         super.resize(width, height);
+    }
+
+    public boolean inMapCheck() {
+        return ScreenUtil.isWithinDistance(new Vector2(0,0), player.getPosition(), levelSize);
     }
 
 }

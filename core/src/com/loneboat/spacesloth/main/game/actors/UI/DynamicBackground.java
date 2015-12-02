@@ -1,11 +1,14 @@
 package com.loneboat.spacesloth.main.game.actors.UI;
 
-import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.loneboat.spacesloth.main.content.ContentHandler;
 import com.loneboat.spacesloth.main.game.actors.SlothShip;
 import com.loneboat.spacesloth.main.screens.GameLevel;
 
@@ -26,8 +29,8 @@ public class DynamicBackground extends Actor {
     private ShapeRenderer debugRenderer;
 
     // Each tile size.
-    private float TileSizeX = 500;
-    private float TileSizeY = 500;
+    private float TileSizeX = 100;
+    private float TileSizeY = 100;
 
     // Total map size on an x -> y axis
     // For example:
@@ -35,7 +38,7 @@ public class DynamicBackground extends Actor {
     //  -- 20 would be 400
     // Try not to set this value too high.
     // Make this value odd. It <i>can</i> be even, just shouldn't
-    private int background_size = 7;
+    private int background_size = 11;
 
     // Map data represented as a 2D array of course!
     private Vector2[][] mapTiles;
@@ -43,11 +46,16 @@ public class DynamicBackground extends Actor {
     // Put them into an easy to calculate arraylist
     private ArrayList<Vector2> tiles;
 
+    private Texture background;
+
     public DynamicBackground(GameLevel level) {
         this.level = level;
         this.debugRenderer = new ShapeRenderer();
         mapTiles = new Vector2[background_size][background_size];
         tiles = new ArrayList<>();
+        background = ContentHandler.manager.get("Backgrounds/SpaceSloth_SpaceBackground_1.png", Texture.class);
+        TileSizeX = background.getWidth();
+        TileSizeY = background.getHeight();
         generateMap();
     }
 
@@ -113,11 +121,11 @@ public class DynamicBackground extends Actor {
             posYOffset = 1;
         }
 
-        for(int x = 0; x < mapTiles.length; x++) {
-            for(int y = 0; y < mapTiles[x].length; y++) {
-                System.out.print(mapTiles[x][y] + "         ");
-                if(mapTiles[x][y] != null) {
-                    Vector2 vec = mapTiles[x][y];
+        for (Vector2[] mapTile : mapTiles) {
+            for (Vector2 aMapTile : mapTile) {
+                System.out.print(aMapTile + "         ");
+                if (aMapTile != null) {
+                    Vector2 vec = aMapTile;
                     tiles.add(vec);
                 }
             }
@@ -129,11 +137,15 @@ public class DynamicBackground extends Actor {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
-        debugRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        batch.begin();
         for(Vector2 vec : tiles) {
-            debugRenderer.box((-player.getBodyX()) - vec.x, (-player.getBodyY()) - vec.y, 0, TileSizeX, TileSizeY, 0);
+            if(player.inMap) {
+                batch.draw(background, (-player.getBodyX()) - vec.x, (-player.getBodyY()) - vec.y, TileSizeX, TileSizeY);
+            } else {
+                batch.draw(background, (-level.lastLoc.x) - vec.x, (-level.lastLoc.y) - vec.y, TileSizeX, TileSizeY);
+            }
         }
-        debugRenderer.end();
+        batch.end();
     }
 
     @Override

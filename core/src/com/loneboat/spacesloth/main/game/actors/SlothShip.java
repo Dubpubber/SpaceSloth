@@ -39,6 +39,7 @@ public class SlothShip extends GameObject {
     private float boostCap;
     private float curBoost = 0;
     public boolean isBoosting = false;
+    public boolean inMap;
 
     private Vector2 MaxBoostVelocity;
 

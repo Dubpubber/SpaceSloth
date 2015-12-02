@@ -46,8 +46,9 @@ public class ContentHandler {
     // TODO: Rename PartFactory to PartFactoryAssemblyObjectDroneProduct (joking)
     public PartFactory partFactory;
 
-    // All the fonts for the game. So cool! Right?!
+    // All the fonts for the game. So cool! Right?! RIGHT?
     public static BitmapFont debugfont;
+    public static BitmapFont onScreenText;
 
     /**
      * Constructor for the content handler, this class manages most global objects needed for the game.
@@ -70,6 +71,7 @@ public class ContentHandler {
         PartFactory.function(game);
 
         queueAssets();
+        onScreenText = generateAllerFont(22);
 
     }
 
@@ -80,6 +82,7 @@ public class ContentHandler {
         manager.load("Sprites/SpaceBackground_1.png", Texture.class);
         manager.load("Sprites/radar_background.png", Texture.class);
         manager.load("Sprites/radar_ship.png", Texture.class);
+        manager.load("Backgrounds/SpaceSloth_SpaceBackground_1.png", Texture.class);
 
         // Load ship parts
         manager.load("Parts/Sprites/BaseCockpit.png", Texture.class);

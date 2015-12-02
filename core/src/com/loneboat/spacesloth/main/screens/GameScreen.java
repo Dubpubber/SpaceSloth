@@ -2,6 +2,7 @@ package com.loneboat.spacesloth.main.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -67,7 +68,7 @@ public abstract class GameScreen implements Screen {
 
     // Main Actor
     public GameObject LeadActor;
-    public boolean CameraFollow;
+    public FollowType CameraFollow;
 
     /**
      * Constructor.
@@ -88,13 +89,19 @@ public abstract class GameScreen implements Screen {
         font = ContentHandler.debugfont;
     }
 
+    public enum FollowType {
+        ONTARGET,
+        XYSPONGE,
+        NONE
+    }
+
     public void setStaticBackground(Texture texture) {
         this.static_background = texture;
     }
 
     public void setLeadActor(GameObject actor, boolean CameraFollow) {
         this.LeadActor = actor;
-        this.CameraFollow = CameraFollow;
+        this.CameraFollow = FollowType.ONTARGET;
     }
 
     /**
@@ -129,16 +136,6 @@ public abstract class GameScreen implements Screen {
         MainStage.act(delta);
         HudStage.act(delta);
 
-        // Second; update the main camera's position.
-        if(LeadActor != null && CameraFollow) {
-            main_cam.position.set(
-                    LeadActor.getBodyX(),
-                    LeadActor.getBodyY(),
-                    0
-            );
-            // Update that camera
-            main_cam.update();
-        }
         // Now we're going to update the mouse relative to the screen.
         Vector3 worldcoords = new Vector3(Gdx.input.getX(), (Gdx.graphics.getHeight() - Gdx.input.getY()), 0);
         hud_cam.unproject(worldcoords);

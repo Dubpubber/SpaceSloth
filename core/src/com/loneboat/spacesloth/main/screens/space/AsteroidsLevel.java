@@ -16,7 +16,7 @@ import com.loneboat.spacesloth.main.screens.GameLevel;
 public class AsteroidsLevel extends GameLevel {
 
     public AsteroidsLevel(SpaceSloth game, ContentHandler handler) {
-        super(game, handler, DIFFICULTY.EASYMODE);
+        super(game, handler, DIFFICULTY.EASYMODE, 500);
         game.getLogger().info("Switched to an AsteroidsLevel");
 
         // Set Contact Listener.
