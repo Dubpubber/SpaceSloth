@@ -21,7 +21,7 @@ public class AsteroidsLevel extends GameLevel {
 
         // Set Contact Listener.
         world.setContactListener(new AsteroidsLevelListener(game));
-        // spawnAsteroids(250);
+        spawnAsteroids(350);
 
         setIsDebugView(true);
     }
