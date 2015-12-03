@@ -1,25 +1,21 @@
-package com.loneboat.spacesloth.main.game.actors.UI;
+package com.loneboat.spacesloth.main.game.systems;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.loneboat.spacesloth.main.content.ContentHandler;
 import com.loneboat.spacesloth.main.game.actors.SlothShip;
-import org.apache.commons.collections4.queue.CircularFifoQueue;
-
-import java.awt.*;
+import com.loneboat.spacesloth.main.game.systems.console.PlayerConsole;
+import com.loneboat.spacesloth.main.game.systems.radar.PlayerRadar;
+import com.loneboat.spacesloth.main.screens.GameLevel;
 
 /**
  * com.loneboat.spacesloth.main.game.actors.UI
@@ -29,6 +25,7 @@ public class PlayerHUD extends Actor {
 
     private SlothShip player;
     private ContentHandler chandle;
+    private GameLevel level;
     private Stage HudStage;
     private Pixmap hudpix;
     private OrthographicCamera hudcam;
@@ -37,26 +34,30 @@ public class PlayerHUD extends Actor {
     private ProgressBar healthbar;
     private ProgressBar boostbar;
 
-    private TextField console;
-    private TextField.TextFieldStyle consoleStyle;
-    private BitmapFont consoleFont;
-    private int selection = 0;
-    private CircularFifoQueue<String> consoleHistory;
+    /* Instead of handling the systems in the GameLevel, we'll handle all that here. */
+    private PlayerRadar radar;
+    private PlayerConsole console;
 
-    public PlayerHUD(SlothShip player, ContentHandler chandle, Stage HudStage) {
+    public PlayerHUD(SlothShip player, ContentHandler chandle, GameLevel level, Stage HudStage) {
         this.player = player;
         this.chandle = chandle;
+        this.level = level;
         this.HudStage = HudStage;
         hudcam = chandle.getHudCamera();
-        consoleHistory = new CircularFifoQueue<>(25);
         createControlPanel();
         createHUD();
+        radar = new PlayerRadar(player, level);
+        console = new PlayerConsole(level, 13);
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
         hudImage.draw(batch, parentAlpha);
+
+        /* Draw the radar */
+        radar.draw(batch, parentAlpha);
+        radar.act(parentAlpha);
 
         /* Health bar act and draw */
         healthbar.draw(batch, parentAlpha);
@@ -65,6 +66,11 @@ public class PlayerHUD extends Actor {
         /* Boost bar act and draw */
         boostbar.draw(batch, parentAlpha);
         boostbar.act(parentAlpha);
+
+        /* Draw the console */
+        console.setColor(console.getColor().r, console.getColor().g, console.getColor().b, 1);
+        console.draw(batch, parentAlpha);
+        console.act(parentAlpha);
 
         /* Update the HUD */
         updateHUD();
@@ -125,33 +131,6 @@ public class PlayerHUD extends Actor {
         hudpix.fill();
         hudImage = new Image(new TextureRegion(new Texture(hudpix)));
         hudImage.setPosition(0, 0);
-    }
-
-    public void log(String out) {
-        consoleHistory.add(" $ " + out);
-        console.setText(consoleHistory.get(0));
-    }
-
-    public void moveDownSelection() {
-        if(selection < consoleHistory.size() - 1) {
-            selection++;
-        } else {
-            selection = 0;
-        }
-        console.setText(consoleHistory.get(selection));
-    }
-
-    public void moveUpSelection() {
-        if(selection > 0) {
-            selection--;
-        } else {
-            selection = consoleHistory.size() - 1;
-        }
-        console.setText(consoleHistory.get(selection));
-    }
-
-    public void moveToRecentEntry() {
-        console.setText(consoleHistory.get(0));
     }
 
     public void updateHUD() {

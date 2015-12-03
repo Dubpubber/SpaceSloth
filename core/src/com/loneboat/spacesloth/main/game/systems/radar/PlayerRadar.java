@@ -36,7 +36,6 @@ public class PlayerRadar extends Actor {
     private Image background;
     private Texture backdrop;
     private Texture radarShip;
-    private Image cover;
 
     private Color coverColor;
 
@@ -60,7 +59,7 @@ public class PlayerRadar extends Actor {
         this.level = level;
         this.hstage = level.HudStage;
         this.sr = new ShapeRenderer();
-        coverColor = Color.GREEN;
+        coverColor = new Color(0, 1, 0, 1);
 
         // Add the ship radar coordinates //
         rship = new HashMap<>();
@@ -87,6 +86,8 @@ public class PlayerRadar extends Actor {
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
 
+        batch.end();
+
         // Update the radar and increase the cover color A
         if(rotationCount == 1) {
             rotationCount = 0;
@@ -105,13 +106,10 @@ public class PlayerRadar extends Actor {
         }
         degrees += RadarScanSpeed;
 
-        batch.end();
-        // Begin Drawing //
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         sr.setProjectionMatrix(level.HudStage.getCamera().combined);
         sr.begin(ShapeRenderer.ShapeType.Filled);
-
         // RADAR BACKGROUND //
         sr.setColor(Color.LIGHT_GRAY);
         sr.rect(background.getX(), background.getY(),
@@ -119,8 +117,8 @@ public class PlayerRadar extends Actor {
                 background.getWidth(), background.getHeight(),
                 1, 1, 0
         );
-
         sr.end();
+        Gdx.gl.glDisable(GL20.GL_BLEND);
 
         batch.begin();
         batch.draw(backdrop, RadarPositionX, RadarPositionY, RadarSizeX, RadarSizeY);
@@ -130,28 +128,12 @@ public class PlayerRadar extends Actor {
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         sr.setProjectionMatrix(level.HudStage.getCamera().combined);
         sr.begin(ShapeRenderer.ShapeType.Filled);
-
         sr.setColor(0, 1, 0, coverColor.a);
         sr.circle(rship.get("center_x"), rship.get("center_y") + 4, RadarSizeX / 2);
-
-        // sr.triangle(10, 10, 30, 50, 50, 10);
-        /*sr.triangle(
-                555, 51,
-                560, 62,
-                565, 51
-        );*/
         sr.end();
+        Gdx.gl.glDisable(GL20.GL_BLEND);
 
         batch.begin();
-        /*batch.draw(
-                Texture texture, float x, float y,
-            float originX, float originY,
-            float width, float height,
-            float scaleX, float scaleY,
-            float rotation, int srcX, int srcY,
-            int srcWidth, int srcHeight,
-            boolean flipX, boolean flipY
-        );*/
         batch.draw(
                 radarShip,
                 (rship.get("right_x") - (radarShip.getWidth() / 2) - 3.15f), rship.get("center_y"),
@@ -165,9 +147,9 @@ public class PlayerRadar extends Actor {
         );
         batch.end();
 
+
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-        sr.setProjectionMatrix(level.HudStage.getCamera().combined);
         sr.begin(ShapeRenderer.ShapeType.Filled);
 
         for(BlipProfile bp : bps) {
@@ -190,8 +172,8 @@ public class PlayerRadar extends Actor {
         );
         sr.end();
         Gdx.gl.glDisable(GL20.GL_BLEND);
-        batch.begin();
 
+        batch.begin();
     }
 
     @Override
@@ -234,14 +216,6 @@ public class PlayerRadar extends Actor {
         Texture bk = ContentHandler.manager.get("Sprites/radar_background.png", Texture.class);
         bk.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         backdrop = bk;
-
-        Image radarCover = new Image(skin.getDrawable("cover"));
-        radarCover.setSize(RadarSizeX, RadarSizeY);
-        radarCover.setPosition(
-                RadarPositionX,
-                5
-        );
-        this.cover = radarCover;
 
         Image radarLine = new Image(skin.getDrawable("radarline"));
         radarLine.setSize(2, 45);

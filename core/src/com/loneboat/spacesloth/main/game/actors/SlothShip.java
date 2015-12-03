@@ -15,7 +15,7 @@ import com.loneboat.spacesloth.main.content.partsystem.Part;
 import com.loneboat.spacesloth.main.content.partsystem.PartFactory;
 import com.loneboat.spacesloth.main.content.partsystem.PartType;
 import com.loneboat.spacesloth.main.game.GameObject;
-import com.loneboat.spacesloth.main.game.actors.UI.PlayerHUD;
+import com.loneboat.spacesloth.main.game.systems.PlayerHUD;
 import com.loneboat.spacesloth.main.game.worldobjects.ores.Ore;
 import com.loneboat.spacesloth.main.game.worldobjects.weapons.BlueBlast;
 import com.loneboat.spacesloth.main.util.PlayerInputListener;
@@ -326,22 +326,6 @@ public class SlothShip extends GameObject {
         if(Gdx.input.isKeyJustPressed(Input.Keys.F2)) {
             profile.shuffleDefaultParts();
             rebuildShip();
-        }
-
-        if(Gdx.input.isKeyJustPressed(Input.Keys.F3)) {
-            hud.log("Hey!");
-        }
-
-        if(Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) {
-            hud.moveDownSelection();
-        }
-
-        if(Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
-            hud.moveUpSelection();
-        }
-
-        if(Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
-            hud.moveToRecentEntry();
         }
 
         if (!isBoosting)

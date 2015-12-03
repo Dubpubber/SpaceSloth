@@ -17,7 +17,8 @@ import com.loneboat.spacesloth.main.game.GameObject;
 import com.loneboat.spacesloth.main.game.ProjectileObject;
 import com.loneboat.spacesloth.main.game.actors.SlothShip;
 import com.loneboat.spacesloth.main.game.actors.UI.DynamicBackground;
-import com.loneboat.spacesloth.main.game.actors.UI.PlayerHUD;
+import com.loneboat.spacesloth.main.game.systems.PlayerHUD;
+import com.loneboat.spacesloth.main.game.systems.console.PlayerConsole;
 import com.loneboat.spacesloth.main.game.systems.radar.PlayerRadar;
 import com.loneboat.spacesloth.main.game.worldobjects.Asteroid;
 import com.loneboat.spacesloth.main.game.worldobjects.enemies.AsteroidBomb;
@@ -75,7 +76,6 @@ public class GameLevel extends GameScreen {
         adjustLimits();
         spawnPlayer();
         addPlayerHUD();
-        addSystems();
 
         warningText = ContentHandler.onScreenText;
         warningGlyph = new GlyphLayout(warningText, "WARNING UNCHARTED TERRITORY!", Color.RED, 100, 10, false);
@@ -148,8 +148,6 @@ public class GameLevel extends GameScreen {
         Vector3 worldcoords = new Vector3(Gdx.input.getX(), (Gdx.graphics.getHeight() - Gdx.input.getY()), 0);
         hud_cam.unproject(worldcoords);
         mouseLoc = new Vector2(worldcoords.x, worldcoords.y);
-
-
 
         batch.setProjectionMatrix(main_cam.combined);
         // Draw our dynamic background.
@@ -262,13 +260,9 @@ public class GameLevel extends GameScreen {
     }
 
     public void addPlayerHUD() {
-        PlayerHUD hud = new PlayerHUD(player, chandle, HudStage);
+        PlayerHUD hud = new PlayerHUD(player, chandle, this, HudStage);
         HudStage.addActor(hud);
         player.setPlayerHud(hud);
-    }
-
-    public void addSystems() {
-        HudStage.addActor(new PlayerRadar(player, this));
     }
 
     public void addProjectile(ProjectileObject object) {
