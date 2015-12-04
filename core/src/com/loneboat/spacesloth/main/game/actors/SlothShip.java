@@ -16,6 +16,7 @@ import com.loneboat.spacesloth.main.content.partsystem.PartFactory;
 import com.loneboat.spacesloth.main.content.partsystem.PartType;
 import com.loneboat.spacesloth.main.game.GameObject;
 import com.loneboat.spacesloth.main.game.systems.PlayerHUD;
+import com.loneboat.spacesloth.main.game.systems.console.PlayerConsole;
 import com.loneboat.spacesloth.main.game.worldobjects.ores.Ore;
 import com.loneboat.spacesloth.main.game.worldobjects.weapons.BlueBlast;
 import com.loneboat.spacesloth.main.util.PlayerInputListener;
@@ -544,6 +545,7 @@ public class SlothShip extends GameObject {
         BigDecimal worth = ore.getOreWorth();
         // When the refinery is integrated, this is where we'd use its efficiency module.
         profile.addMoney(worth);
+        getPlayerHud().getConsole().setMessageFromCrew(PlayerConsole.CrewType.QUARTERMASTER, "Refined one " + ore.getType().name().toLowerCase() + " estimated worth being $" + worth);
     }
 
     public void setPlayerHud(PlayerHUD hud) {

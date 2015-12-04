@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -68,7 +69,6 @@ public class PlayerHUD extends Actor {
         boostbar.act(parentAlpha);
 
         /* Draw the console */
-        console.setColor(console.getColor().r, console.getColor().g, console.getColor().b, 1);
         console.draw(batch, parentAlpha);
         console.act(parentAlpha);
 
@@ -136,6 +136,14 @@ public class PlayerHUD extends Actor {
     public void updateHUD() {
         healthbar.setValue(player.getHealth());
         boostbar.setValue(player.getCurBoost());
+    }
+
+    public PlayerConsole getConsole() {
+        return console;
+    }
+
+    public PlayerRadar getRadar() {
+        return radar;
     }
 
 }

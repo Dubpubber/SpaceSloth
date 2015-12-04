@@ -17,23 +17,37 @@ public class PlayerConsole extends Actor {
 
     public enum CrewType {
 
-        ENGINEERING("C90000", "[ENG]"),
-        COMMUNICATIONS("A941CC", "[COMMS]"),
-        COLONIZATION("45E6B8", "[CLN]"),
-        HQ("FFFFFF", "[HQ]"),
-        BALLISTICS("F0229A", "[BLTS]"),
-        FLEETCOMMAND("64B3E8", "[FC]"),
-        FIRSTMATE("7164A3", "[FM]"),
-        RANDD("F2EC3D", "[R&D]"),
-        MEDICAL("ED984E", "[MED]"),
-        ADMINISTRATION("08FF80", "[ADM]");
+        // RED
+        ENGINEERING("FF0D0D", "[ENG]", "Systems go Captain."),
+        // BLUE
+        COMMUNICATIONS("4775FF", "[COMMS]", "Comms active."),
+        // YELLOW ORANGE
+        COLONIZATION("FFD119", "[CLN]", "Colonization office reporting."),
+        // PINK
+        QUARTERMASTER("FF0AFB", "[QMTR]", "Hull's priming for some stocking."),
+        // WHITE
+        HQ("FFFFFF", "[HQ]", "Station online."),
+        // RED ORANGE
+        BALLISTICS("FF780A", "[BLTS]", "Weapons active and ready Captain!"),
+        // ORANGE
+        FLEETCOMMAND("FFCC00", "[FC]", "Fleet command standing by."),
+        // TEAL
+        FIRSTMATE("2EFFFC", "[FM]", "At your side Captain."),
+        // PURPLE
+        RANDD("B66EFF", "[R&D]", "Lab reporting."),
+        // GREEN
+        MEDICAL("45FF48", "[MED]", "Ready for treatment."),
+        // BLUE GREEN
+        ADMINISTRATION("45FFA8", "[ADM]", "Ready.");
 
         private final String c;
         private final String title;
+        private final String greeting;
 
-        CrewType(String c, String title) {
+        CrewType(String c, String title, String greeting) {
             this.c = c;
             this.title = title;
+            this.greeting = greeting;
         }
 
         public Color getColor() {
@@ -44,6 +58,25 @@ public class PlayerConsole extends Actor {
             return title;
         }
 
+        public String getGreeting() {
+            return greeting;
+        }
+
+    }
+
+    public enum UrgencyLevel {
+
+        LOW("B7FF59");
+
+        private final String c;
+
+        UrgencyLevel(String c) {
+            this.c = c;
+        }
+
+        public Color getColor() {
+            return Color.valueOf(c);
+        }
     }
 
     private GameLevel level;
@@ -61,6 +94,8 @@ public class PlayerConsole extends Actor {
     private TextField.TextFieldStyle style;
     private TextArea area;
 
+    private String message;
+
     public PlayerConsole(GameLevel level, int fontSize) {
         this.level = level;
 
@@ -70,7 +105,7 @@ public class PlayerConsole extends Actor {
 
     @Override
     public void draw(Batch batch, float delta) {
-        area.setStyle(style);
+        font.getData().markupEnabled = true;
         area.draw(batch, delta);
     }
 
@@ -82,32 +117,26 @@ public class PlayerConsole extends Actor {
     public void createConsoleWindow() {
         style = new TextField.TextFieldStyle();
         style.font = font;
-        style.fontColor = CrewType.HQ.getColor();
+        style.fontColor = Color.GREEN;
 
         area = new TextArea("Welcome, Captain. Press L to view the captain's log.", style);
         area.setPosition(ConsoleX, ConsoleY);
         area.setSize(ConsoleWidth, ConsoleHeight);
+        area.setCursorPosition(0);
 
-        for(CrewType crewType : CrewType.values()) {
-            writeFromCrew(crewType, "Hello, Systems check!");
+        setMessageFromCrew(CrewType.COMMUNICATIONS, "Opening comms with the departments... stand by for confirmation notices.");
+        for(CrewType type : CrewType.values()) {
+            setMessageFromCrew(type, type.getGreeting());
         }
     }
 
-    public void write(String out) {
-        area.appendText("\n" + ConsoleStartingStr + out);
+    public void setMessageFromCrew(CrewType type, String line) {
+        String title = type.title;
+        message = "[#" + type.getColor() + "]" + title + "[] " + line + " Over.";
     }
 
-    public void writeFromCrew(CrewType type, String line) {
-        String title = type.title;
-        area.appendText("\n" + title + " " + line);
-    }
-
-    public void writeFromCrew(CrewType type, String[] lines) {
-        String title = type.title;
-        style.fontColor = type.getColor();
-        for(String line : lines) {
-            area.appendText("\n" + title + " " + line);
-        }
+    public void writeMessage() {
+        area.appendText(message);
     }
 
 }
