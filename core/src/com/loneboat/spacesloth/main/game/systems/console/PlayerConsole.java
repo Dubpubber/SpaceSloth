@@ -1,11 +1,20 @@
 package com.loneboat.spacesloth.main.game.systems.console;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.loneboat.spacesloth.main.content.ContentHandler;
 import com.loneboat.spacesloth.main.screens.GameLevel;
 
@@ -64,79 +73,84 @@ public class PlayerConsole extends Actor {
 
     }
 
-    public enum UrgencyLevel {
-
-        LOW("B7FF59");
-
-        private final String c;
-
-        UrgencyLevel(String c) {
-            this.c = c;
-        }
-
-        public Color getColor() {
-            return Color.valueOf(c);
-        }
-    }
-
     private GameLevel level;
 
     private final int ConsoleWidth = 500;
     private final int ConsoleHeight = 250;
 
-    private final float ConsoleX = 7;
+    private final float ConsoleX = 0;
     private final float ConsoleY = 505;
 
     private final String ConsoleStartingStr = "> ";
 
     private BitmapFont font;
 
-    private TextField.TextFieldStyle style;
-    private TextArea area;
+    private Array<Label> entries;
+    private final int history = 10;
 
-    private String message;
+    // UI elements
+    private Label.LabelStyle entryStyle;
+
+    private ScrollPane pane;
+    private Table console;
+    private Table scrollingTable;
+
+    private ShapeRenderer sr;
+    private boolean debug = true;
+
+    private Timer refreshTimer;
 
     public PlayerConsole(GameLevel level, int fontSize) {
         this.level = level;
 
         font = ContentHandler.generateAllerFont(fontSize);
-        createConsoleWindow();
+        sr = new ShapeRenderer();
+
+        entries = new Array<>(history);
+
+        // UI elements
+        console = new Table();
+
+        entryStyle = new Label.LabelStyle(font, Color.WHITE);
+
+        for(int i = 0; i < history; i++) {
+            Label l = new Label("Numbah: " + MathUtils.random(0, 1000000000), entryStyle);
+            entries.add(l);
+            console.add(l).align(Align.left).fill(true, false).row();
+        }
+
+        pane = new ScrollPane(console);
+
+        scrollingTable = new Table();
+        scrollingTable.add(pane);
+        scrollingTable.setSize(ConsoleWidth, ConsoleHeight);
+        scrollingTable.setPosition(ConsoleX, ConsoleY);
+
+        level.HudStage.addActor(scrollingTable);
+        refreshTimer = new Timer();
+        refreshTimer.scheduleTask(new Timer.Task() {
+            @Override
+            public void run() {
+                refresh();
+            }
+        }, 0, 3);
     }
 
     @Override
     public void draw(Batch batch, float delta) {
-        font.getData().markupEnabled = true;
-        area.draw(batch, delta);
+        super.draw(batch, delta);
+        if(debug) {
+            level.HudStage.setDebugTableUnderMouse(true);
+        }
     }
 
     @Override
     public void act(float parentAlpha) {
-        area.act(parentAlpha);
+
     }
 
-    public void createConsoleWindow() {
-        style = new TextField.TextFieldStyle();
-        style.font = font;
-        style.fontColor = Color.GREEN;
-
-        area = new TextArea("Welcome, Captain. Press L to view the captain's log.", style);
-        area.setPosition(ConsoleX, ConsoleY);
-        area.setSize(ConsoleWidth, ConsoleHeight);
-        area.setCursorPosition(0);
-
-        setMessageFromCrew(CrewType.COMMUNICATIONS, "Opening comms with the departments... stand by for confirmation notices.");
-        for(CrewType type : CrewType.values()) {
-            setMessageFromCrew(type, type.getGreeting());
-        }
-    }
-
-    public void setMessageFromCrew(CrewType type, String line) {
-        String title = type.title;
-        message = "[#" + type.getColor() + "]" + title + "[] " + line + " Over.";
-    }
-
-    public void writeMessage() {
-        area.appendText(message);
+    public void refresh() {
+        level.getLogger().info("Updating console.");
     }
 
 }

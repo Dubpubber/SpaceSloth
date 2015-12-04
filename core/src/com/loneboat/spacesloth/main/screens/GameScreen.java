@@ -248,6 +248,4 @@ public abstract class GameScreen implements Screen {
         return Math.round(timer);
     }
 
-
-
 }

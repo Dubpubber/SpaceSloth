@@ -247,7 +247,7 @@ public class GameLevel extends GameScreen {
 
     private void setMousePixmap() {
         Pixmap pm = new Pixmap(Gdx.files.internal("Sprites/mouseSprite.png"));
-        Gdx.input.setCursorImage(pm, 0, 0);
+        Gdx.input.setCursorImage(pm, pm.getWidth() / 2, pm.getHeight() / 2);
         pm.dispose();
     }
 
