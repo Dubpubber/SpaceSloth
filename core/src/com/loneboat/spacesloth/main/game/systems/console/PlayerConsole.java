@@ -152,7 +152,7 @@ public class PlayerConsole extends Actor {
         entries.add(lbl);
         console.clearChildren();
         for(Label l : entries) {
-            console.add(l).row();
+            console.add(l).align(Align.bottomLeft).row();
         }
     }
 

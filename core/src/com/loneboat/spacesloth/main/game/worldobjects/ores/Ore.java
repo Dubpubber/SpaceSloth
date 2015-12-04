@@ -27,7 +27,7 @@ public class Ore extends GameObject {
     private OreType type;
 
     public enum OreType {
-        ROCK(50, new BigDecimal(20.0)), GOLD(5, new BigDecimal(50.0)), PLATINUM(1, new BigDecimal(500.0));
+        ROCK(1, new BigDecimal(20.0)), GOLD(5, new BigDecimal(50.0)), PLATINUM(1, new BigDecimal(500.0));
 
         private final int weight;
         private final BigDecimal worth;

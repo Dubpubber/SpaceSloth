@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Timer;
 import com.loneboat.spacesloth.main.Globals;
 import com.loneboat.spacesloth.main.SpaceSloth;
 import com.loneboat.spacesloth.main.content.ContentHandler;
@@ -241,6 +242,7 @@ public class SlothShip extends GameObject {
         setBody(body);
         body.setUserData(this);
         rebuildShip();
+        createRadarWarn();
 
         ip = new PlayerInputListener(game, chandle);
 
@@ -545,7 +547,19 @@ public class SlothShip extends GameObject {
         BigDecimal worth = ore.getOreWorth();
         // When the refinery is integrated, this is where we'd use its efficiency module.
         profile.addMoney(worth);
-        getPlayerHud().getConsole().writeFromCrew(PlayerConsole.CrewType.QUARTERMASTER, "Collected ore.");
+        String quarterMasterResponse = "...";
+        switch(ore.getType()) {
+            case ROCK:
+                quarterMasterResponse = "Processed one really nice [GRAY]rock[]. Estimated worth: $" + ore.getOreWorth();
+                break;
+            case GOLD:
+                quarterMasterResponse = "Processed one really big piece of [YELLOW]gold[]. Estimated worth: $" + ore.getOreWorth();
+                break;
+            case PLATINUM:
+                quarterMasterResponse = "Nice find, Processed one [WHITE]platinum[]. Estimated worth: $" + ore.getOreWorth();
+                break;
+        }
+        getPlayerHud().getConsole().writeFromCrew(PlayerConsole.CrewType.QUARTERMASTER, quarterMasterResponse);
     }
 
     public void setPlayerHud(PlayerHUD hud) {
@@ -554,6 +568,15 @@ public class SlothShip extends GameObject {
 
     public PlayerHUD getPlayerHud() {
         return hud;
+    }
+
+    public void createRadarWarn() {
+        new Timer().scheduleTask(new Timer.Task() {
+            @Override
+            public void run() {
+                getPlayerHud().getConsole().writeFromCrew(PlayerConsole.CrewType.FIRSTMATE, "Captain, radar's showin' [WHITE]" + getPlayerHud().getRadar().getBlips() + "[] objects!");
+            }
+        }, 0, 30);
     }
 
 }

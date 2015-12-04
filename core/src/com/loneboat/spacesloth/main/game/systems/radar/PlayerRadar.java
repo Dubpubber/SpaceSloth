@@ -250,4 +250,8 @@ public class PlayerRadar extends Actor {
         });
     }
 
+    public int getBlips() {
+        return bps.size();
+    }
+
 }
