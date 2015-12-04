@@ -1,22 +1,20 @@
 package com.loneboat.spacesloth.main.game.systems.console;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Timer;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.loneboat.spacesloth.main.content.ContentHandler;
 import com.loneboat.spacesloth.main.screens.GameLevel;
+import org.apache.commons.collections4.queue.CircularFifoQueue;
 
 /**
  * com.loneboat.spacesloth.main.game.systems.console
@@ -78,15 +76,16 @@ public class PlayerConsole extends Actor {
     private final int ConsoleWidth = 500;
     private final int ConsoleHeight = 250;
 
-    private final float ConsoleX = 0;
-    private final float ConsoleY = 505;
+    private final float ConsoleX = 7;
+    private final float ConsoleY = 582;
 
     private final String ConsoleStartingStr = "> ";
 
     private BitmapFont font;
 
-    private Array<Label> entries;
-    private final int history = 10;
+    private Array<Label> lines;
+    private final int history = 20;
+    private CircularFifoQueue<Label> entries;
 
     // UI elements
     private Label.LabelStyle entryStyle;
@@ -95,7 +94,6 @@ public class PlayerConsole extends Actor {
     private Table console;
     private Table scrollingTable;
 
-    private ShapeRenderer sr;
     private boolean debug = true;
 
     private Timer refreshTimer;
@@ -104,36 +102,31 @@ public class PlayerConsole extends Actor {
         this.level = level;
 
         font = ContentHandler.generateAllerFont(fontSize);
-        sr = new ShapeRenderer();
+        font.getData().markupEnabled = true;
 
-        entries = new Array<>(history);
+        lines = new Array<>(history);
+        entries = new CircularFifoQueue<>(history);
 
         // UI elements
         console = new Table();
 
-        entryStyle = new Label.LabelStyle(font, Color.WHITE);
+        entryStyle = new Label.LabelStyle();
+        entryStyle.font = font;
 
         for(int i = 0; i < history; i++) {
-            Label l = new Label("Numbah: " + MathUtils.random(0, 1000000000), entryStyle);
-            entries.add(l);
-            console.add(l).align(Align.left).fill(true, false).row();
+            Label l = new Label("", entryStyle);
+            lines.add(l);
         }
 
         pane = new ScrollPane(console);
 
         scrollingTable = new Table();
         scrollingTable.add(pane);
+        scrollingTable.align(Align.bottomLeft);
         scrollingTable.setSize(ConsoleWidth, ConsoleHeight);
         scrollingTable.setPosition(ConsoleX, ConsoleY);
 
         level.HudStage.addActor(scrollingTable);
-        refreshTimer = new Timer();
-        refreshTimer.scheduleTask(new Timer.Task() {
-            @Override
-            public void run() {
-                refresh();
-            }
-        }, 0, 3);
     }
 
     @Override
@@ -149,8 +142,18 @@ public class PlayerConsole extends Actor {
 
     }
 
-    public void refresh() {
-        level.getLogger().info("Updating console.");
+    public void writeFromCrew(CrewType type, String message) {
+        String title = type.getTitle();
+        Label lbl = new Label("[#" + type.getColor() + "]" + title + "[WHITE] " + ConsoleStartingStr + "[GREEN]" + message + " Over.", entryStyle);
+        addLabel(lbl);
+    }
+
+    private void addLabel(Label lbl) {
+        entries.add(lbl);
+        console.clearChildren();
+        for(Label l : entries) {
+            console.add(l).row();
+        }
     }
 
 }
