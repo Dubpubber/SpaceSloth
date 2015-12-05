@@ -107,7 +107,7 @@ public class ProjectileObject extends GameObject {
     }
 
     public void setDestroyTime() {
-        game.getLogger().info("Destroy time set to " + (Math.round(level.timer) + time));
+        game.getLogger().info("Level: " + level.getPlayer().inMap);
         destroyTime = Math.round(level.timer) + time;
     }
 

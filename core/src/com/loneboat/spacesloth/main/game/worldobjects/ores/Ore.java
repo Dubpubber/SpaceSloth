@@ -116,7 +116,7 @@ public class Ore extends GameObject {
         // Set the fields of GameObject
         setBody(body);
         body.setUserData(this);
-        Vector2 force = ScreenUtil.randomVector2(1, 10);
+        Vector2 force = container.getCurVelocity();
         body.applyLinearImpulse(force.x, force.y, getBodyX(), getBodyY(), true);
         fixture = oreFixture;
 
