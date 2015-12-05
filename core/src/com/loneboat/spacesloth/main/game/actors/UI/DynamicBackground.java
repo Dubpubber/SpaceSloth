@@ -7,10 +7,12 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.loneboat.spacesloth.main.content.ContentHandler;
 import com.loneboat.spacesloth.main.game.actors.SlothShip;
 import com.loneboat.spacesloth.main.screens.GameLevel;
+import com.loneboat.spacesloth.main.util.ScreenUtil;
 
 import java.util.ArrayList;
 
@@ -125,8 +127,7 @@ public class DynamicBackground extends Actor {
             for (Vector2 aMapTile : mapTile) {
                 System.out.print(aMapTile + "         ");
                 if (aMapTile != null) {
-                    Vector2 vec = aMapTile;
-                    tiles.add(vec);
+                    tiles.add(aMapTile);
                 }
             }
             System.out.println();
@@ -134,13 +135,33 @@ public class DynamicBackground extends Actor {
 
     }
 
+    /*
+    * (Texture texture, float x, float y,
+    * float originX, float originY,
+    * float width, float height,
+    * float scaleX, float scaleY,
+    * float rotation,
+    * int srcX, int srcY,
+    * int srcWidth, int srcHeight,
+    * boolean flipX, boolean flipY)
+    * */
+
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
         batch.begin();
         for(Vector2 vec : tiles) {
             if(player.inMap) {
-                batch.draw(background, (-player.getBodyX()) - vec.x, (-player.getBodyY()) - vec.y, TileSizeX, TileSizeY);
+                batch.draw(background,
+                        (-player.getBodyX() / 10) - vec.x, (-player.getBodyY() / 10) - vec.y,
+                        (TileSizeX / 2) + vec.x, (TileSizeY / 2) + vec.y,
+                        TileSizeX, TileSizeY,
+                        0.25f, 0.25f,
+                        0,
+                        0, 0,
+                        (int) TileSizeX, (int) TileSizeY,
+                        false, false
+                );
             } else {
                 batch.draw(background, (-level.lastLoc.x) - vec.x, (-level.lastLoc.y) - vec.y, TileSizeX, TileSizeY);
             }

@@ -20,6 +20,7 @@ import com.loneboat.spacesloth.main.game.systems.PlayerHUD;
 import com.loneboat.spacesloth.main.game.systems.console.PlayerConsole;
 import com.loneboat.spacesloth.main.game.worldobjects.ores.Ore;
 import com.loneboat.spacesloth.main.game.worldobjects.weapons.BlueBlast;
+import com.loneboat.spacesloth.main.screens.GameLevel;
 import com.loneboat.spacesloth.main.util.PlayerInputListener;
 import com.loneboat.spacesloth.main.util.ScreenUtil;
 import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
@@ -42,6 +43,8 @@ public class SlothShip extends GameObject {
     private float curBoost = 0;
     public boolean isBoosting = false;
     public boolean inMap;
+
+    private GameLevel level;
 
     private Vector2 MaxBoostVelocity;
 

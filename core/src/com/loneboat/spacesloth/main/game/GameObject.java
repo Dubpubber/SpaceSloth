@@ -154,6 +154,14 @@ public abstract class GameObject extends Actor implements GameObjectTracker {
     }
 
     /**
+     * Get's the game level this game object is currently using.
+     * @return - the active game level.
+     */
+    public GameLevel getLevel() {
+        return level;
+    }
+
+    /**
      * Creates a basic sprite, without box2d capabilities.
      * @param filename - File handle for the texture of the sprite.
      */

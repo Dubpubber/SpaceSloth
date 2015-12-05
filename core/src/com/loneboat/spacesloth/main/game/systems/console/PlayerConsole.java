@@ -3,8 +3,6 @@ package com.loneboat.spacesloth.main.game.systems.console;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
@@ -77,7 +75,7 @@ public class PlayerConsole extends Actor {
     private final int ConsoleHeight = 250;
 
     private final float ConsoleX = 7;
-    private final float ConsoleY = 582;
+    private final float ConsoleY = 512;
 
     private final String ConsoleStartingStr = "> ";
 
@@ -95,8 +93,6 @@ public class PlayerConsole extends Actor {
     private Table scrollingTable;
 
     private boolean debug = true;
-
-    private Timer refreshTimer;
 
     public PlayerConsole(GameLevel level, int fontSize) {
         this.level = level;
@@ -122,11 +118,15 @@ public class PlayerConsole extends Actor {
 
         scrollingTable = new Table();
         scrollingTable.add(pane);
-        scrollingTable.align(Align.bottomLeft);
+        scrollingTable.align(Align.topLeft);
         scrollingTable.setSize(ConsoleWidth, ConsoleHeight);
         scrollingTable.setPosition(ConsoleX, ConsoleY);
 
         level.HudStage.addActor(scrollingTable);
+
+        for(CrewType type : CrewType.values()) {
+            writeFromCrew(type, type.getGreeting());
+        }
     }
 
     @Override
