@@ -33,21 +33,38 @@ import java.math.BigDecimal;
  */
 public class SlothShip extends GameObject {
 
+    // Used to call on for possible player input.
     private PlayerInputListener ip;
+
+    // Holds the save/load profile for the player. All serializable information will be stored here.
     private Profile profile;
+
+    // The player hud and systems. Radar, console and health/boost.
     private PlayerHUD hud;
 
+    // The current amount of steer torque being applied to the player's spacecraft.
     private float steeringTorque = 0;
 
+    /**
+     * Interchangeable values.
+     *  - These values are not final for a reason!!!
+     */
+    // Maximum boost for the spacecraft. Should be more than max velocity!
     private float boostCap;
+    // Holds the current boost of the player's spacecraft.
     private float curBoost = 0;
+    // Boolean to note if the player is boosting. (Cause it's illegal, ya know.)
     public boolean isBoosting = false;
+    // Is the player currently within my very lazy and needs some desperate tuning in map boolean?
     public boolean inMap;
 
+    // Holds the current level of which the player is currently playing.
     private GameLevel level;
 
+    // Max boost velocity. I actually don't know the difference. Should probably though.
     private Vector2 MaxBoostVelocity;
 
+    // Like in most Java naming parterns, the part factory is in charge of well, processing and gathering all the possible parts for the player's ship!
     private PartFactory pf;
 
     /**
@@ -55,14 +72,25 @@ public class SlothShip extends GameObject {
      *  (for easy saving and loading.)
      */
     public class Profile {
+        // This
         private SlothShip sloth;
+        // Array of the current parts equiped to the player's ship.
         private Part[] currentParts;
+        // Amount of money the player currently has.
         private BigDecimal money;
 
+        // Count of parts. currentParts.length doesn't check for null-ness, so that's why this exists!
         private int equipedPartCount = 0;
 
+        // The shield is it's own special thing, it gets a place in the GC as well.
         private Box2DSprite shield;
 
+        /**
+         * Constructor for creating a new game profile.
+         * As mentioned this profile covers the entirety of saving and loading individual games.
+         * Pretty freakin' important.
+         * @param sloth - This!
+         */
         public Profile(SlothShip sloth) {
             this.sloth = sloth;
             this.currentParts = new Part[20];
