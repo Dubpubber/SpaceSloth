@@ -2,6 +2,7 @@ package com.loneboat.spacesloth.main.game.actors;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
@@ -116,14 +117,26 @@ public class SlothShip extends GameObject {
             currentParts[6] = PartFactory.fetchPart("rankfshieldgenerator");
         }
 
-        public boolean load() {
-            return false;
+        /**
+         * Hopefully one day load a saved game.
+         * @param savefile - the location of the save file.
+         * @return - the loaded profile.
+         */
+        public Profile load(FileHandle savefile) {
+            return null;
         }
 
-        public boolean save() {
-            return false;
-        }
+        /**
+         * Again, hopefully one day save a profile.
+         * @param savefile - the save location.
+         */
+        public void save(FileHandle savefile) {}
 
+        /**
+         * Get part by type.
+         * @param partType - the enum of the part needed.
+         * @return - the part from type.
+         */
         public Part getPart(PartType partType) {
             switch(partType) {
                 case COCKPIT:
