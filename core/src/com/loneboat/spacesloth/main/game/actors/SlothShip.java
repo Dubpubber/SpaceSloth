@@ -301,6 +301,9 @@ public class SlothShip extends GameObject {
         setMaxProjectileCount(30);
     }
 
+    /**
+     * When called, this builds the entire ship over again. Usually on initial object creation and part shuffles/assigns.
+     */
     public void rebuildShip() {
         destroyAllFixtures();
         PolygonShape shape = new PolygonShape();
@@ -315,8 +318,8 @@ public class SlothShip extends GameObject {
     }
 
     /**
-     * @param batch       - the sprite batch.
-     * @param parentAlpha Should be multiplied with the actor's alpha, allowing a parent's alpha to affect all children.
+     * @param batch - the sprite batch.
+     * @param parentAlpha - Should be multiplied with the actor's alpha, allowing a parent's alpha to affect all children.
      */
     @Override
     public void draw(Batch batch, float parentAlpha) {
@@ -384,64 +387,120 @@ public class SlothShip extends GameObject {
 
     }
 
+    /**
+     * Gets the player's current profile.
+     * @return - the profile.
+     */
     public Profile getProfile() {
         return profile;
     }
 
+    /**
+     * Get's the input listener attached to the slothship object.
+     * @return - the input listener.
+     */
     public PlayerInputListener getPlayerInputListener() {
         return ip;
     }
 
+    /**
+     * Get's the box2dsprite object of this player object.
+     * @return - the box2dsprite for the gun mount.
+     */
     public Box2DSprite getGunMountSprite() {
         return gunMount_sprite;
     }
 
+    /**
+     * Get's the boost cap for the player.
+     * @return - float of boost cap.
+     */
     public float getBoostCap() {
         return boostCap;
     }
 
+    /**
+     * Sets the boost cap of player.
+     * @param boostCap - the new boost cap.
+     */
     public void setBoostCap(float boostCap) {
         this.boostCap = boostCap;
     }
 
+    /**
+     * Get the current boost as a float.
+     * @return - boost.
+     */
     public float getCurBoost() {
         return curBoost;
     }
 
+    /**
+     * Set's the current boost.
+     * @param curBoost - new boost.
+     */
     public void setCurBoost(float curBoost) {
         this.curBoost = curBoost;
     }
 
+    /**
+     * Replenish the boost.
+     */
     public void replenishBoost() {
         this.curBoost = boostCap;
     }
 
+    /**
+     * Boolean to check if the player has any available boost.
+     * @return - boolean of boost capacity.
+     */
     public boolean hasBoost() {
         return curBoost > 0;
     }
 
+    /**
+     * Can use boost.
+     * @return - boolean if the player can use boost or not.
+     */
     public boolean useBoost() {
         return curBoost >= boostCap;
     }
 
+    /**
+     * Begin depleting boosters.
+     */
     public void depleteBoosters() {
         if(hasBoost())
             curBoost -= 1.0f;
     }
 
+    /**
+     * Start restoring boosters.
+     */
     public void restoreBoosters() {
         if(curBoost < boostCap)
             curBoost += 0.15f;
     }
 
+    // End drug boosting. //
+
+    /**
+     * Gets the max boost velocity of the player.
+     * @return
+     */
     public Vector2 getMaxBoostVelocity() {
         return MaxBoostVelocity;
     }
 
+    /**
+     * Sets the current boost velocity of the player to the new vector given.
+     * @param maxBoostVelocity - new max boost velocity.
+     */
     public void setMaxBoostVelocity(Vector2 maxBoostVelocity) {
         MaxBoostVelocity = maxBoostVelocity;
     }
 
+    // All of these are pretty self-explanatory...
     public void createCockpit(Body body, PolygonShape shape) {
         shape = new PolygonShape();
         shape.setAsBox(
@@ -587,6 +646,10 @@ public class SlothShip extends GameObject {
         shape.dispose();
     }
 
+    /**
+     * Process an ore contact.
+     * @param ore - the ore that was just collected by the player.
+     */
     public void processOreContact(Ore ore) {
         BigDecimal worth = ore.getOreWorth();
         // When the refinery is integrated, this is where we'd use its efficiency module.
@@ -606,14 +669,25 @@ public class SlothShip extends GameObject {
         getPlayerHud().getConsole().writeFromCrew(PlayerConsole.CrewType.QUARTERMASTER, quarterMasterResponse);
     }
 
+    /**
+     * Sets the player's hud.
+     * @param hud - the hud object.
+     */
     public void setPlayerHud(PlayerHUD hud) {
         this.hud = hud;
     }
 
+    /**
+     * Get's the player's hud. Used for getting systems like radar and console.
+     * @return - player hud.
+     */
     public PlayerHUD getPlayerHud() {
         return hud;
     }
 
+    /**
+     * Radar warning generator.
+     */
     public void createRadarWarn() {
         new Timer().scheduleTask(new Timer.Task() {
             @Override
