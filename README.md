@@ -1,5 +1,10 @@
-# SpaceSloth
-Reboot to an awesome series. Written in Java using the libgdx library, this game is just a simple space shooter.
+# Project Purpose
+The purpose of Spacesloth is purely entertainment. The idea came from a good friend of mine who suggested the concept and I took the idea and ran with it. Now, Spacesloth is about five factions featuring five different animal species: The Bat Syndicate, The Bear Republic, The Octopi Cartel, The Penguin Platoon and of course, The Sloth Empire. These five factions race against each other in a humorous space race of conquer, trade and resource grab. 
 
-#About SpaceSloth
-SpaceSloth is written in Java using the LibGdx game library. SpaceSloth is a game that features you, as a sloth, venturing the depths of space. Discover new planets, become friends with factions and spread your culture throughout the newly discovered universe. Be aware, other factions have also moved into the new universe to spread their own culture and people. Mine for resources, manage your crew, take part in epic space battles. Become a slothy ambassador or a tyrant. Even a pirate! The choice is yours.
+As of right now, this game is inactive in terms of development.
+
+# Project Author
+My name is Tyler Crowe, I'm currently a Computer Science student at the University of North Carolina at Charlotte. I try to put aside time every week specifically for creating to further grow my skills. I’ve been programming for about 8 years now and have no plans on stopping now! If you’re more interested in me or my work, visit [my website](https://loneboat.com/).
+
+# Project License
+Like most of my projects, this project is sourced under [The MIT License](https://opensource.org/licenses/MIT). (Basically, it's as much yours, reader, as it is mine.)
